@@ -189,25 +189,5 @@ upstream renames one, that test fails, which is the point.
 
 ## Changing this repository
 
-```bash
-bash -n bin/* tests/*.sh          # syntax
-shellcheck bin/* tests/*.sh       # if you have it; CI runs it
-docker compose config --quiet     # compose validity
-./bin/test --skip-claude          # layers 1-3
-./bin/test claude-code            # layer 4, costs model turns
-./bin/reset --yes && ./bin/test --skip-claude   # prove a clean build still works
-```
-
-CI runs the same checks plus a full stack build on Ubuntu, so a change that only
-works on your machine fails there.
-
-Conventions worth keeping:
-
-- Every `bin/` script sources `bin/lib.sh` and nothing else.
-- Anything that has to know a container path goes through `wpx`, which is the
-  only place `MSYS_NO_PATHCONV` is set.
-- Never `curl -o /dev/null`; use `http_status` or `http_headers` from
-  `bin/lib.sh`. Git Bash's native curl treats `/dev/null` as a filename.
-- Provisioning steps check current state before changing it. Setup must stay
-  idempotent.
-- Tests name their content uniquely and delete it in an `EXIT` trap.
+The checks to run before proposing a change, and the conventions the scripts
+follow, are in [CONTRIBUTING.md](../CONTRIBUTING.md).

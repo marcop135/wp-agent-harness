@@ -139,27 +139,8 @@ claude -p "Using the WordPress MCP server, list the active plugins." \
 `--allowedTools "mcp__wordpress"` permits the whole server; `--permission-prompts
 none` denies anything that would otherwise prompt, so the turn cannot hang.
 
-## Troubleshooting
+## When it does not connect
 
-**`claude mcp get wordpress` says the server is not found.**
-You are not in the repository directory, or `./bin/connect` has not run. `local`
-scope is keyed to the project path.
-
-**Status is not `Connected`.**
-Check the stack first: `./bin/start`, then `./bin/status`. If `./bin/status`
-reports an authenticated `initialize`, the endpoint is fine and the problem is
-the registration — re-run `./bin/connect`.
-
-**Claude Code connects but has no WordPress tools.**
-Restart the session. Claude Code reads the MCP configuration at start, so a
-server registered mid-session is not picked up.
-
-**Tools appear but every call fails with an authentication error.**
-The Application Password was rotated (`./bin/reset`, or a manual revoke) while
-the old one is still in `~/.claude.json`. `./bin/setup && ./bin/connect`, then
-restart Claude Code.
-
-**The port changed.**
-The registered URL still points at the old one. `./bin/connect` again.
-
-More, including the WordPress-side failures: [troubleshooting.md](troubleshooting.md).
+[troubleshooting.md](troubleshooting.md#claude-code) covers the four failure
+modes — server not found, status not `Connected`, connected but no tools, tools
+that fail on every call — along with the WordPress-side causes behind them.

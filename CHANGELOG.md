@@ -3,6 +3,29 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Repository
+
+- Community health files: `CONTRIBUTING.md`, `SECURITY.md` (private reporting,
+  and what belongs upstream instead), `CODE_OF_CONDUCT.md`.
+- `.github/`: YAML issue forms for bug, feature and question, blank issues off,
+  a pull request template that asks which test layers were run, `CODEOWNERS`,
+  and Dependabot for the workflow's own actions.
+- `.gitattributes`: `eol=lf` for everything, so a Windows checkout cannot break
+  a container shebang; `export-ignore` for scaffolding.
+- `tests/repo.sh` covers all of the above.
+
+### Documentation
+
+Streamlined to one home per topic. The README lost the duplicated dependency
+procedure, debugging hierarchy and reset walkthrough, which now live in
+`docs/development.md`, `docs/troubleshooting.md` and the commands table; the
+three-meta-tool explanation is stated once and linked from the other three
+places. Contributor conventions moved out of `docs/development.md` into
+`CONTRIBUTING.md`. README is a fifth shorter (2361 → 1944 words) and carries
+build, licence and WordPress badges.
+
 ## [1.0.0] — 2026-09-18
 
 First working version. Claude Code drives a local WordPress site through the

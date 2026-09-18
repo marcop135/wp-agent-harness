@@ -351,6 +351,11 @@ Correct. `mcp-adapter-discover-abilities`, `mcp-adapter-get-ability-info` and
 behind them. See
 [architecture.md](architecture.md#why-three-tools-and-not-thirty).
 
+### The port changed and calls stopped working
+
+The registered URL still points at the old port. `./bin/connect` rewrites it,
+then restart Claude Code.
+
 ### `./bin/connect` fails with `claude is not on PATH`
 
 Claude Code is not installed, or not in this shell's `PATH`. `./bin/setup` warns

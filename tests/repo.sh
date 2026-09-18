@@ -130,7 +130,12 @@ suite 'Repository — documented files exist'
 # ===========================================================================
 
 for f in README.md CLAUDE.md CHANGELOG.md LICENSE Makefile docker-compose.yml \
-         .env.example .gitignore \
+         .env.example .gitignore .gitattributes \
+         CONTRIBUTING.md SECURITY.md CODE_OF_CONDUCT.md \
+         .github/workflows/test.yml .github/dependabot.yml \
+         .github/CODEOWNERS .github/PULL_REQUEST_TEMPLATE.md \
+         .github/ISSUE_TEMPLATE/config.yml .github/ISSUE_TEMPLATE/1-bug.yml \
+         .github/ISSUE_TEMPLATE/2-feature.yml .github/ISSUE_TEMPLATE/3-question.yml \
          docs/architecture.md docs/claude-code.md docs/development.md \
          docs/security.md docs/troubleshooting.md \
          examples/README.md examples/inspect-site.md examples/create-content.md \

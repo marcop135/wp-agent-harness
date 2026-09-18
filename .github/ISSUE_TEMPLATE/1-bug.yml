@@ -1,0 +1,80 @@
+name: Bug report
+description: Something in this environment does not work as documented
+title: "[bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A fault in an ability, in the MCP protocol handling, or in the adapter
+        itself belongs upstream — [mcp-adapter](https://github.com/WordPress/mcp-adapter/issues)
+        or [ms-wp-abilities](https://github.com/miriamschwab/ms-wp-abilities/issues).
+        `./bin/wp ability run <name> --user=admin` tells the two apart: if it
+        fails there, MCP is not involved.
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you expected, and what you got instead.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: layer
+    attributes:
+      label: Which layer fails first
+      description: From `./bin/status`, which walks the stack in order.
+      options:
+        - Containers (Docker, ports, database)
+        - WordPress (install, permalinks, /wp-json/)
+        - Abilities (registration, wp ability)
+        - MCP endpoint (401, session, tools/list)
+        - Claude Code (registration, tools, calls)
+        - Repository tooling (bin/, tests/, CI)
+        - Not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. ./bin/reset --yes
+        2. ./bin/setup
+        3. ./bin/test --skip-claude
+        4. tests/integration.sh fails at ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: status
+    attributes:
+      label: Output of ./bin/status
+      description: Redact nothing but credentials. This is rendered as a code block.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant output of ./bin/logs --debug
+      render: text
+
+  - type: input
+    id: host
+    attributes:
+      label: Host
+      description: OS, shell, Docker and Compose versions.
+      placeholder: "Windows 11, Git Bash, Docker Desktop 4.x, Compose v2.x"
+    validations:
+      required: true
+
+  - type: input
+    id: versions
+    attributes:
+      label: Version pins
+      description: Any line in your `.env` that differs from `.env.example`.
+      placeholder: "MCP_ADAPTER_VERSION=0.6.1, MS_WP_ABILITIES_VERSION=1.12.0"
