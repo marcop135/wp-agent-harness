@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+#
+# test — run the test suite.
+#
+#   ./bin/test                 everything
+#   ./bin/test --skip-claude   all but layer 4 (no model turns, no cost)
+#   ./bin/test repo            repository integrity only (no Docker)
+#   ./bin/test smoke           layers 1-2 only
+#   ./bin/test integration     layer 3 only
+#   ./bin/test claude-code     layer 4 only
+#
+# Files:
+#   tests/repo.sh          repository integrity: secrets, .gitignore, syntax
+#   tests/smoke.sh         layer 1 infrastructure, layer 2 WordPress/abilities
+#   tests/integration.sh   layer 3 MCP protocol
+#   tests/claude-code.sh   layer 4 Claude Code end to end
+#
+# Tests create only uniquely named content and remove it again. They never
+# touch the rest of the site — that is ./bin/reset's job.
+
+source "$(dirname -- "${BASH_SOURCE[0]}")/lib.sh"
+
+skip_claude=false
+selected=()
+
+for arg in "$@"; do
+    case "$arg" in
+        --skip-claude)          skip_claude=true ;;
+        repo|smoke|integration|claude-code) selected+=("$arg") ;;
+        -h|--help)              sed -n '2,20p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
+        *)                      die "Unknown argument: $arg" ;;
+    esac
+done
+
+if [[ "${#selected[@]}" -eq 0 ]]; then
+    selected=(repo smoke integration claude-code)
+fi
+
+# tests/repo.sh needs neither Docker nor a running site.
+needs_stack=false
+for name in "${selected[@]}"; do
+    [[ "$name" == 'repo' ]] || needs_stack=true
+done
+
+if [[ "$needs_stack" == true ]]; then
+    require_docker
+    require_env
+    container_running wordpress || die 'The wordpress container is not running. Run ./bin/start.'
+fi
+
+failed=()
+skipped=()
+
+for name in "${selected[@]}"; do
+    if [[ "$name" == 'claude-code' ]]; then
+        if [[ "$skip_claude" == true ]]; then
+            skipped+=('claude-code (--skip-claude)')
+            continue
+        fi
+        if ! have claude; then
+            skipped+=('claude-code (claude is not on PATH)')
+            continue
+        fi
+    fi
+
+    printf '\n%s┌─ tests/%s.sh %s\n' "$C_BOLD" "$name" "$C_RESET"
+    if bash "$REPO_ROOT/tests/$name.sh"; then
+        printf '%s└─ tests/%s.sh passed%s\n' "$C_GREEN" "$name" "$C_RESET"
+    else
+        failed+=("$name")
+        printf '%s└─ tests/%s.sh FAILED%s\n' "$C_RED" "$name" "$C_RESET"
+    fi
+done
+
+printf '\n%s──────────────────────────────────────────%s\n' "$C_BOLD" "$C_RESET"
+for name in "${skipped[@]}"; do
+    printf '  %sskip%s %s\n' "$C_YELLOW" "$C_RESET" "$name"
+done
+
+if [[ "${#failed[@]}" -eq 0 ]]; then
+    printf '  %sAll selected test files passed.%s\n\n' "$C_GREEN$C_BOLD" "$C_RESET"
+    exit 0
+fi
+
+printf '  %sFailed: %s%s\n\n' "$C_RED$C_BOLD" "${failed[*]}" "$C_RESET"
+exit 1

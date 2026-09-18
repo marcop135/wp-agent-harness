@@ -1,0 +1,206 @@
+#!/bin/sh
+# Idempotent WordPress provisioning, run inside the WordPress container.
+#
+# Invoked by ./bin/setup on the host as:
+#   docker compose exec -T wordpress wp-provision
+#
+# Every step checks the current state before changing it. Re-running creates no
+# duplicate users, no duplicate plugins and destroys no existing content.
+# Destroying state is ./bin/reset's job, never this script's.
+set -eu
+
+WP_SITE_TITLE="${WP_SITE_TITLE:-WordPress Claude MCP}"
+WP_ADMIN_USER="${WP_ADMIN_USER:-admin}"
+WP_ADMIN_EMAIL="${WP_ADMIN_EMAIL:-admin@wordpress-claude-mcp.test}"
+WP_THEME="${WP_THEME:-twentytwentyfive}"
+MCP_ADAPTER_VERSION="${MCP_ADAPTER_VERSION:-0.6.1}"
+MS_WP_ABILITIES_VERSION="${MS_WP_ABILITIES_VERSION:-1.12.0}"
+SITE_URL="${WORDPRESS_SITE_URL:-http://localhost:8080}"
+
+step() { printf '\n\033[1m==> %s\033[0m\n' "$*"; }
+info() { printf '    %s\n' "$*"; }
+fail() { printf '\033[31mERROR: %s\033[0m\n' "$*" >&2; exit 1; }
+
+[ -n "${WP_ADMIN_PASSWORD:-}" ] || fail 'WP_ADMIN_PASSWORD is not set in the container environment.'
+
+# ---------------------------------------------------------------------------
+step 'Waiting for the database'
+# ---------------------------------------------------------------------------
+attempt=0
+until wp db check --quiet >/dev/null 2>&1; do
+    attempt=$((attempt + 1))
+    [ "$attempt" -lt 60 ] || fail 'Database did not become reachable within 120s. Try: ./bin/logs db'
+    sleep 2
+done
+info "Database reachable ($(wp db query 'SELECT VERSION();' --skip-column-names 2>/dev/null | head -1))"
+
+# ---------------------------------------------------------------------------
+step 'Installing WordPress'
+# ---------------------------------------------------------------------------
+if wp core is-installed >/dev/null 2>&1; then
+    info "Already installed (WordPress $(wp core version))"
+else
+    wp core install \
+        --url="$SITE_URL" \
+        --title="$WP_SITE_TITLE" \
+        --admin_user="$WP_ADMIN_USER" \
+        --admin_password="$WP_ADMIN_PASSWORD" \
+        --admin_email="$WP_ADMIN_EMAIL" \
+        --skip-email
+    info "Installed WordPress $(wp core version)"
+fi
+
+# ---------------------------------------------------------------------------
+step 'Development administrator'
+# ---------------------------------------------------------------------------
+if wp user get "$WP_ADMIN_USER" --field=ID >/dev/null 2>&1; then
+    wp user update "$WP_ADMIN_USER" \
+        --user_pass="$WP_ADMIN_PASSWORD" \
+        --user_email="$WP_ADMIN_EMAIL" \
+        --role=administrator \
+        --skip-email >/dev/null
+    info "$WP_ADMIN_USER exists; password, email and role synchronised with .env"
+else
+    wp user create "$WP_ADMIN_USER" "$WP_ADMIN_EMAIL" \
+        --role=administrator \
+        --user_pass="$WP_ADMIN_PASSWORD" >/dev/null
+    info "Created administrator $WP_ADMIN_USER"
+fi
+
+# Site title and URL are cheap to re-apply and let WP_PORT / WP_SITE_TITLE
+# changes in .env take effect without a reinstall.
+wp option update blogname "$WP_SITE_TITLE" >/dev/null
+wp option update siteurl "$SITE_URL" >/dev/null
+wp option update home "$SITE_URL" >/dev/null
+
+# ---------------------------------------------------------------------------
+step 'Permalinks'
+# ---------------------------------------------------------------------------
+# The MCP endpoint lives under /wp-json/, which needs pretty permalinks and a
+# writable .htaccess. Without them clients would have to use the
+# ?rest_route= fallback.
+if [ "$(wp option get permalink_structure 2>/dev/null || true)" != '/%postname%/' ]; then
+    wp rewrite structure '/%postname%/' >/dev/null
+    info 'Set permalink structure to /%postname%/'
+else
+    info 'Permalink structure already /%postname%/'
+fi
+wp rewrite flush >/dev/null
+
+# The base image ships the standard WordPress .htaccess and enables
+# AllowOverride, so the rewrite rules are already in place. Prove it rather
+# than assume it — every later check depends on /wp-json/ resolving.
+rest_status="$(curl -s -o /dev/null -w '%{http_code}' 'http://localhost/wp-json/' || true)"
+if [ "$rest_status" = '200' ]; then
+    info 'REST API reachable at /wp-json/'
+else
+    fail "/wp-json/ returned HTTP $rest_status. Pretty permalinks are not being rewritten;
+    check that mod_rewrite is enabled and .htaccess is readable in the container."
+fi
+
+# ---------------------------------------------------------------------------
+step "Theme: $WP_THEME"
+# ---------------------------------------------------------------------------
+if wp theme is-installed "$WP_THEME" >/dev/null 2>&1; then
+    info "$WP_THEME already installed ($(wp theme get "$WP_THEME" --field=version))"
+else
+    wp theme install "$WP_THEME" >/dev/null
+    info "Installed $WP_THEME $(wp theme get "$WP_THEME" --field=version)"
+fi
+
+if [ "$(wp theme list --status=active --field=name)" = "$WP_THEME" ]; then
+    info "$WP_THEME already active"
+else
+    wp theme activate "$WP_THEME" >/dev/null
+    info "Activated $WP_THEME"
+fi
+
+# ---------------------------------------------------------------------------
+step 'Plugins'
+# ---------------------------------------------------------------------------
+# Installed from pinned upstream GitHub release ZIPs rather than a moving
+# branch, so a given .env always produces the same site. See
+# docs/development.md for the update procedure.
+install_pinned_plugin() {
+    slug="$1"
+    want="$2"
+    url="$3"
+
+    have=''
+    if wp plugin is-installed "$slug" >/dev/null 2>&1; then
+        have="$(wp plugin get "$slug" --field=version 2>/dev/null || true)"
+    fi
+
+    if [ "$have" = "$want" ]; then
+        info "$slug $want already installed"
+    elif [ -n "$have" ]; then
+        wp plugin install "$url" --force >/dev/null
+        info "$slug $have -> $want"
+    else
+        wp plugin install "$url" >/dev/null
+        info "$slug $want installed"
+    fi
+
+    if wp plugin is-active "$slug" >/dev/null 2>&1; then
+        info "$slug already active"
+    else
+        wp plugin activate "$slug" >/dev/null
+        info "$slug activated"
+    fi
+}
+
+install_pinned_plugin mcp-adapter "$MCP_ADAPTER_VERSION" \
+    "https://github.com/WordPress/mcp-adapter/releases/download/v${MCP_ADAPTER_VERSION}/mcp-adapter.zip"
+
+install_pinned_plugin ms-wp-abilities "$MS_WP_ABILITIES_VERSION" \
+    "https://github.com/miriamschwab/ms-wp-abilities/releases/download/v${MS_WP_ABILITIES_VERSION}/ms-wp-abilities-${MS_WP_ABILITIES_VERSION}.zip"
+
+# The base image ships Akismet and Hello Dolly. This toolkit's plugin set is
+# exactly the two above, so the defaults are removed on first run.
+for bundled in akismet hello; do
+    if wp plugin is-installed "$bundled" >/dev/null 2>&1; then
+        wp plugin delete "$bundled" >/dev/null
+        info "Removed bundled plugin $bundled"
+    fi
+done
+
+# ---------------------------------------------------------------------------
+step 'Verifying the Abilities API'
+# ---------------------------------------------------------------------------
+wp eval 'if ( ! function_exists( "wp_register_ability" ) ) { WP_CLI::error( "wp_register_ability() is missing — WordPress " . get_bloginfo( "version" ) . " has no Abilities API. 6.9 or newer is required." ); }'
+info "wp_register_ability() available on WordPress $(wp core version)"
+
+ability_total="$(wp ability list --format=count)"
+[ "$ability_total" -gt 0 ] || fail 'No abilities are registered. Is ms-wp-abilities active?'
+info "$ability_total abilities registered"
+
+ms_total="$(wp ability list --namespace=miriamschwab --format=count)"
+[ "$ms_total" -gt 0 ] || fail 'MS WP Abilities registered no abilities in the miriamschwab namespace.'
+info "$ms_total abilities in the miriamschwab namespace"
+
+# ---------------------------------------------------------------------------
+step 'Verifying the MCP endpoint'
+# ---------------------------------------------------------------------------
+mcp_path='/wp-json/mcp/mcp-adapter-default-server'
+status="$(curl -s -o /dev/null -w '%{http_code}' -X POST "http://localhost${mcp_path}" \
+    -H 'Content-Type: application/json' \
+    -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}' || true)"
+
+case "$status" in
+    401|403)
+        info "Endpoint reachable and refusing unauthenticated requests (HTTP $status) — correct"
+        ;;
+    404)
+        fail "MCP endpoint returned 404 at ${mcp_path}. Check that mcp-adapter is active and permalinks are flushed."
+        ;;
+    000)
+        fail 'Could not reach the WordPress HTTP server from inside the container.'
+        ;;
+    *)
+        info "Endpoint returned HTTP $status to an unauthenticated request"
+        ;;
+esac
+
+printf '\n\033[32mProvisioning complete.\033[0m\n'
+printf '    Site:         %s\n' "$SITE_URL"
+printf '    MCP endpoint: %s%s\n' "$SITE_URL" "$mcp_path"

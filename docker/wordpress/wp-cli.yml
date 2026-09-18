@@ -1,0 +1,8 @@
+# WP-CLI global configuration inside the WordPress container.
+# Referenced by the WP_CLI_CONFIG_PATH environment variable.
+
+path: /var/www/html
+
+# Loads wp-cli/ability-command, which provides `wp ability`.
+require:
+  - /usr/local/lib/wp-cli-packages/ability-command/ability-command.php
