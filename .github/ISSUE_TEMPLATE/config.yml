@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: MCP Adapter (upstream)
+    url: https://github.com/WordPress/mcp-adapter/issues
+    about: Transport, sessions, the three meta-tools, permission callbacks.
+  - name: MS WordPress Abilities (upstream)
+    url: https://github.com/miriamschwab/ms-wp-abilities/issues
+    about: Any miriamschwab/* ability, including rest-get and rest-write.
+  - name: Security report
+    url: https://github.com/marcop135/wordpress-claude-mcp/security/advisories/new
+    about: Report privately. Never in a public issue.
