@@ -216,16 +216,11 @@ those to `-` for MCP tool names, which is why the tool is
 
 ### STDIO
 
-The adapter also ships `wp mcp-adapter serve`, a STDIO transport for WP-CLI:
-
-```bash
-echo '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' \
-  | ./bin/wp mcp-adapter serve --user=admin --server=mcp-adapter-default-server
-```
-
-Useful for debugging, since it bypasses HTTP and authentication entirely. It is
-not wired into Claude Code here: doing so would mean a stdio command that shells
-into Docker, which adds a moving part without adding a capability.
+The adapter also ships `wp mcp-adapter serve`, a STDIO transport for WP-CLI. It
+bypasses HTTP and authentication entirely, which makes it the way to tell an
+adapter fault from a transport fault ([development.md](development.md#speaking-mcp-by-hand)
+has the command). It is not wired into Claude Code here: doing so would mean a
+stdio command that shells into Docker, a moving part that adds no capability.
 
 ## Authentication flow
 

@@ -23,31 +23,19 @@ cd . && claude
 These are documentation, not fixtures. Nothing here is committed to the
 database, and running them leaves only what you ask for.
 
-## How Claude reaches WordPress
+## What to expect
 
-Every one of these goes through the same three meta-tools:
+Every prompt here goes through the same three meta-tools, so Claude makes more
+than one tool call per prompt: a discovery or schema lookup, then the real work.
+That is the MCP Adapter's design, not overhead you can configure away
+([docs/architecture.md](../docs/architecture.md#why-three-tools-and-not-thirty)).
 
-```
-mcp-adapter-discover-abilities   what can this site do?
-mcp-adapter-get-ability-info     what does that ability expect?
-mcp-adapter-execute-ability      do it
-```
-
-Expect Claude to make more than one tool call per prompt: a discovery or schema
-lookup, then the real work. That is the MCP Adapter's design, not overhead you
-can configure away. See
-[docs/architecture.md](../docs/architecture.md#why-three-tools-and-not-thirty).
-
-## The abilities behind them
+The examples name the abilities they use so you can follow along, but the pinned
+MS WP Abilities release defines the real set:
 
 ```bash
-./bin/wp ability list
 ./bin/wp ability list --namespace=miriamschwab --fields=name,label
 ```
-
-Treat that output as authoritative. The examples name the abilities they use so
-you can follow along, but the pinned MS WP Abilities release is what actually
-defines the set.
 
 ## Reading and writing
 
