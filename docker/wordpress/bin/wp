@@ -1,0 +1,25 @@
+#!/bin/sh
+# WP-CLI wrapper.
+#
+# The WordPress container's shells run as root, but WordPress owns
+# /var/www/html as www-data. Running WP-CLI as root would leave root-owned
+# files in wp-content that Apache cannot then write to (uploads, plugin
+# installs), so the wrapper drops to www-data whenever it is invoked as root.
+#
+# WP-CLI 2.12 bundles a Symfony release that emits E_DEPRECATED on PHP 8.3.
+# Those notices are upstream's and say nothing about this site, so they are
+# muted for WP-CLI only. Warnings and errors still surface.
+set -eu
+
+PHAR=/usr/local/lib/wp-cli.phar
+ERROR_REPORTING='error_reporting=E_ALL & ~E_DEPRECATED'
+
+if [ "$(id -u)" = "0" ]; then
+    exec runuser -u www-data -- \
+        env WP_CLI_CONFIG_PATH="${WP_CLI_CONFIG_PATH:-/usr/local/etc/wp-cli.yml}" \
+            WP_CLI_CACHE_DIR="${WP_CLI_CACHE_DIR:-/tmp/wp-cli-cache}" \
+            WP_CLI_PACKAGES_DIR="${WP_CLI_PACKAGES_DIR:-/usr/local/lib/wp-cli-packages}" \
+            php -d "$ERROR_REPORTING" "$PHAR" "$@"
+fi
+
+exec php -d "$ERROR_REPORTING" "$PHAR" "$@"

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+#
+# start — start the Docker services and wait until they are healthy.
+#         Existing data is untouched.
+
+source "$(dirname -- "${BASH_SOURCE[0]}")/lib.sh"
+
+require_docker
+require_env
+
+step 'Starting services'
+dc up -d --wait --wait-timeout 300
+
+ok 'db and wordpress are healthy'
+printf '\n  WordPress      %s\n' "$(site_url)"
+printf '  MCP endpoint   %s\n\n' "$(mcp_endpoint)"

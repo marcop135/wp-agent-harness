@@ -1,0 +1,119 @@
+#!/usr/bin/env bash
+#
+# status — report container health, WordPress health, ability registration,
+#          MCP endpoint health and the Claude Code connection.
+#
+# Read-only: it changes nothing.
+
+source "$(dirname -- "${BASH_SOURCE[0]}")/lib.sh"
+
+require_docker
+require_env
+
+failures=0
+bad() { printf '    %sfail%s %s\n' "$C_RED" "$C_RESET" "$*"; failures=$((failures + 1)); }
+
+# ---------------------------------------------------------------------------
+step 'Containers'
+# ---------------------------------------------------------------------------
+dc ps --format 'table {{.Service}}\t{{.State}}\t{{.Status}}\t{{.Ports}}' || true
+
+for service in db wordpress; do
+    if container_running "$service"; then
+        ok "$service running"
+    else
+        bad "$service is not running — try ./bin/start"
+    fi
+done
+
+if [[ "$failures" -gt 0 ]]; then
+    printf '\n%s%d check(s) failed.%s See docs/troubleshooting.md.\n\n' "$C_RED" "$failures" "$C_RESET"
+    exit 1
+fi
+
+# ---------------------------------------------------------------------------
+step 'WordPress'
+# ---------------------------------------------------------------------------
+if wp_cli core is-installed >/dev/null 2>&1; then
+    ok "WordPress $(wp_cli core version | tr -d '\r') installed"
+else
+    bad 'WordPress is not installed — run ./bin/setup'
+fi
+
+theme="$(wp_cli theme list --status=active --field=name 2>/dev/null | tr -d '\r' || true)"
+want_theme="$(env_get WP_THEME twentytwentyfive)"
+if [[ "$theme" == "$want_theme" ]]; then
+    ok "active theme $theme $(wp_cli theme get "$theme" --field=version 2>/dev/null | tr -d '\r')"
+else
+    bad "active theme is '${theme:-none}', expected '$want_theme'"
+fi
+
+while IFS=',' read -r name status version; do
+    [[ -n "$name" && "$name" != 'name' ]] || continue
+    if [[ "$status" == 'active' ]]; then
+        ok "plugin $name $version active"
+    else
+        bad "plugin $name is '$status'"
+    fi
+done < <(wp_cli plugin list --fields=name,status,version --format=csv 2>/dev/null | tr -d '\r')
+
+# ---------------------------------------------------------------------------
+step 'Abilities'
+# ---------------------------------------------------------------------------
+total="$(wp_cli ability list --format=count 2>/dev/null | tr -d '\r' || echo 0)"
+ms="$(wp_cli ability list --namespace=miriamschwab --format=count 2>/dev/null | tr -d '\r' || echo 0)"
+if [[ "${total:-0}" -gt 0 ]]; then
+    ok "$total abilities registered ($ms in the miriamschwab namespace)"
+else
+    bad 'no abilities are registered'
+fi
+
+# ---------------------------------------------------------------------------
+step 'MCP endpoint'
+# ---------------------------------------------------------------------------
+info "$(mcp_endpoint)"
+
+anon="$(http_status "$(mcp_endpoint)" -X POST \
+    -H 'Content-Type: application/json' \
+    -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}')"
+case "$anon" in
+    401|403) ok "unauthenticated requests are refused (HTTP $anon)" ;;
+    000)     bad 'endpoint unreachable' ;;
+    *)       bad "unauthenticated request returned HTTP $anon, expected 401/403" ;;
+esac
+
+if creds="$(mcp_basic_auth 2>/dev/null)"; then
+    headers="$(http_headers "$(mcp_endpoint)" -X POST \
+        --user "$creds" \
+        -H 'Content-Type: application/json' \
+        -H 'Accept: application/json, text/event-stream' \
+        -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"bin-status","version":"1.0.0"}}}')"
+    if grep -qi '^HTTP/[0-9.]* 200' <<<"$headers"; then
+        session="$(grep -i '^mcp-session-id:' <<<"$headers" | awk '{print $2}' | tr -d '\r')"
+        ok "authenticated initialize succeeded (session ${session:0:8}…)"
+    else
+        bad "authenticated initialize failed: $(head -n1 <<<"$headers" | tr -d '\r')"
+    fi
+else
+    bad "no Application Password in ${APP_PASSWORD_FILE#"$REPO_ROOT/"} — run ./bin/setup"
+fi
+
+# ---------------------------------------------------------------------------
+step 'Claude Code'
+# ---------------------------------------------------------------------------
+server_name="$(env_get MCP_SERVER_NAME wordpress)"
+if ! have claude; then
+    warn 'claude is not on PATH; cannot check the MCP registration'
+elif ( cd "$REPO_ROOT" && claude mcp get "$server_name" >/dev/null 2>&1 ); then
+    ok "MCP server '$server_name' is registered for this project"
+else
+    warn "MCP server '$server_name' is not registered — run ./bin/connect"
+fi
+
+# ---------------------------------------------------------------------------
+if [[ "$failures" -eq 0 ]]; then
+    printf '\n%sAll checks passed.%s\n\n' "$C_GREEN" "$C_RESET"
+else
+    printf '\n%s%d check(s) failed.%s See docs/troubleshooting.md.\n\n' "$C_RED" "$failures" "$C_RESET"
+    exit 1
+fi
