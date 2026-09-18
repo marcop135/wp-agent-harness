@@ -49,6 +49,21 @@ Then ask:
 
 `./bin/setup` is idempotent. It never destroys content; only `./bin/reset` does.
 
+### Reusing it for another project
+
+This repository is a GitHub template, so **Use this template** gives you your
+own copy. Change three things in `.env` and a second site runs beside this one
+without collision:
+
+```bash
+COMPOSE_PROJECT_NAME=my-project   # Docker project and volume prefix
+WP_PORT=8081                      # and DB_PORT, if 3307 is taken
+WP_SITE_TITLE=My Project
+```
+
+Then `./bin/setup && ./bin/connect`. Claude Code registers the server per
+project directory, so each clone gets its own registration.
+
 ## Requirements
 
 | Tool | Why | Notes |
