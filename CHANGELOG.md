@@ -74,4 +74,4 @@ README, `docs/architecture.md`, `docs/claude-code.md`, `docs/development.md`,
 `docs/security.md`, `docs/troubleshooting.md`, seven worked examples, and a
 `CLAUDE.md` that gives Claude Code its working context.
 
-[1.0.0]: https://github.com/marcop135/wordpress-claude-mcp/releases/tag/v1.0.0
+[1.0.0]: https://github.com/Foreveryone-berlin/wordpress-claude-mcp/releases/tag/v1.0.0

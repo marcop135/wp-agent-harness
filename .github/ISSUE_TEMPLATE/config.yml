@@ -7,5 +7,5 @@ contact_links:
     url: https://github.com/miriamschwab/ms-wp-abilities/issues
     about: Any miriamschwab/* ability, including rest-get and rest-write.
   - name: Security report
-    url: https://github.com/marcop135/wordpress-claude-mcp/security/advisories/new
+    url: https://github.com/Foreveryone-berlin/wordpress-claude-mcp/security/advisories/new
     about: Report privately. Never in a public issue.

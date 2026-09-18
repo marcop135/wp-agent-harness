@@ -4,7 +4,7 @@ A disposable, reproducible local WordPress site that Claude Code drives as a
 real development and site-administration agent, over the official WordPress MCP
 Adapter.
 
-[![test](https://github.com/marcop135/wordpress-claude-mcp/actions/workflows/test.yml/badge.svg)](https://github.com/marcop135/wordpress-claude-mcp/actions/workflows/test.yml)
+[![test](https://github.com/Foreveryone-berlin/wordpress-claude-mcp/actions/workflows/test.yml/badge.svg)](https://github.com/Foreveryone-berlin/wordpress-claude-mcp/actions/workflows/test.yml)
 [![licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
 [![WordPress 7.1](https://img.shields.io/badge/WordPress-7.1-21759b.svg)](https://wordpress.org/)
 
@@ -34,7 +34,7 @@ away and rebuilds it.
 ## Quick start
 
 ```bash
-git clone https://github.com/marcop135/wordpress-claude-mcp.git
+git clone https://github.com/Foreveryone-berlin/wordpress-claude-mcp.git
 cd wordpress-claude-mcp
 
 ./bin/setup     # build, start, install WordPress, issue credentials
