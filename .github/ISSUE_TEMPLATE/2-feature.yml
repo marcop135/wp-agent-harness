@@ -1,0 +1,48 @@
+name: Feature request
+description: Propose a change to the environment, the commands, the tests or the docs
+title: "[feature]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This repository is local infrastructure: Docker, Bash commands, tests
+        and documentation. New abilities and new MCP capabilities belong
+        upstream, in
+        [ms-wp-abilities](https://github.com/miriamschwab/ms-wp-abilities/issues)
+        or [mcp-adapter](https://github.com/WordPress/mcp-adapter/issues).
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What is awkward, slow or impossible today.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: The proposal
+      description: What should exist instead. Name the file or command it touches.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Docker image or Compose
+        - bin/ commands
+        - Tests or CI
+        - Documentation or examples
+        - Claude Code integration
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What you already tried
+      description: Existing commands, `.env` settings or a Compose override.

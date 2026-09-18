@@ -1,0 +1,19 @@
+version: 2
+
+# Only the workflow's own actions are automatable here.
+#
+# Every other version — WordPress, MariaDB, WP-CLI, wp-cli/ability-command, the
+# MCP Adapter and MS WP Abilities — is a variable in .env / .env.example, and
+# the Dockerfile's FROM is `${WORDPRESS_IMAGE}`, which Dependabot cannot
+# resolve. Those are moved by hand, on purpose:
+# docs/development.md ("Updating dependencies").
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: ci
+    labels:
+      - dependencies
+      - ci
