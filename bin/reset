@@ -24,7 +24,7 @@ done
 require_docker
 [[ -f "$ENV_FILE" ]] || die ".env is missing. Nothing to reset — run ./bin/setup."
 
-project="$(env_get COMPOSE_PROJECT_NAME wordpress-claude-mcp)"
+project="$(env_get COMPOSE_PROJECT_NAME wp-agent-harness)"
 
 printf '%sThis destroys the local WordPress site completely.%s\n\n' "$C_BOLD$C_YELLOW" "$C_RESET"
 printf '  project          %s\n' "$project"

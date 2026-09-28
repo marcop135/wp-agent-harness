@@ -164,7 +164,7 @@ mcp_initialize() {
     MCP_SESSION_ID=''
     MCP_NEGOTIATED_VERSION=''
     mcp_request "$(jq -cn --arg v "$MCP_PROTOCOL_VERSION" \
-        '{jsonrpc:"2.0",id:0,method:"initialize",params:{protocolVersion:$v,capabilities:{},clientInfo:{name:"wordpress-claude-mcp-tests",version:"1.0.0"}}}')"
+        '{jsonrpc:"2.0",id:0,method:"initialize",params:{protocolVersion:$v,capabilities:{},clientInfo:{name:"wp-agent-harness-tests",version:"1.0.0"}}}')"
 
     MCP_SESSION_ID="$(grep -i '^mcp-session-id:' <<<"$MCP_LAST_HEADERS" \
         | tail -n1 | cut -d: -f2- | tr -d '[:space:]')"

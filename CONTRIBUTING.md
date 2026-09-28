@@ -17,8 +17,8 @@ fails there, MCP is not involved.
 ## Setting up
 
 ```bash
-git clone https://github.com/Foreveryone-berlin/wordpress-claude-mcp.git
-cd wordpress-claude-mcp
+git clone https://github.com/Foreveryone-berlin/wp-agent-harness.git
+cd wp-agent-harness
 ./bin/setup          # idempotent; safe to re-run at any time
 ./bin/status         # every layer, in order
 ```
@@ -80,7 +80,7 @@ home for that topic.
 
 - **Bug or feature request** — open an issue with the matching template.
 - **A question about using the site** — that is not a bug; open a
-  [discussion-style issue](https://github.com/Foreveryone-berlin/wordpress-claude-mcp/issues/new/choose)
+  [discussion-style issue](https://github.com/Foreveryone-berlin/wp-agent-harness/issues/new/choose)
   and pick "Question", or read [docs/troubleshooting.md](docs/troubleshooting.md)
   first, which covers most of them.
 - **A security problem** — do not open an issue. [SECURITY.md](SECURITY.md).

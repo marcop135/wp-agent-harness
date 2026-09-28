@@ -4,7 +4,7 @@
 
 ```bash
 ./bin/connect
-cd /path/to/wordpress-claude-mcp && claude
+cd /path/to/wp-agent-harness && claude
 ```
 
 ## The registration
