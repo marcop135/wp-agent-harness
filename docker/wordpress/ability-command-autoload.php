@@ -8,7 +8,7 @@
  * exactly where ability-command.php looks for it. The class map mirrors the
  * package's own composer.json: WP_CLI\Ability\ => src/.
  *
- * @package wordpress-claude-mcp
+ * @package wp-agent-harness
  */
 
 spl_autoload_register(

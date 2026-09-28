@@ -1,10 +1,10 @@
-# wordpress-claude-mcp
+# wp-agent-harness
 
 A disposable, reproducible local WordPress site that Claude Code drives as a
 real development and site-administration agent, over the official WordPress MCP
 Adapter.
 
-[![test](https://github.com/Foreveryone-berlin/wordpress-claude-mcp/actions/workflows/test.yml/badge.svg)](https://github.com/Foreveryone-berlin/wordpress-claude-mcp/actions/workflows/test.yml)
+[![test](https://github.com/Foreveryone-berlin/wp-agent-harness/actions/workflows/test.yml/badge.svg)](https://github.com/Foreveryone-berlin/wp-agent-harness/actions/workflows/test.yml)
 [![licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
 [![WordPress 7.1](https://img.shields.io/badge/WordPress-7.1-21759b.svg)](https://wordpress.org/)
 
@@ -34,8 +34,8 @@ away and rebuilds it.
 ## Quick start
 
 ```bash
-git clone https://github.com/Foreveryone-berlin/wordpress-claude-mcp.git
-cd wordpress-claude-mcp
+git clone https://github.com/Foreveryone-berlin/wp-agent-harness.git
+cd wp-agent-harness
 
 ./bin/setup     # build, start, install WordPress, issue credentials
 ./bin/connect   # register the MCP server with Claude Code
@@ -156,11 +156,11 @@ with a freshly generated random secret. The ones you are most likely to change:
 | `WP_PORT` | `8080` | host port for WordPress, bound to `127.0.0.1` |
 | `DB_PORT` | `3307` | host port for MariaDB, bound to `127.0.0.1` |
 | `WP_THEME` | `twentytwentyfive` | installed and activated by setup |
-| `WP_SITE_TITLE` | `WordPress Claude MCP` | site title |
+| `WP_SITE_TITLE` | `WP Agent Harness` | site title |
 | `WP_ADMIN_USER` | `admin` | development administrator login |
 | `WP_ADMIN_PASSWORD` | generated | **wp-admin** password, not the MCP credential |
 | `MCP_SERVER_NAME` | `wordpress` | name Claude Code registers the server under |
-| `COMPOSE_PROJECT_NAME` | `wordpress-claude-mcp` | Docker Compose project and volume prefix |
+| `COMPOSE_PROJECT_NAME` | `wp-agent-harness` | Docker Compose project and volume prefix |
 
 The rest — image tags, plugin versions, database credentials, the Application
 Password label — are documented inline in
@@ -264,7 +264,7 @@ repository: [SECURITY.md](SECURITY.md).
 ## Project structure
 
 ```
-wordpress-claude-mcp/
+wp-agent-harness/
 ├── .claude/skills/              curated WordPress agent skills (Claude Code)
 ├── .cursor/skills/              same pack for Cursor
 ├── .github/                     CI, issue and PR templates, Dependabot

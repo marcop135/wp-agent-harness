@@ -1,4 +1,4 @@
-# WordPress + WP-CLI image for the wordpress-claude-mcp toolkit.
+# WordPress + WP-CLI image for the wp-agent-harness toolkit.
 #
 # Everything here is pinned. The base image tag, the WP-CLI phar (verified
 # against its published SHA-512) and the wp-cli/ability-command release are all
@@ -73,8 +73,8 @@ ENV WP_CLI_CONFIG_PATH=/usr/local/etc/wp-cli.yml \
     WP_CLI_CACHE_DIR=/tmp/wp-cli-cache \
     WP_CLI_PACKAGES_DIR=/usr/local/lib/wp-cli-packages
 
-COPY apache-wordpress.conf /etc/apache2/conf-available/zz-wordpress-claude-mcp.conf
-RUN a2enconf zz-wordpress-claude-mcp
+COPY apache-wordpress.conf /etc/apache2/conf-available/zz-wp-agent-harness.conf
+RUN a2enconf zz-wp-agent-harness
 
 COPY wp-cli.yml /usr/local/etc/wp-cli.yml
 COPY bin/wp /usr/local/bin/wp

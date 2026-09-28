@@ -415,7 +415,7 @@ so the rebuilt site has the same configuration.
 
 ```bash
 docker compose down --volumes --remove-orphans
-docker image rm wordpress-claude-mcp-wordpress:local
+docker image rm wp-agent-harness-wordpress:local
 docker builder prune
 ```
 

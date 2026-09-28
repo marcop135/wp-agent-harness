@@ -5,6 +5,13 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Renamed the project to `wp-agent-harness` (Compose project, defaults, docs, and
+  clone URLs). Existing Docker volumes under the old project name are orphaned;
+  run `./bin/reset --yes` (or keep `COMPOSE_PROJECT_NAME=wordpress-claude-mcp`
+  in `.env` until you migrate).
+
 ## [1.1.0] - 2026-09-28
 
 ### Added
@@ -78,6 +85,6 @@ README states what the tool is and how to run it, and links rather than repeats.
 - Published as a GitHub template. `COMPOSE_PROJECT_NAME`, `WP_PORT` and
   `WP_SITE_TITLE` are all a second site needs to run beside the first.
 
-[Unreleased]: https://github.com/Foreveryone-berlin/wordpress-claude-mcp/compare/v1.1.0...HEAD
-[1.1.0]: https://github.com/Foreveryone-berlin/wordpress-claude-mcp/compare/v1.0.0...v1.1.0
-[1.0.0]: https://github.com/Foreveryone-berlin/wordpress-claude-mcp/releases/tag/v1.0.0
+[Unreleased]: https://github.com/Foreveryone-berlin/wp-agent-harness/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/Foreveryone-berlin/wp-agent-harness/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/Foreveryone-berlin/wp-agent-harness/releases/tag/v1.0.0
