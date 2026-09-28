@@ -163,7 +163,7 @@ clone inherits it. Nothing follows a moving branch.
 | `WP_CLI_ABILITY_COMMAND_VERSION` | GitHub release tarball | `gh release list --repo wp-cli/ability-command` |
 | `WP_THEME` | wordpress.org | `./bin/wp theme update twentytwentyfive` |
 
-Procedure:
+### Runtime plugins and image pins
 
 ```bash
 # 1. edit both files so a fresh clone gets the same version
@@ -182,10 +182,36 @@ reinstalls in place when they differ, so a plugin bump needs no reset. Image and
 WP-CLI changes are picked up by the rebuild `./bin/setup` runs. A **MariaDB major
 version** change needs `./bin/reset`, because the data directory format changes.
 
-Before pinning a new upstream version, check its requirements — both plugins
+Before pinning a new upstream version, check its requirements. Both plugins
 currently need WordPress 6.9+ and PHP 7.4+, and the ability names this repository
 asserts in `tests/smoke.sh` come from the pinned MS WP Abilities release. If
 upstream renames one, that test fails, which is the point.
+
+### Agent skills (vendored)
+
+Skills are not version variables in `.env`. They are committed trees under
+`.claude/skills/` and `.cursor/skills/`. Refresh from upstream deliberately,
+keep the curated list, and do not install Playground or `@wordpress/env` skills
+(this stack uses Docker Compose + MCP). See
+[docs/claude-code.md](claude-code.md#wordpress-agent-skills).
+
+```bash
+npx skills add WordPress/agent-skills \
+  --skill wordpress-router \
+  --skill wp-project-triage \
+  --skill wp-block-development \
+  --skill wp-block-themes \
+  --skill wp-patterns \
+  --skill wp-plugin-development \
+  --skill wp-rest-api \
+  --skill wp-wpcli-and-ops \
+  --skill wp-abilities-api \
+  --skill wp-abilities-audit \
+  --skill wp-abilities-verify
+```
+
+Commit the updated trees for both `.claude/skills/` and `.cursor/skills/` so the
+two agents stay in sync.
 
 ## Changing this repository
 

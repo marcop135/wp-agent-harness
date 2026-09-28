@@ -1,10 +1,10 @@
 # wp-agent-harness
 
-A disposable, reproducible local WordPress site that Claude Code drives as a
-real development and site-administration agent, over the official WordPress MCP
-Adapter.
+A local, disposable WordPress harness for coding agents. Clone it, run one
+command, and agents talk to a real site over the official
+[WordPress MCP Adapter](https://github.com/WordPress/mcp-adapter).
 
-[![test](https://github.com/Foreveryone-berlin/wp-agent-harness/actions/workflows/test.yml/badge.svg)](https://github.com/Foreveryone-berlin/wp-agent-harness/actions/workflows/test.yml)
+[![test](https://github.com/marcop135/wp-agent-harness/actions/workflows/test.yml/badge.svg)](https://github.com/marcop135/wp-agent-harness/actions/workflows/test.yml)
 [![licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
 [![WordPress 7.1](https://img.shields.io/badge/WordPress-7.1-21759b.svg)](https://wordpress.org/)
 
@@ -12,29 +12,28 @@ Adapter.
 
 ## What this is
 
-Three things already exist and work:
+This repository does **not** ship an MCP server, an abilities framework, or a
+WordPress plugin of its own. Those exist upstream. What lives here is the glue
+that makes them usable as a reproducible agent lab:
 
-- **[WordPress Abilities API](https://developer.wordpress.org/apis/abilities-api/)** (WordPress 6.9+) — core's standard way to register discrete, permission-checked capabilities.
-- **[MCP Adapter](https://github.com/WordPress/mcp-adapter)** — the official WordPress package that exposes those abilities over the Model Context Protocol.
-- **[MS WordPress Abilities](https://github.com/miriamschwab/ms-wp-abilities)** — Miriam Schwab's plugin, which registers 26 abilities covering posts, pages, taxonomy, media, users, settings, plugins, themes and a generic REST bridge.
+- Docker Compose, provisioning, and developer commands (`./bin/*`)
+- Application Password authentication for the MCP endpoint
+- Four layers of automated tests
+- Docs, examples, and a curated set of WordPress agent skills
 
-What did not exist is a repository you can clone on a new machine and have all
-of it running against Claude Code a few minutes later, pinned to exact versions,
-with tests that prove the whole chain actually works.
+Upstream building blocks this harness wires together:
 
-That is this repository. It contains **no MCP server, no abilities framework and
-no WordPress plugin of its own** — every one of those exists upstream and is used
-as a dependency. What is here is the local infrastructure, the authentication
-wiring, the developer commands, the tests and the documentation.
+- **[WordPress Abilities API](https://developer.wordpress.org/apis/abilities-api/)** (WordPress 6.9+)
+- **[MCP Adapter](https://github.com/WordPress/mcp-adapter)** (official WordPress package)
+- **[MS WordPress Abilities](https://github.com/miriamschwab/ms-wp-abilities)** (Miriam Schwab; 26 site-management abilities)
 
-Use it as a starting point for WordPress work: clone or use it as a template,
-run one command, and you have an agent-drivable site. `./bin/reset` throws it
-away and rebuilds it.
+Use it as a starting point or GitHub template. `./bin/reset` throws the site away
+and rebuilds it.
 
 ## Quick start
 
 ```bash
-git clone https://github.com/Foreveryone-berlin/wp-agent-harness.git
+git clone https://github.com/marcop135/wp-agent-harness.git
 cd wp-agent-harness
 
 ./bin/setup     # build, start, install WordPress, issue credentials
@@ -48,12 +47,12 @@ Then ask:
 > active plugins, site title, available post types and current content structure.
 
 `./bin/setup` is idempotent. It never destroys content; only `./bin/reset` does.
+Cursor can use the same skills under `.cursor/skills/`; MCP registration via
+`./bin/connect` is Claude Code-specific.
 
 ### Reusing it for another project
 
-This repository is a GitHub template, so **Use this template** gives you your
-own copy. Change three things in `.env` and a second site runs beside this one
-without collision:
+**Use this template** on GitHub, then change three values in `.env`:
 
 ```bash
 COMPOSE_PROJECT_NAME=my-project   # Docker project and volume prefix
@@ -61,8 +60,28 @@ WP_PORT=8081                      # and DB_PORT, if 3307 is taken
 WP_SITE_TITLE=My Project
 ```
 
-Then `./bin/setup && ./bin/connect`. Claude Code registers the server per
-project directory, so each clone gets its own registration.
+Then `./bin/setup && ./bin/connect`.
+
+## Dependencies
+
+Nothing here tracks a moving upstream branch. Versions are pinned in `.env` /
+[`.env.example`](.env.example). How to bump them:
+[docs/development.md](docs/development.md#updating-dependencies).
+
+| Component | Role | How it gets here | Licence | Pin |
+|-----------|------|------------------|---------|-----|
+| **MCP Adapter** | Exposes abilities over MCP | WordPress plugin, GitHub release ZIP at `./bin/setup` | GPL-2.0-or-later | `MCP_ADAPTER_VERSION` |
+| **MS WordPress Abilities** | Registers site-management abilities | WordPress plugin, GitHub release ZIP at `./bin/setup` | GPL-2.0-or-later | `MS_WP_ABILITIES_VERSION` |
+| **WP-CLI** | CLI inside the container | Phar in the Docker image build | MIT | `WP_CLI_VERSION` |
+| **wp-cli/ability-command** | `wp ability` diagnostic path (not MCP) | Tarball in the Docker image build | MIT | `WP_CLI_ABILITY_COMMAND_VERSION` |
+| **WordPress** | The site | Official Docker image | GPL-2.0-or-later | `WORDPRESS_IMAGE` |
+| **MariaDB** | Database | Official Docker image | GPL-2.0-or-later | `MARIADB_IMAGE` |
+| **Twenty Twenty-Five** | Default theme | wordpress.org via setup | GPL-2.0-or-later | `WP_THEME` |
+| **WordPress agent skills** | Agent procedures (blocks, themes, Abilities, …) | **Vendored** under `.claude/skills/` and `.cursor/skills/` | GPL-2.0-or-later | manual refresh (see docs) |
+
+Only **two** WordPress plugins are installed at runtime. `ability-command` is a
+WP-CLI package in the image, not a plugin. Agent skills are the only upstream
+source tree committed into this git repository.
 
 ## Requirements
 
@@ -72,7 +91,7 @@ project directory, so each clone gets its own registration.
 | Git | clone | |
 | Bash | the `./bin` commands | Git Bash on Windows, the system shell elsewhere |
 | curl | health and MCP checks | ships with Git Bash and macOS |
-| Claude Code | the point of the exercise | only `./bin/connect` and test layer 4 need it |
+| Claude Code | MCP registration and test layer 4 | optional for layers 0–3 |
 | jq | the test suite only | `brew install jq` · `apt install jq` · `winget install jqlang.jq` |
 
 Tested on Windows 11 (Git Bash), and in GitHub Actions on Ubuntu.
@@ -83,7 +102,7 @@ Tested on Windows 11 (Git Bash), and in GitHub Actions on Ubuntu.
   ┌─────────────────────────────────────────────┐
   │ host machine                                │
   │                                             │
-  │   Claude Code                               │
+  │   Coding agent (e.g. Claude Code)           │
   │       │                                     │
   │       │ MCP Streamable HTTP + Basic auth    │
   │       │ (WordPress Application Password)    │
@@ -124,7 +143,7 @@ Which state is persistent, which is disposable, and why it is built this way:
 | `./bin/setup` | Validate prerequisites, create `.env`, build, start, install and configure WordPress, issue the Application Password, verify the stack. Idempotent. |
 | `./bin/start` | Start the Docker services and wait for health. |
 | `./bin/stop` | Stop the services. Volumes and content survive. |
-| `./bin/reset` | **Destructive.** Remove containers, both volumes and the stored credential, then rebuild. Asks for confirmation; `--yes` skips it, `--no-setup` destroys without rebuilding. Run `./bin/connect` afterwards — the Application Password is new. |
+| `./bin/reset` | **Destructive.** Remove containers, both volumes and the stored credential, then rebuild. Asks for confirmation; `--yes` skips it, `--no-setup` destroys without rebuilding. Run `./bin/connect` afterwards; the Application Password is new. |
 | `./bin/status` | Container health, WordPress health, ability registration, MCP endpoint health, Claude Code registration. |
 | `./bin/logs` | Docker logs. `./bin/logs -f wordpress` follows one service; `./bin/logs --debug` shows WordPress's own PHP debug log. |
 | `./bin/test` | The test suite. `--skip-claude` skips the layer that costs model turns; a file name (`repo`, `smoke`, `integration`, `claude-code`) runs one. |
@@ -143,7 +162,7 @@ Which state is persistent, which is disposable, and why it is built this way:
 | **MCP endpoint** | `http://localhost:8080/wp-json/mcp/mcp-adapter-default-server` |
 
 All bound to `127.0.0.1`. Change the port with `WP_PORT` in `.env`, then
-`./bin/start` — no reinstall is needed.
+`./bin/start`. No reinstall is needed.
 
 ## Configuration
 
@@ -162,11 +181,9 @@ with a freshly generated random secret. The ones you are most likely to change:
 | `MCP_SERVER_NAME` | `wordpress` | name Claude Code registers the server under |
 | `COMPOSE_PROJECT_NAME` | `wp-agent-harness` | Docker Compose project and volume prefix |
 
-The rest — image tags, plugin versions, database credentials, the Application
-Password label — are documented inline in
-[`.env.example`](.env.example). Version pins are listed under
-[Versions](#versions); moving one is
-[docs/development.md](docs/development.md#updating-dependencies).
+Image tags, plugin pins, and the Application Password label are documented
+inline in [`.env.example`](.env.example). Current pins:
+[Versions](#versions).
 
 ## Connecting Claude Code
 
@@ -177,8 +194,7 @@ Password label — are documented inline in
 registers an HTTP MCP server in Claude Code's **local** scope: this project only,
 stored in `~/.claude.json`, outside this repository. Verify with
 `claude mcp get wordpress`, remove with `./bin/connect --remove`. Scopes, the
-exact `claude mcp add` equivalent, headless use, and the curated WordPress
-agent skills under `.claude/skills/` and `.cursor/skills/`:
+exact `claude mcp add` equivalent, headless use, and agent skills:
 [docs/claude-code.md](docs/claude-code.md).
 
 Two credentials are easily confused:
@@ -186,9 +202,9 @@ Two credentials are easily confused:
 | | Used for | Where it lives |
 |---|---|---|
 | **Administrator password** | logging into `/wp-admin/` in a browser | `WP_ADMIN_PASSWORD` in `.env` |
-| **Application Password** | MCP and REST requests from Claude Code | `.secrets/application-password`, and Claude Code's own config |
+| **Application Password** | MCP and REST requests from the agent | `.secrets/application-password`, and Claude Code's own config |
 
-## What Claude Code can actually do
+## What the agent can do
 
 The MCP Adapter's default server exposes **three meta-tools**, not one tool per
 ability:
@@ -199,24 +215,16 @@ mcp-adapter-get-ability-info     what does that ability expect?
 mcp-adapter-execute-ability      do it
 ```
 
-Claude discovers what exists, fetches the schema it needs, then executes, so
-`tools/list` stays at three schemas however many abilities the site registers.
 Behind them this site registers 32 abilities: 26 from MS WP Abilities
 (`miriamschwab/*`), 3 WordPress core abilities opted into MCP (`core/*`), and the
 adapter's own 3. Why it is built that way:
 [docs/architecture.md](docs/architecture.md#why-three-tools-and-not-thirty).
 
-The live list, which is authoritative:
-
 ```bash
 ./bin/wp ability list
 ```
 
-Worked prompts, each with the abilities it exercises and what to expect:
-[examples/](examples/README.md) — [inspect](examples/inspect-site.md),
-[create](examples/create-content.md), [modify](examples/modify-content.md),
-[theme](examples/theme.md), [media](examples/media.md),
-[plugins](examples/plugins.md), [build a feature](examples/site-development.md).
+Worked prompts: [examples/](examples/README.md).
 
 ## Testing
 
@@ -232,18 +240,14 @@ Worked prompts, each with the abilities it exercises and what to expect:
 | 0 Repository | `tests/repo.sh` | `.gitignore` coverage, nothing secret tracked, no credential patterns in tracked content, every script parses and is executable, documented files really are tracked, versions in `.env.example` and this README agree, loopback-only bindings |
 | 1 Infrastructure | `tests/smoke.sh` | Compose config, services, health, loopback-only port bindings, `.env` completeness |
 | 2 WordPress / Abilities | `tests/smoke.sh` | WordPress ≥ 6.9, PHP ≥ 7.4, active theme, both plugins at the pinned versions, `wp_register_ability()`, every expected ability registered, `wp ability run` |
-| 3 MCP protocol | `tests/integration.sh` | 401 without auth and with a wrong password, `initialize`, `Mcp-Session-Id` issuance and enforcement, protocol negotiation, `notifications/initialized`, `tools/list`, all three meta-tools, discovery, schema retrieval, execution, a create/read/modify/verify/trash cycle, session termination |
-| 4 Claude Code | `tests/claude-code.sh` | A real headless `claude -p` session that inspects the site, creates a draft page, reads it back, modifies it and trashes it — each step checked against the database with WP-CLI |
+| 3 MCP protocol | `tests/integration.sh` | Auth refusals, session lifecycle, tool discovery and execution, create/read/modify/trash cycle |
+| 4 Claude Code | `tests/claude-code.sh` | Headless `claude -p` session checked against the database with WP-CLI |
 
-Tests create only uniquely named content and delete it again. They never touch
-the rest of the site.
+Tests create only uniquely named content and delete it again.
 
 ## Troubleshooting
 
-`./bin/status` first: it walks the stack in order and the first failing check
-names the layer. Then [docs/troubleshooting.md](docs/troubleshooting.md), which
-covers Docker, ports, the database, plugin installs, missing abilities, MCP
-authentication, Claude Code, stale volumes and credential rotation.
+`./bin/status` first. Then [docs/troubleshooting.md](docs/troubleshooting.md).
 
 ## Security
 
@@ -252,14 +256,14 @@ can create and publish content, install and activate plugins, update themes and
 issue arbitrary REST API writes as the administrator.
 
 - Both ports bind to `127.0.0.1` only.
-- Authentication is always on. An unauthenticated request gets HTTP 401 — the test suite asserts it.
+- Authentication is always on. An unauthenticated request gets HTTP 401; the test suite asserts it.
 - Credentials are never committed. `.env` and `.secrets/` are ignored; the MCP credential lives in Claude Code's own config.
 - The preview/confirm model in MS WP Abilities is a working convention between you and the agent, not a security boundary enforced by code.
 
 Do not expose this to the internet, do not point it at production data, and do
 not reuse its credentials anywhere else. Full model:
-[docs/security.md](docs/security.md). To report a vulnerability in this
-repository: [SECURITY.md](SECURITY.md).
+[docs/security.md](docs/security.md). To report a vulnerability:
+[SECURITY.md](SECURITY.md).
 
 ## Project structure
 
@@ -315,15 +319,15 @@ install, uploads, logs, and Claude Code's MCP registration.
 | MCP protocol | 2025-11-25 | negotiated; the adapter also supports 2025-06-18 and 2024-11-05 |
 
 Both plugins require WordPress 6.9+ (for the Abilities API) and PHP 7.4+.
-Nothing tracks a moving branch.
 
 ## Contributing
 
-[CONTRIBUTING.md](CONTRIBUTING.md) has the development loop, the conventions the
-scripts follow, and what CI checks. Changes to this repository run
-`./bin/test --skip-claude` before they are proposed.
+[CONTRIBUTING.md](CONTRIBUTING.md) has the development loop, conventions, and CI
+expectations. Run `./bin/test --skip-claude` before proposing a change.
 
 ## Licence
 
-[MIT](LICENSE) for this repository. Every upstream component keeps its own
-licence; none of their code is vendored here.
+[MIT](LICENSE) for the harness code. Vendored WordPress agent skills are
+**GPL-2.0-or-later**. Runtime installs (WordPress, plugins, theme, WP-CLI) keep
+their upstream licences and are not committed here except where noted under
+[Dependencies](#dependencies).

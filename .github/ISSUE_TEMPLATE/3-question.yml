@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        [docs/troubleshooting.md](https://github.com/Foreveryone-berlin/wp-agent-harness/blob/main/docs/troubleshooting.md)
+        [docs/troubleshooting.md](https://github.com/marcop135/wp-agent-harness/blob/main/docs/troubleshooting.md)
         answers most of these, and `./bin/status` localises a failure to one
         layer in a couple of seconds. If neither helps, ask here.
 

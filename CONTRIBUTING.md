@@ -1,9 +1,9 @@
 # Contributing
 
-This repository is local infrastructure for driving WordPress from Claude Code.
-It carries no MCP server, no abilities and no WordPress plugin of its own, so a
-change here is almost always to a Bash script, the Docker image, the tests or
-the documentation.
+This repository is local infrastructure for driving WordPress from coding agents
+over the MCP Adapter. It carries no MCP server, no abilities framework and no
+WordPress plugin of its own, so a change here is almost always to a Bash script,
+the Docker image, the tests or the documentation.
 
 **A bug in an ability, in the MCP protocol handling, or in the adapter itself
 belongs upstream**, not here:
@@ -17,7 +17,7 @@ fails there, MCP is not involved.
 ## Setting up
 
 ```bash
-git clone https://github.com/Foreveryone-berlin/wp-agent-harness.git
+git clone https://github.com/marcop135/wp-agent-harness.git
 cd wp-agent-harness
 ./bin/setup          # idempotent; safe to re-run at any time
 ./bin/status         # every layer, in order
@@ -80,7 +80,7 @@ home for that topic.
 
 - **Bug or feature request** — open an issue with the matching template.
 - **A question about using the site** — that is not a bug; open a
-  [discussion-style issue](https://github.com/Foreveryone-berlin/wp-agent-harness/issues/new/choose)
+  [discussion-style issue](https://github.com/marcop135/wp-agent-harness/issues/new/choose)
   and pick "Question", or read [docs/troubleshooting.md](docs/troubleshooting.md)
   first, which covers most of them.
 - **A security problem** — do not open an issue. [SECURITY.md](SECURITY.md).
