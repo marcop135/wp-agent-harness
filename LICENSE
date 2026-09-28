@@ -22,14 +22,30 @@ SOFTWARE.
 
 ---
 
-This repository contains no upstream source code. It installs, at run time and
-from their pinned upstream releases:
+## What this licence covers
 
-  WordPress            GPL-2.0-or-later   https://wordpress.org
-  MCP Adapter          GPL-2.0-or-later   https://github.com/WordPress/mcp-adapter
-  MS WordPress Abilities  GPL-2.0-or-later  https://github.com/miriamschwab/ms-wp-abilities
-  Twenty Twenty-Five   GPL-2.0-or-later   https://wordpress.org/themes/twentytwentyfive/
-  WP-CLI               MIT                https://wp-cli.org
-  wp-cli/ability-command  MIT             https://github.com/wp-cli/ability-command
+The MIT licence above applies to the harness itself: Docker Compose, `bin/`,
+`docker/`, `tests/`, docs, examples, and related project files authored here.
+
+## Third-party components
+
+### Vendored in this repository (GPL-2.0-or-later)
+
+A curated subset of [WordPress/agent-skills](https://github.com/WordPress/agent-skills)
+is committed under `.claude/skills/` and `.cursor/skills/`. Those trees keep
+their upstream GPL-2.0-or-later licence (see `LICENSE` beside each skills root).
+They are not MIT.
+
+### Installed at setup or image build (not in git)
+
+Pinned upstream releases, fetched when you run `./bin/setup` or build the
+WordPress image. None of their source is committed here:
+
+  WordPress                 GPL-2.0-or-later   https://wordpress.org
+  MCP Adapter               GPL-2.0-or-later   https://github.com/WordPress/mcp-adapter
+  MS WordPress Abilities    GPL-2.0-or-later   https://github.com/miriamschwab/ms-wp-abilities
+  Twenty Twenty-Five        GPL-2.0-or-later   https://wordpress.org/themes/twentytwentyfive/
+  WP-CLI                    MIT                https://wp-cli.org
+  wp-cli/ability-command    MIT                https://github.com/wp-cli/ability-command
 
 Each remains under its own licence.
