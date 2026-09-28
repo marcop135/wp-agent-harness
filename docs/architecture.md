@@ -271,7 +271,9 @@ that matters should ever live only in there.
 
 Infrastructure and documentation only: `docker-compose.yml`, `docker/`, `bin/`,
 `tests/`, `docs/`, `examples/`, `.env.example`, `CLAUDE.md`, `Makefile`,
-`README.md`, `LICENSE`, `CHANGELOG.md`, `.github/`.
+`README.md`, `LICENSE`, `CHANGELOG.md`, `.github/`, plus the curated
+WordPress agent skills under `.claude/skills/` and `.cursor/skills/`
+(GPL-2.0-or-later upstream copies; see [claude-code.md](claude-code.md)).
 
 ### Excluded from Git, and why
 
