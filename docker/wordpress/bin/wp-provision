@@ -9,9 +9,9 @@
 # Destroying state is ./bin/reset's job, never this script's.
 set -eu
 
-WP_SITE_TITLE="${WP_SITE_TITLE:-WordPress Claude MCP}"
+WP_SITE_TITLE="${WP_SITE_TITLE:-WP Agent Harness}"
 WP_ADMIN_USER="${WP_ADMIN_USER:-admin}"
-WP_ADMIN_EMAIL="${WP_ADMIN_EMAIL:-admin@wordpress-claude-mcp.test}"
+WP_ADMIN_EMAIL="${WP_ADMIN_EMAIL:-admin@wp-agent-harness.test}"
 WP_THEME="${WP_THEME:-twentytwentyfive}"
 MCP_ADAPTER_VERSION="${MCP_ADAPTER_VERSION:-0.6.1}"
 MS_WP_ABILITIES_VERSION="${MS_WP_ABILITIES_VERSION:-1.12.0}"

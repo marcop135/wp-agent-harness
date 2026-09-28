@@ -1,4 +1,4 @@
-name: ${COMPOSE_PROJECT_NAME:-wordpress-claude-mcp}
+name: ${COMPOSE_PROJECT_NAME:-wp-agent-harness}
 
 services:
   db:
@@ -31,7 +31,7 @@ services:
         WORDPRESS_IMAGE: ${WORDPRESS_IMAGE:-wordpress:7.1.0-php8.3-apache}
         WP_CLI_VERSION: ${WP_CLI_VERSION:-2.12.0}
         WP_CLI_ABILITY_COMMAND_VERSION: ${WP_CLI_ABILITY_COMMAND_VERSION:-1.0.2}
-    image: ${COMPOSE_PROJECT_NAME:-wordpress-claude-mcp}-wordpress:local
+    image: ${COMPOSE_PROJECT_NAME:-wp-agent-harness}-wordpress:local
     restart: unless-stopped
     depends_on:
       db:
@@ -46,9 +46,9 @@ services:
       # recreating the container is enough — no reinstall needed.
       WORDPRESS_SITE_URL: http://localhost:${WP_PORT:-8080}
       # Consumed by /usr/local/bin/wp-provision inside the container.
-      WP_SITE_TITLE: ${WP_SITE_TITLE:-WordPress Claude MCP}
+      WP_SITE_TITLE: ${WP_SITE_TITLE:-WP Agent Harness}
       WP_ADMIN_USER: ${WP_ADMIN_USER:-admin}
-      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL:-admin@wordpress-claude-mcp.test}
+      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL:-admin@wp-agent-harness.test}
       WP_ADMIN_PASSWORD: ${WP_ADMIN_PASSWORD:?WP_ADMIN_PASSWORD is required — run ./bin/setup}
       WP_THEME: ${WP_THEME:-twentytwentyfive}
       MCP_ADAPTER_VERSION: ${MCP_ADAPTER_VERSION:-0.6.1}
