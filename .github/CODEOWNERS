@@ -1,0 +1,10 @@
+# Review is on the repository owner by default.
+*                   @marcop135
+
+# The parts where a mistake is a credential leak or a widened binding.
+/docker-compose.yml @marcop135
+/docker/            @marcop135
+/bin/               @marcop135
+/.github/           @marcop135
+/SECURITY.md        @marcop135
+/docs/security.md   @marcop135

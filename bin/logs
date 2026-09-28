@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+#
+# logs — show Docker service logs.
+#
+#   ./bin/logs                 last 200 lines from every service
+#   ./bin/logs wordpress       one service only (wordpress | db)
+#   ./bin/logs -f wordpress    follow
+#   ./bin/logs --debug         WordPress's own wp-content/debug.log
+
+source "$(dirname -- "${BASH_SOURCE[0]}")/lib.sh"
+
+require_docker
+require_env
+
+if [[ "${1:-}" == '--debug' ]]; then
+    step 'wp-content/debug.log'
+    if wpx test -f /var/www/html/wp-content/debug.log; then
+        wpx tail -n "${2:-200}" /var/www/html/wp-content/debug.log
+    else
+        info 'No debug.log yet — WordPress has logged no PHP notices or errors.'
+    fi
+    exit 0
+fi
+
+follow=()
+if [[ "${1:-}" == '-f' || "${1:-}" == '--follow' ]]; then
+    follow=(--follow)
+    shift
+fi
+
+dc logs --tail 200 --timestamps "${follow[@]}" "$@"

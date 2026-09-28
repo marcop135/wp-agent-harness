@@ -1,0 +1,84 @@
+name: ${COMPOSE_PROJECT_NAME:-wp-agent-harness}
+
+services:
+  db:
+    image: ${MARIADB_IMAGE:-mariadb:11.8.9}
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    environment:
+      MARIADB_DATABASE: ${MYSQL_DATABASE:-wordpress}
+      MARIADB_USER: ${MYSQL_USER:-wordpress}
+      MARIADB_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD is required — run ./bin/setup}
+      MARIADB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is required — run ./bin/setup}
+    volumes:
+      - db_data:/var/lib/mysql
+    # Bound to loopback so the database is never reachable from the network.
+    ports:
+      - "127.0.0.1:${DB_PORT:-3307}:3306"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  wordpress:
+    build:
+      context: ./docker/wordpress
+      args:
+        WORDPRESS_IMAGE: ${WORDPRESS_IMAGE:-wordpress:7.1.0-php8.3-apache}
+        WP_CLI_VERSION: ${WP_CLI_VERSION:-2.12.0}
+        WP_CLI_ABILITY_COMMAND_VERSION: ${WP_CLI_ABILITY_COMMAND_VERSION:-1.0.2}
+    image: ${COMPOSE_PROJECT_NAME:-wp-agent-harness}-wordpress:local
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE:-wordpress}
+      WORDPRESS_DB_USER: ${MYSQL_USER:-wordpress}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD is required — run ./bin/setup}
+      WORDPRESS_DEBUG: "1"
+      # Read back by wp-config.php below, so changing WP_PORT in .env and
+      # recreating the container is enough — no reinstall needed.
+      WORDPRESS_SITE_URL: http://localhost:${WP_PORT:-8080}
+      # Consumed by /usr/local/bin/wp-provision inside the container.
+      WP_SITE_TITLE: ${WP_SITE_TITLE:-WP Agent Harness}
+      WP_ADMIN_USER: ${WP_ADMIN_USER:-admin}
+      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL:-admin@wp-agent-harness.test}
+      WP_ADMIN_PASSWORD: ${WP_ADMIN_PASSWORD:?WP_ADMIN_PASSWORD is required — run ./bin/setup}
+      WP_THEME: ${WP_THEME:-twentytwentyfive}
+      MCP_ADAPTER_VERSION: ${MCP_ADAPTER_VERSION:-0.6.1}
+      MS_WP_ABILITIES_VERSION: ${MS_WP_ABILITIES_VERSION:-1.12.0}
+      MCP_APP_PASSWORD_NAME: ${MCP_APP_PASSWORD_NAME:-claude-code-mcp}
+      WORDPRESS_CONFIG_EXTRA: |
+        /* Local development environment. Never use this configuration in production. */
+        define( 'WP_ENVIRONMENT_TYPE', 'local' );
+        define( 'WP_HOME', getenv( 'WORDPRESS_SITE_URL' ) ?: 'http://localhost:8080' );
+        define( 'WP_SITEURL', WP_HOME );
+        define( 'WP_DEBUG_LOG', true );
+        define( 'WP_DEBUG_DISPLAY', false );
+        define( 'FS_METHOD', 'direct' );
+        define( 'AUTOMATIC_UPDATER_DISABLED', true );
+    volumes:
+      - wp_data:/var/www/html
+    # Bound to loopback so WordPress and the MCP endpoint are never reachable
+    # from the network. See docs/security.md.
+    ports:
+      - "127.0.0.1:${WP_PORT:-8080}:80"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          curl -fsS -o /dev/null http://localhost/wp-json/ || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 40s
+
+volumes:
+  db_data:
+  wp_data:

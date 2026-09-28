@@ -1,0 +1,25 @@
+name: Question
+description: How do I do X with this setup
+title: "[question]: "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        [docs/troubleshooting.md](https://github.com/marcop135/wp-agent-harness/blob/main/docs/troubleshooting.md)
+        answers most of these, and `./bin/status` localises a failure to one
+        layer in a couple of seconds. If neither helps, ask here.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: What are you trying to do
+    validations:
+      required: true
+
+  - type: textarea
+    id: tried
+    attributes:
+      label: What you have tried
+      description: Commands you ran and what came back.
+      render: text
