@@ -64,6 +64,19 @@ them as durable, and do not store anything there that is not reproducible.
 diagnostic path: if an ability works there but not over MCP, the problem is in
 the MCP layer, not in WordPress.
 
+## Skills
+
+A curated subset of [WordPress/agent-skills](https://github.com/WordPress/agent-skills)
+lives under `.claude/skills/` and `.cursor/skills/` (blocks, themes, plugins,
+REST, Abilities API, WP-CLI, router/triage). Use them for WordPress coding
+patterns.
+
+They do not replace this stack. Site work still goes through the `wordpress` MCP
+abilities or `./bin/wp`. Do not switch to `@wordpress/env`, WordPress Playground,
+or Blueprints for the local site; this repository's Docker Compose setup is the
+environment. Content and admin rules above still apply (drafts by default,
+inspect before change, no destructive ops without an explicit ask).
+
 ## Boundaries
 
 - Never expose the MCP endpoint or the WordPress site beyond localhost.

@@ -176,7 +176,8 @@ Password label — are documented inline in
 registers an HTTP MCP server in Claude Code's **local** scope: this project only,
 stored in `~/.claude.json`, outside this repository. Verify with
 `claude mcp get wordpress`, remove with `./bin/connect --remove`. Scopes, the
-exact `claude mcp add` equivalent and headless use:
+exact `claude mcp add` equivalent, headless use, and the curated WordPress
+agent skills under `.claude/skills/` and `.cursor/skills/`:
 [docs/claude-code.md](docs/claude-code.md).
 
 Two credentials are easily confused:
@@ -263,6 +264,8 @@ repository: [SECURITY.md](SECURITY.md).
 
 ```
 wordpress-claude-mcp/
+├── .claude/skills/              curated WordPress agent skills (Claude Code)
+├── .cursor/skills/              same pack for Cursor
 ├── .github/                     CI, issue and PR templates, Dependabot
 ├── bin/                         the developer commands
 │   ├── lib.sh                   shared helpers, sourced by the rest
