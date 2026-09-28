@@ -3,6 +3,20 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [1.1.0] - 2026-09-28
+
+### Added
+
+- Curated [WordPress/agent-skills](https://github.com/WordPress/agent-skills)
+  pack (GPL-2.0-or-later) under `.claude/skills/` and `.cursor/skills/`: router,
+  project triage, block development, block themes, patterns, plugin development,
+  REST API, WP-CLI/ops, and Abilities API (api, audit, verify).
+- Skills precedence in `CLAUDE.md`: MCP abilities and `./bin/wp` stay the site
+  path; `@wordpress/env`, Playground and Blueprints are not used for this stack.
+- Refresh and exclusion notes in `docs/claude-code.md`.
+
 ## [1.0.0] — 2026-09-18
 
 First working version. Claude Code drives a local WordPress site through the
@@ -64,4 +78,6 @@ README states what the tool is and how to run it, and links rather than repeats.
 - Published as a GitHub template. `COMPOSE_PROJECT_NAME`, `WP_PORT` and
   `WP_SITE_TITLE` are all a second site needs to run beside the first.
 
+[Unreleased]: https://github.com/Foreveryone-berlin/wordpress-claude-mcp/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/Foreveryone-berlin/wordpress-claude-mcp/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/Foreveryone-berlin/wordpress-claude-mcp/releases/tag/v1.0.0

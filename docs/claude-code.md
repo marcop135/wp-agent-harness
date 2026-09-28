@@ -110,6 +110,52 @@ The end-to-end check, which drives a real headless session:
 ./bin/test claude-code
 ```
 
+## WordPress agent skills
+
+This repository vendors a curated subset of
+[WordPress/agent-skills](https://github.com/WordPress/agent-skills) (GPL-2.0-or-later)
+into `.claude/skills/` and `.cursor/skills/` so Claude Code and Cursor share the
+same pack:
+
+| Skill | Role |
+|-------|------|
+| `wordpress-router` | Classify the task and route to a domain skill |
+| `wp-project-triage` | Detect project type, tooling, versions |
+| `wp-block-development` | Gutenberg blocks |
+| `wp-block-themes` | Block themes, `theme.json`, templates |
+| `wp-patterns` | Block patterns |
+| `wp-plugin-development` | Plugin architecture, hooks, security |
+| `wp-rest-api` | REST routes, schema, auth |
+| `wp-wpcli-and-ops` | WP-CLI and ops |
+| `wp-abilities-api` | Abilities API registration and consumption |
+| `wp-abilities-audit` | Audit REST surface for Abilities registrations |
+| `wp-abilities-verify` | Verify Abilities registrations |
+
+Not installed on purpose: `wp-env`, `wp-playground`, `blueprint`, and other
+skills that compete with this repo's Docker + MCP stack. [CLAUDE.md](../CLAUDE.md)
+is authoritative: site ops stay on MCP abilities and `./bin/wp`.
+
+Refresh the curated set from upstream:
+
+```bash
+npx skills add WordPress/agent-skills \
+  --skill wordpress-router \
+  --skill wp-project-triage \
+  --skill wp-block-development \
+  --skill wp-block-themes \
+  --skill wp-patterns \
+  --skill wp-plugin-development \
+  --skill wp-rest-api \
+  --skill wp-wpcli-and-ops \
+  --skill wp-abilities-api \
+  --skill wp-abilities-audit \
+  --skill wp-abilities-verify
+```
+
+Or clone the upstream repo, run `skillpack-build.mjs` / `skillpack-install.mjs`
+with `--targets=claude,cursor` and the same `--skills=` list. Confirm discovery
+with `claude /skills` (or Cursor's skill list) from the repository root.
+
 ## Removing the connection
 
 ```bash
