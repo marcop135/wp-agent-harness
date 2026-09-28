@@ -5,6 +5,8 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-09-28
+
 ### Changed
 
 - Renamed the project to `wp-agent-harness` (Compose project, defaults, docs, and
@@ -85,6 +87,7 @@ README states what the tool is and how to run it, and links rather than repeats.
 - Published as a GitHub template. `COMPOSE_PROJECT_NAME`, `WP_PORT` and
   `WP_SITE_TITLE` are all a second site needs to run beside the first.
 
-[Unreleased]: https://github.com/Foreveryone-berlin/wp-agent-harness/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/Foreveryone-berlin/wp-agent-harness/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/Foreveryone-berlin/wp-agent-harness/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/Foreveryone-berlin/wp-agent-harness/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/Foreveryone-berlin/wp-agent-harness/releases/tag/v1.0.0
