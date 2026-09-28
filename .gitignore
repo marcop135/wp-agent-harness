@@ -1,0 +1,66 @@
+# ---------------------------------------------------------------------------
+# Secrets and local configuration
+# ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+.secrets/
+*.pem
+*.key
+*.p12
+*credentials*
+!docs/**/*credentials*
+
+# Claude Code local state. .claude/settings.local.json can hold credentials;
+# MCP servers are registered in ~/.claude.json, outside this repository.
+.claude/settings.local.json
+.mcp.json
+
+# ---------------------------------------------------------------------------
+# Generated WordPress state — all of it lives in Docker volumes, none of it
+# belongs in Git. These rules exist as a second line of defence.
+#
+# Anchored to the repository root on purpose: an unanchored `wordpress/` would
+# also swallow docker/wordpress/, which is tracked infrastructure.
+# ---------------------------------------------------------------------------
+/wordpress/
+/wp-admin/
+/wp-includes/
+/wp-content/
+/wp-config.php
+/uploads/
+
+# ---------------------------------------------------------------------------
+# Database dumps and Docker volume data
+# ---------------------------------------------------------------------------
+*.sql
+*.sql.gz
+*.sql.bz2
+*.dump
+data/
+db-data/
+volumes/
+docker-compose.override.yml
+
+# ---------------------------------------------------------------------------
+# Logs and build artefacts
+# ---------------------------------------------------------------------------
+*.log
+logs/
+tmp/
+.tmp/
+node_modules/
+vendor/
+
+# ---------------------------------------------------------------------------
+# OS and editor files
+# ---------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+!.vscode/extensions.json

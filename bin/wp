@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+#
+# wp — run WP-CLI inside the WordPress container, as www-data.
+#
+#   ./bin/wp plugin list
+#   ./bin/wp ability list --namespace=miriamschwab
+#   ./bin/wp ability run core/get-site-info --user=admin
+
+source "$(dirname -- "${BASH_SOURCE[0]}")/lib.sh"
+
+require_docker
+require_env
+
+container_running wordpress || die 'The wordpress container is not running. Run ./bin/start.'
+
+wp_cli "$@"

@@ -1,0 +1,85 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: shell and repository integrity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: shellcheck
+        run: |
+          shellcheck --version
+          shellcheck --severity=warning \
+            bin/lib.sh bin/setup bin/start bin/stop bin/reset \
+            bin/status bin/logs bin/test bin/connect bin/wp \
+            tests/lib.sh tests/repo.sh tests/smoke.sh \
+            tests/integration.sh tests/claude-code.sh
+
+      - name: shellcheck (container scripts, POSIX sh)
+        run: |
+          shellcheck --severity=warning --shell=sh \
+            docker/wordpress/bin/wp \
+            docker/wordpress/bin/wp-provision \
+            docker/wordpress/bin/wp-app-password
+
+      - name: php syntax
+        run: php -l docker/wordpress/ability-command-autoload.php
+
+      - name: docker compose configuration is valid
+        run: |
+          cp .env.example .env
+          sed -i 's/^\([A-Z_]*\)=CHANGE_ME$/\1=ci-placeholder-not-a-secret/' .env
+          docker compose config --quiet
+          docker compose config | grep -q '127.0.0.1'
+
+      - name: repository integrity
+        run: bash tests/repo.sh
+
+  stack:
+    name: full stack, layers 1-3
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: setup
+        run: ./bin/setup
+
+      - name: status
+        run: ./bin/status
+
+      - name: tests (layers 1-3)
+        run: ./bin/test repo smoke integration
+
+      - name: setup is idempotent
+        run: ./bin/setup
+
+      - name: reset rebuilds from a clean state
+        run: |
+          ./bin/reset --yes
+          ./bin/test smoke integration
+
+      - name: diagnostics on failure
+        if: failure()
+        run: |
+          docker compose ps || true
+          ./bin/logs || true
+          ./bin/logs --debug || true
+
+      - name: tear down
+        if: always()
+        run: docker compose down --volumes --remove-orphans || true

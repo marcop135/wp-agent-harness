@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#
+# stop — stop the Docker services. Volumes, the database and every piece of
+#        site content survive; ./bin/start brings it all back.
+
+source "$(dirname -- "${BASH_SOURCE[0]}")/lib.sh"
+
+require_docker
+require_env
+
+step 'Stopping services'
+dc stop
+
+ok 'Stopped. Data volumes are intact — ./bin/start resumes where you left off.'

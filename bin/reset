@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+#
+# reset — DESTRUCTIVE. Remove the containers, both Docker volumes (database and
+#         the whole WordPress install) and the local Application Password, then
+#         rebuild the environment from scratch.
+#
+#   ./bin/reset            destroy, then run ./bin/setup again
+#   ./bin/reset --no-setup destroy only
+#   ./bin/reset --yes      skip the confirmation prompt (for scripts and CI)
+
+source "$(dirname -- "${BASH_SOURCE[0]}")/lib.sh"
+
+assume_yes=false
+run_setup=true
+for arg in "$@"; do
+    case "$arg" in
+        -y|--yes)   assume_yes=true ;;
+        --no-setup) run_setup=false ;;
+        -h|--help)  sed -n '2,12p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
+        *)          die "Unknown option: $arg" ;;
+    esac
+done
+
+require_docker
+[[ -f "$ENV_FILE" ]] || die ".env is missing. Nothing to reset — run ./bin/setup."
+
+project="$(env_get COMPOSE_PROJECT_NAME wp-agent-harness)"
+
+printf '%sThis destroys the local WordPress site completely.%s\n\n' "$C_BOLD$C_YELLOW" "$C_RESET"
+printf '  project          %s\n' "$project"
+printf '  database volume  %s_db_data\n' "$project"
+printf '  wordpress volume %s_wp_data\n' "$project"
+printf '  credential       %s\n' "${APP_PASSWORD_FILE#"$REPO_ROOT/"}"
+printf '\n  .env is kept. Every post, page, upload, plugin and setting is not.\n\n'
+
+if [[ "$assume_yes" != true ]]; then
+    read -r -p "Type 'destroy' to continue: " answer
+    [[ "$answer" == 'destroy' ]] || die 'Aborted. Nothing was changed.'
+fi
+
+step 'Removing containers and volumes'
+dc down --volumes --remove-orphans
+ok 'Containers and volumes removed'
+
+if [[ -f "$APP_PASSWORD_FILE" ]]; then
+    rm -f "$APP_PASSWORD_FILE"
+    ok 'Removed the stored Application Password'
+fi
+
+if [[ "$run_setup" == true ]]; then
+    step 'Rebuilding from scratch'
+    exec "$REPO_ROOT/bin/setup"
+fi
+
+printf '\n%sReset complete.%s Run ./bin/setup to rebuild.\n\n' "$C_GREEN" "$C_RESET"
