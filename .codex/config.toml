@@ -1,0 +1,14 @@
+# Project-scoped MCP for OpenAI Codex (CLI / IDE).
+#
+# Requires a trusted project directory (Codex prompts on first open).
+# Auth is not stored here. After ./bin/setup:
+#
+#   eval "$(./bin/connect --print | grep '^export ')"
+#
+# Or copy the export line from ./bin/connect --print.
+# If you change WP_PORT in .env, update the url below to match.
+# See docs/codex.md.
+
+[mcp_servers.wordpress]
+url = "http://127.0.0.1:8080/wp-json/mcp/mcp-adapter-default-server"
+env_http_headers = { Authorization = "WORDPRESS_MCP_BASIC_AUTH" }

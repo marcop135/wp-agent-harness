@@ -1,5 +1,9 @@
 # Connecting Claude Code
 
+For OpenAI Codex, see [codex.md](codex.md). For the shared agent map, see
+[ai-skills.md](ai-skills.md). `./bin/connect --print` works without Claude Code
+and prints URL plus `WORDPRESS_MCP_BASIC_AUTH` for other MCP clients.
+
 ## The short version
 
 ```bash
@@ -15,7 +19,7 @@ cd /path/to/wp-agent-harness && claude
 | Transport | `http` |
 | URL | `http://localhost:8080/wp-json/mcp/mcp-adapter-default-server` |
 | Authentication | `Authorization: Basic <base64 of admin:application-password>` |
-| Scope | `local` — this project only, stored in `~/.claude.json` |
+| Scope | `local`, this project only, stored in `~/.claude.json` |
 
 `./bin/connect` is exactly this, with the endpoint and credential filled in from
 `.env` and `.secrets/application-password`:
@@ -64,8 +68,8 @@ need an environment-variable indirection:
 }
 ```
 
-That works — `.mcp.json` expands `${VAR}` and `${VAR:-default}` in `url`,
-`headers`, `command`, `args` and `env` — but it means exporting
+That works, `.mcp.json` expands `${VAR}` and `${VAR:-default}` in `url`,
+`headers`, `command`, `args` and `env`, but it means exporting
 `WORDPRESS_MCP_BASIC_AUTH` in every shell that starts Claude Code, and it adds a
 file whose only purpose is to reference a secret stored elsewhere. `.mcp.json` is
 in `.gitignore` here so an experiment cannot be committed by accident.
@@ -89,7 +93,7 @@ wordpress:
     Authorization: Basic ...
 ```
 
-Run both from the repository directory — a `local`-scope server does not exist
+Run both from the repository directory, a `local`-scope server does not exist
 anywhere else.
 
 Inside an interactive session, `/mcp` lists the connected servers and their
@@ -101,7 +105,7 @@ mcp__wordpress__mcp-adapter-get-ability-info
 mcp__wordpress__mcp-adapter-execute-ability
 ```
 
-Three is correct and complete. The abilities live behind them — see
+Three is correct and complete. The abilities live behind them, see
 [architecture.md](architecture.md#why-three-tools-and-not-thirty).
 
 The end-to-end check, which drives a real headless session:
@@ -133,7 +137,9 @@ same pack:
 
 Not installed on purpose: `wp-env`, `wp-playground`, `blueprint`, and other
 skills that compete with this repo's Docker + MCP stack. [CLAUDE.md](../CLAUDE.md)
-is authoritative: site ops stay on MCP abilities and `./bin/wp`.
+is authoritative: site ops stay on MCP abilities and `./bin/wp`. See also
+[ai-skills.md](ai-skills.md) for how entry docs, MCP, and coding skills relate,
+and [AGENTS.md](AGENTS.md) for the canonical agent index.
 
 Refresh the curated set from upstream:
 
@@ -188,5 +194,5 @@ none` denies anything that would otherwise prompt, so the turn cannot hang.
 ## When it does not connect
 
 [troubleshooting.md](troubleshooting.md#claude-code) covers the four failure
-modes — server not found, status not `Connected`, connected but no tools, tools
-that fail on every call — along with the WordPress-side causes behind them.
+modes, server not found, status not `Connected`, connected but no tools, tools
+that fail on every call, along with the WordPress-side causes behind them.
