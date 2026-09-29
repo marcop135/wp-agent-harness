@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 1280 640"
+     width="1280"
+     height="640"
+     role="img"
+     aria-label="wp-agent-harness: local disposable WordPress for coding agents, over MCP">
+
+  <title>wp-agent-harness: Local Disposable WordPress for Coding Agents, over MCP</title>
+
+  <defs>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#05070E"/>
+      <stop offset="100%" stop-color="#0A101F"/>
+    </linearGradient>
+
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 0 40"
+            fill="none"
+            stroke="#38BDF8"
+            stroke-opacity="0.07"
+            stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <style>
+    .mono {
+      font-family: "Cascadia Code", "Cascadia Mono", Consolas,
+                   "SFMono-Regular", Menlo, "DejaVu Sans Mono", monospace;
+    }
+
+    .sans {
+      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont,
+                   Inter, Helvetica, Arial, sans-serif;
+    }
+
+    .h1 {
+      font-size: 72px;
+      font-weight: 700;
+      fill: #E8FAFF;
+      letter-spacing: -2px;
+    }
+
+    .h2 {
+      font-size: 28px;
+      font-weight: 600;
+      fill: #7F9AB8;
+      letter-spacing: -0.4px;
+    }
+
+    .sh {
+      font-size: 34px;
+      font-weight: 700;
+    }
+
+    .plat {
+      font-size: 20px;
+      font-weight: 600;
+      fill: #7F9AB8;
+    }
+  </style>
+
+  <rect width="1280" height="640" fill="url(#ground)"/>
+  <rect width="1280" height="640" fill="url(#grid)"/>
+
+  <!-- Vertically centered block: title + tagline + cards (~286px) -->
+  <g transform="translate(0 177)">
+
+    <text class="mono h1"
+          x="640"
+          y="72"
+          text-anchor="middle">
+      <tspan fill="#38BDF8">wp-</tspan><tspan>agent-harness</tspan>
+    </text>
+
+    <text class="sans h2"
+          x="640"
+          y="120"
+          text-anchor="middle">
+      local disposable WordPress for coding agents, over MCP
+    </text>
+
+    <!-- Flat cards, no chrome / dots / shadow -->
+    <g>
+
+      <rect x="65" y="166" width="275" height="120" rx="12"
+            fill="#111B2E" stroke="#243450" stroke-width="2"/>
+      <rect x="65" y="280" width="275" height="6" fill="#C084FC"/>
+      <text class="mono sh" x="202.5" y="222" text-anchor="middle" fill="#C084FC">agent</text>
+      <text class="sans plat" x="202.5" y="258" text-anchor="middle">Claude · Cursor · Codex</text>
+
+      <rect x="355" y="166" width="275" height="120" rx="12"
+            fill="#111B2E" stroke="#243450" stroke-width="2"/>
+      <rect x="355" y="280" width="275" height="6" fill="#38BDF8"/>
+      <text class="mono sh" x="492.5" y="222" text-anchor="middle" fill="#38BDF8">mcp</text>
+      <text class="sans plat" x="492.5" y="258" text-anchor="middle">Adapter</text>
+
+      <rect x="645" y="166" width="275" height="120" rx="12"
+            fill="#111B2E" stroke="#243450" stroke-width="2"/>
+      <rect x="645" y="280" width="275" height="6" fill="#2DD4BF"/>
+      <text class="mono sh" x="782.5" y="222" text-anchor="middle" fill="#2DD4BF">ability</text>
+      <text class="sans plat" x="782.5" y="258" text-anchor="middle">Abilities API</text>
+
+      <rect x="940" y="166" width="275" height="120" rx="12"
+            fill="#111B2E" stroke="#243450" stroke-width="2"/>
+      <rect x="940" y="280" width="275" height="6" fill="#60A5FA"/>
+      <text class="mono sh" x="1077.5" y="222" text-anchor="middle" fill="#60A5FA">stack</text>
+      <text class="sans plat" x="1077.5" y="258" text-anchor="middle">WP · MariaDB · Docker</text>
+
+    </g>
+  </g>
+</svg>

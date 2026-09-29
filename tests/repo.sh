@@ -4,7 +4,7 @@
 #
 # Checks that nothing secret is tracked, that .gitignore keeps it that way,
 # that every shell script parses, that the Compose file is valid, and that the
-# versions in .env.example and README.md have not drifted apart.
+# versions in .env.example and docs/development.md have not drifted apart.
 #
 # Runs locally (./bin/test repo) and in CI.
 
@@ -129,15 +129,18 @@ done
 suite 'Repository — documented files exist'
 # ===========================================================================
 
-for f in README.md CLAUDE.md CHANGELOG.md LICENSE Makefile docker-compose.yml \
+for f in README.md CLAUDE.md AGENTS.md llms.txt CHANGELOG.md LICENSE Makefile docker-compose.yml \
          .env.example .gitignore .gitattributes \
          CONTRIBUTING.md SECURITY.md CODE_OF_CONDUCT.md \
          .github/workflows/test.yml .github/dependabot.yml \
          .github/CODEOWNERS .github/PULL_REQUEST_TEMPLATE.md \
          .github/ISSUE_TEMPLATE/config.yml .github/ISSUE_TEMPLATE/1-bug.yml \
          .github/ISSUE_TEMPLATE/2-feature.yml .github/ISSUE_TEMPLATE/3-question.yml \
-         docs/architecture.md docs/claude-code.md docs/development.md \
+         .cursor/AGENTS.md .codex/config.toml \
+         docs/AGENTS.md docs/ai-skills.md docs/architecture.md docs/claude-code.md docs/codex.md docs/development.md \
          docs/security.md docs/troubleshooting.md \
+         docs/agents/README.md docs/agents/agent-contract.md docs/agents/runtime-policy.md \
+         docs/hero.png docs/og.png docs/og.svg \
          examples/README.md examples/inspect-site.md examples/create-content.md \
          examples/modify-content.md examples/media.md examples/theme.md \
          examples/plugins.md examples/site-development.md \
@@ -158,17 +161,17 @@ for f in README.md CLAUDE.md CHANGELOG.md LICENSE Makefile docker-compose.yml \
 done
 
 # ===========================================================================
-suite 'Repository — versions agree between .env.example and README.md'
+suite 'Repository — versions agree between .env.example and docs/development.md'
 # ===========================================================================
 
-readme="$(cat README.md)"
+versions_doc="$(cat docs/development.md)"
 for var in MCP_ADAPTER_VERSION MS_WP_ABILITIES_VERSION WP_CLI_VERSION \
            WP_CLI_ABILITY_COMMAND_VERSION WORDPRESS_IMAGE MARIADB_IMAGE; do
     value="$(grep -E "^${var}=" .env.example | cut -d= -f2- | tr -d '\r')"
     if [[ -z "$value" ]]; then
         _record_fail "$var is set in .env.example" 'missing'
     else
-        assert_contains "README.md documents $var=$value" "$readme" "$value"
+        assert_contains "docs/development.md documents $var=$value" "$versions_doc" "$value"
     fi
 done
 

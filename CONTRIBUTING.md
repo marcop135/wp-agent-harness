@@ -47,7 +47,7 @@ Application Password, or the abilities the test drives.
 - Never `curl -o /dev/null`; use `http_status` or `http_headers` from
   `bin/lib.sh`. Git Bash's native curl treats `/dev/null` as a filename.
 - Provisioning steps check current state before changing it. `./bin/setup` must
-  stay idempotent, and must never destroy content — that is `./bin/reset`'s job
+  stay idempotent, and must never destroy content: that is `./bin/reset`'s job
   alone.
 - Tests name their content uniquely and delete it in an `EXIT` trap.
 - Shell is Bash for `bin/` and `tests/`, POSIX `sh` for
@@ -57,7 +57,9 @@ Application Password, or the abilities the test drives.
   moving branch. Moving a pin is
   [docs/development.md](docs/development.md#updating-dependencies).
 - Documentation grows by replacing, not appending. Each topic has one home:
-  architecture, claude-code, development, security, troubleshooting.
+  AGENTS (and `docs/agents/`), ai-skills, architecture, claude-code, development,
+  security, troubleshooting. Agent entry surfaces stay in parity: `docs/AGENTS.md`,
+  root `AGENTS.md`, `CLAUDE.md`, `.cursor/AGENTS.md`, and `llms.txt`.
 
 ## Before opening a pull request
 
@@ -78,12 +80,12 @@ home for that topic.
 
 ## Reporting
 
-- **Bug or feature request** — open an issue with the matching template.
-- **A question about using the site** — that is not a bug; open a
+- **Bug or feature request:** open an issue with the matching template.
+- **A question about using the site:** that is not a bug; open a
   [discussion-style issue](https://github.com/marcop135/wp-agent-harness/issues/new/choose)
   and pick "Question", or read [docs/troubleshooting.md](docs/troubleshooting.md)
   first, which covers most of them.
-- **A security problem** — do not open an issue. [SECURITY.md](SECURITY.md).
+- **A security problem:** do not open an issue. [SECURITY.md](SECURITY.md).
 
 ## Code of conduct
 

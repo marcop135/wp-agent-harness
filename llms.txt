@@ -1,0 +1,62 @@
+# wp-agent-harness
+
+> Local, disposable WordPress harness for coding agents. Clone it, run one
+> command, and agents talk to a real site over the official WordPress MCP
+> Adapter. Development only: loopback ports, no production deploy. This
+> repository does not ship an MCP server, abilities framework, or WordPress
+> plugin of its own; it wires Docker Compose, Application Password auth,
+> tests, docs, examples, and curated WordPress agent skills.
+
+This file is the entry point for AI agents and engineers adopting the harness.
+Read the rules below before driving the site. Discover abilities at runtime;
+do not invent names or parameters from memory.
+
+## How to use this harness
+
+1. `./bin/setup` then (Claude Code) `./bin/connect`.
+2. Drive the site through the `wordpress` MCP server, or diagnose with
+   `./bin/wp ability list` / `./bin/wp ability run` (bypasses MCP).
+3. MCP meta-tools only: `mcp-adapter-discover-abilities`,
+   `mcp-adapter-get-ability-info`, `mcp-adapter-execute-ability`.
+4. Prefer `miriamschwab/rest-get` and `miriamschwab/rest-write` before
+   concluding a REST route is unreachable.
+5. Obey the hard rules in this file and in [docs/AGENTS.md](docs/AGENTS.md).
+
+## Hard rules (never break)
+
+- **Never invent ability names or parameters.** Discover, then
+  `get-ability-info`, then execute.
+- **Default to drafts.** Do not publish, delete, or bulk-change unless asked.
+- **Inspect before change.** State what you found.
+- **Destructive ops need an explicit ask:** trash, deactivate plugins, change
+  site settings, `./bin/reset`.
+- **Never expose** the MCP endpoint or WordPress beyond localhost.
+- **Never put credentials** in a tracked file (`.env`, `.secrets/` stay
+  ignored).
+- **Do not edit infra** (`docker-compose.yml`, `docker/`, `bin/`, `.env`) for a
+  content or site-building task without saying so first.
+- **Do not switch** the local site to `@wordpress/env`, Playground, or
+  Blueprints; this repo's Docker Compose setup is the environment.
+- **No agent attribution** on commits or PRs.
+
+## Files
+
+- Agent index (canonical): [docs/AGENTS.md](docs/AGENTS.md)
+- Root agent mirror: [AGENTS.md](AGENTS.md)
+- Claude Code entry: [CLAUDE.md](CLAUDE.md)
+- AI skills map: [docs/ai-skills.md](docs/ai-skills.md)
+- Task contract: [docs/agents/agent-contract.md](docs/agents/agent-contract.md)
+- Risk tiers: [docs/agents/runtime-policy.md](docs/agents/runtime-policy.md)
+- Architecture: [docs/architecture.md](docs/architecture.md)
+- Development loop: [docs/development.md](docs/development.md)
+- Claude Code MCP: [docs/claude-code.md](docs/claude-code.md)
+- Security: [docs/security.md](docs/security.md)
+- Examples: [examples/README.md](examples/README.md)
+- Skills: [.claude/skills/](.claude/skills/) and [.cursor/skills/](.cursor/skills/)
+- Codex MCP: [.codex/config.toml](.codex/config.toml) · [docs/codex.md](docs/codex.md)
+
+## Agent skills
+
+Curated WordPress coding skills (blocks, themes, plugins, REST, Abilities API,
+WP-CLI, router/triage) under `.claude/skills/` and `.cursor/skills/`. They do
+not replace MCP/`./bin/wp` for site work on this harness.

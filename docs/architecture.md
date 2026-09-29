@@ -319,3 +319,49 @@ if you are working on plugin or theme source.
 tracked `.mcp.json` with a credential in it, or an environment-variable
 indirection that has to be set up separately. Local scope is per-project too,
 and keeps the credential out of the repository entirely.
+
+## Project structure
+
+```
+wp-agent-harness/
+├── .claude/skills/              curated WordPress agent skills (Claude Code)
+├── .codex/config.toml           Codex project MCP (env auth; see docs/codex.md)
+├── .cursor/
+│   ├── AGENTS.md                Cursor precedence shim
+│   └── skills/                  same pack for Cursor
+├── .github/                     CI, issue and PR templates, Dependabot
+├── bin/                         the developer commands
+│   ├── lib.sh                   shared helpers, sourced by the rest
+│   ├── setup  start  stop  reset
+│   ├── status  logs  test  connect  wp
+├── docker/wordpress/            the WordPress image
+│   ├── Dockerfile               base image + WP-CLI + wp ability
+│   ├── apache-wordpress.conf    AllowOverride and the Authorization header
+│   ├── wp-cli.yml               WP-CLI global config
+│   ├── ability-command-autoload.php
+│   └── bin/                     scripts that run inside the container
+│       ├── wp                   WP-CLI wrapper, drops root to www-data
+│       ├── wp-provision         idempotent WordPress provisioning
+│       └── wp-app-password      Application Password lifecycle
+├── docs/
+│   ├── AGENTS.md                canonical agent index
+│   ├── agents/                  contract · runtime policy
+│   ├── architecture · claude-code · codex · development
+│   ├── ai-skills · security · troubleshooting
+│   └── hero.png · og.png · og.svg (1280×640 social)├── examples/                    prompts that work against this site
+├── tests/
+│   ├── lib.sh                   assertions and a minimal MCP HTTP client
+│   ├── repo.sh                  layer 0, no Docker needed
+│   ├── smoke.sh                 layers 1-2
+│   ├── integration.sh           layer 3
+│   └── claude-code.sh           layer 4
+├── .env.example                 tracked template; .env is ignored
+├── AGENTS.md                    root mirror for tools that only read root
+├── CLAUDE.md                    Claude Code entry (points at docs/AGENTS.md)
+├── llms.txt                     LLM entry: hard rules and file map
+├── docker-compose.yml
+└── Makefile
+```
+
+Not tracked, by design: `.env`, `.secrets/`, the database, the WordPress
+install, uploads, logs, and Claude Code's MCP registration.

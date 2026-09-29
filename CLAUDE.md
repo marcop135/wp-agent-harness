@@ -1,21 +1,26 @@
-# Working in this repository
+# Claude Code: wp-agent-harness
 
-This is a local WordPress development environment. WordPress and MariaDB run in
-Docker on this machine; you reach the site through the `wordpress` MCP server,
-which is the local WordPress MCP Adapter endpoint. Nothing here is public and
-nothing here is production.
+Focused entry for [Claude Code](https://code.claude.com/docs). Full index and rules: **[docs/AGENTS.md](docs/AGENTS.md)**. Do not duplicate the long docs index here; read that file for retrieval paths.
+
+**Maintenance:** When stack pins, commands, or git summary change, update this file, root [AGENTS.md](AGENTS.md), and [.cursor/AGENTS.md](.cursor/AGENTS.md), plus matching sections in [docs/AGENTS.md](docs/AGENTS.md) as needed. See [docs/agents/agent-contract.md](docs/agents/agent-contract.md) (Cross-tool parity).
+
+## What this repo is
+
+Local, disposable WordPress harness for coding agents. WordPress and MariaDB run in Docker on this machine; you reach the site through the `wordpress` MCP server (local WordPress MCP Adapter endpoint). Nothing here is public and nothing here is production. This repository does **not** ship an MCP server, abilities framework, or WordPress plugin of its own.
+
+MCP registration and scopes: [docs/claude-code.md](docs/claude-code.md). Task contract: [docs/agents/agent-contract.md](docs/agents/agent-contract.md).
 
 ## What the MCP server gives you
 
 The MCP Adapter's default server exposes three meta-tools, not one tool per
 capability:
 
-- `mcp-adapter-discover-abilities` — list the abilities this site exposes
-- `mcp-adapter-get-ability-info` — fetch one ability's input schema
-- `mcp-adapter-execute-ability` — run an ability with parameters
+- `mcp-adapter-discover-abilities`: list the abilities this site exposes
+- `mcp-adapter-get-ability-info`: fetch one ability's input schema
+- `mcp-adapter-execute-ability`: run an ability with parameters
 
 So the loop is: discover, inspect the schema, execute. Do not assume ability
-names or parameters from memory — call `get-ability-info` when you are unsure.
+names or parameters from memory; call `get-ability-info` when you are unsure.
 The abilities themselves come from the MS WP Abilities plugin (`miriamschwab/*`)
 and WordPress core (`core/*`).
 
@@ -37,7 +42,7 @@ REST route, so reach for them before concluding something is not possible.
 - For content edits, `patch-post-content` is the surgical option;
   `preview-post-update` then `apply-post-update` is the staged one. State the
   proposed change in plain language and wait for a real answer before applying
-  it — that two-step model is a working convention, not something the code
+  it: that two-step model is a working convention, not something the code
   enforces.
 - Destructive operations (trashing, deactivating plugins, changing site
   settings) need an explicit instruction first.
@@ -85,3 +90,4 @@ inspect before change, no destructive ops without an explicit ask).
   config, outside this repository.
 - Test content must be uniquely named and cleaned up. `./bin/reset` is the only
   thing allowed to destroy unrelated development content.
+- Never add agent attribution on commits or PRs.
