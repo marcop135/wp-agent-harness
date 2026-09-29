@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 #
-# connect — register the local WordPress MCP server with Claude Code.
+# connect — register the local WordPress MCP server with an agent client.
 #
-#   ./bin/connect            add (or replace) the registration for this project
-#   ./bin/connect --remove   remove it
-#   ./bin/connect --print    print the endpoint and header without touching config
+#   ./bin/connect            add (or replace) the Claude Code registration
+#   ./bin/connect --remove   remove the Claude Code registration
+#   ./bin/connect --print    print endpoint, header, and env export (no Claude required)
 #
-# The Application Password is written into Claude Code's own configuration
-# (~/.claude.json, local scope — this project only), never into a file in this
-# repository. See docs/claude-code.md.
+# Claude Code: writes into ~/.claude.json (local scope), never into this repo.
+# Codex: project config is .codex/config.toml; export WORDPRESS_MCP_BASIC_AUTH
+# from --print. Cursor and other MCP clients use the same URL and header.
+# See docs/claude-code.md and docs/codex.md.
 
 source "$(dirname -- "${BASH_SOURCE[0]}")/lib.sh"
 
@@ -19,16 +20,15 @@ case "${1:-}" in
     '')                 ;;
     --remove|--disconnect) action='remove' ;;
     --print)            action='print' ;;
-    -h|--help)          sed -n '2,12p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help)          sed -n '2,14p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *)                  die "Unknown option: $1" ;;
 esac
-
-have claude || die 'claude is not on PATH. Install Claude Code, then re-run ./bin/connect.'
 
 server_name="$(env_get MCP_SERVER_NAME wordpress)"
 endpoint="$(mcp_endpoint)"
 
 if [[ "$action" == 'remove' ]]; then
+    have claude || die 'claude is not on PATH. Install Claude Code, then re-run ./bin/connect --remove.'
     step "Removing MCP server '$server_name'"
     ( cd "$REPO_ROOT" && claude mcp remove "$server_name" ) \
         || die "Claude Code has no MCP server called '$server_name' for this project."
@@ -41,14 +41,25 @@ creds="$(mcp_basic_auth 2>/dev/null)" \
     Run ./bin/setup first."
 
 basic="$(printf '%s' "$creds" | base64 | tr -d '\r\n')"
+auth_header="Basic $basic"
 
 if [[ "$action" == 'print' ]]; then
     printf 'transport   http\n'
     printf 'name        %s\n' "$server_name"
     printf 'url         %s\n' "$endpoint"
-    printf 'header      Authorization: Basic %s\n' "$basic"
+    printf 'header      Authorization: %s\n' "$auth_header"
+    printf '\n'
+    printf '# Export for Codex (.codex/config.toml), Cursor, or any MCP HTTP client:\n'
+    printf "export WORDPRESS_MCP_BASIC_AUTH='%s'\n" "$auth_header"
+    printf '\n'
+    printf '# Claude Code one-shot registration (requires claude on PATH):\n'
+    printf '#   ./bin/connect\n'
+    printf '# Codex: trust this project, export the variable above, then run codex here.\n'
+    printf '# Detail: docs/codex.md · docs/claude-code.md\n'
     exit 0
 fi
+
+have claude || die 'claude is not on PATH. Install Claude Code, then re-run ./bin/connect.'
 
 require_docker
 container_running wordpress \
@@ -68,17 +79,18 @@ info "auth       Authorization: Basic <application password>"
         --transport http \
         --scope local \
         "$server_name" "$endpoint" \
-        --header "Authorization: Basic $basic"
+        --header "Authorization: $auth_header"
 ) || die 'claude mcp add failed. See docs/troubleshooting.md.'
 
 ( cd "$REPO_ROOT" && claude mcp get "$server_name" >/dev/null 2>&1 ) \
     || die "Claude Code did not persist the '$server_name' server."
 
-ok "Registered for $REPO_ROOT (local scope — this project only)"
+ok "Registered for $REPO_ROOT (local scope, this project only)"
 
 printf '\n%sClaude Code is connected.%s\n\n' "$C_GREEN$C_BOLD" "$C_RESET"
 printf '  Start Claude Code from this directory:\n'
 printf '      cd %s && claude\n\n' "$REPO_ROOT"
+printf '  Codex / Cursor: ./bin/connect --print  then docs/codex.md\n\n'
 printf '  Then try:\n'
 printf '      "Inspect the local WordPress site: version, active theme,\n'
 printf '       active plugins, site title and available post types."\n\n'
