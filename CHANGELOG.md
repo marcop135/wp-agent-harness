@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- README screenshot of the wp-admin Plugins screen (`docs/wp-admin-plugins.png`).
+
 ## [0.2.0] - 2026-09-29
 
 ### Added
