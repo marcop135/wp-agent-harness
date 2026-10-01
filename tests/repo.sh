@@ -129,7 +129,7 @@ done
 suite 'Repository — documented files exist'
 # ===========================================================================
 
-for f in README.md CLAUDE.md AGENTS.md llms.txt CHANGELOG.md LICENSE Makefile docker-compose.yml \
+for f in README.md CLAUDE.md AGENTS.md llms.txt CHANGELOG.md LICENSE NOTICE Makefile docker-compose.yml \
          .env.example .gitignore .gitattributes \
          CONTRIBUTING.md SECURITY.md CODE_OF_CONDUCT.md \
          .github/workflows/test.yml .github/dependabot.yml \
@@ -140,7 +140,6 @@ for f in README.md CLAUDE.md AGENTS.md llms.txt CHANGELOG.md LICENSE Makefile do
          docs/AGENTS.md docs/ai-skills.md docs/architecture.md docs/claude-code.md docs/codex.md docs/development.md \
          docs/security.md docs/troubleshooting.md \
          docs/agents/README.md docs/agents/agent-contract.md docs/agents/runtime-policy.md \
-         docs/wp-admin-plugins.png \
          .github/brand/README.md .github/brand/brand.config.json .github/brand/render.mjs \
          .github/brand/readme.svg .github/brand/readme.png .github/brand/social.svg \
          .github/brand/social.png .github/brand/og.svg .github/brand/og.png \

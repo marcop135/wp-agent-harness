@@ -14,7 +14,8 @@ its own. Upstream: [Abilities API](https://developer.wordpress.org/apis/abilitie
 [MCP Adapter](https://github.com/WordPress/mcp-adapter),
 [MS WordPress Abilities](https://github.com/miriamschwab/ms-wp-abilities).
 
-[![licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![CI](https://github.com/marcop135/wp-agent-harness/actions/workflows/test.yml/badge.svg)](https://github.com/marcop135/wp-agent-harness/actions/workflows/test.yml)
 [![WordPress 7.1.2](https://img.shields.io/badge/WordPress-7.1.2-21759b.svg)](https://wordpress.org/)
 [![MariaDB 11.8](https://img.shields.io/badge/MariaDB-11.8-C3363F.svg)](https://mariadb.org/)
 [![Docker Compose v2](https://img.shields.io/badge/Docker_Compose-v2-2496ED.svg)](https://docs.docker.com/compose/)
@@ -67,10 +68,6 @@ More detail: [Claude Code](docs/claude-code.md) · [Codex](docs/codex.md) ·
 | Tests | four layers: repo → infra → WordPress/abilities → MCP → Claude Code |
 | Skills | curated WordPress agent skills under `.claude/skills/` and `.cursor/skills/` |
 
-<p align="center">
-  <img src="./docs/wp-admin-plugins.png" alt="wp-admin Plugins screen with MCP Adapter 0.6.1 and MS WordPress Abilities 1.12.0 active" width="760" />
-</p>
-
 Worked prompts: [examples/](examples/README.md). Stack diagram:
 [docs/architecture.md](docs/architecture.md).
 
@@ -104,8 +101,8 @@ How to update them: [Updating dependencies](docs/development.md#updating-depende
 
 [CONTRIBUTING.md](CONTRIBUTING.md). Run `./bin/test --skip-claude` before a PR.
 
-## Licence
+## License
 
-MIT for the harness. Vendored WordPress agent skills are GPL-2.0-or-later.
-Runtime installs keep their upstream licences; see
-[Dependencies](docs/development.md#dependencies).
+MIT for the harness ([LICENSE](LICENSE)). Vendored WordPress agent skills are
+GPL-2.0-or-later. Runtime installs keep their upstream licences; see
+[NOTICE](NOTICE) and [Dependencies](docs/development.md#dependencies).
