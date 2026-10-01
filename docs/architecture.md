@@ -330,6 +330,7 @@ wp-agent-harness/
 │   ├── AGENTS.md                Cursor precedence shim
 │   └── skills/                  same pack for Cursor
 ├── .github/                     CI, issue and PR templates, Dependabot
+│   └── brand/                   README, OG and social images (SVG source + PNG)
 ├── bin/                         the developer commands
 │   ├── lib.sh                   shared helpers, sourced by the rest
 │   ├── setup  start  stop  reset
@@ -348,7 +349,6 @@ wp-agent-harness/
 │   ├── agents/                  contract · runtime policy
 │   ├── architecture · claude-code · codex · development
 │   ├── ai-skills · security · troubleshooting
-│   ├── hero.png · og.png · og.svg (1280×640 social)
 │   └── wp-admin-plugins.png     README screenshot
 ├── examples/                    prompts that work against this site
 ├── tests/
