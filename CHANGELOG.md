@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - README screenshot of the wp-admin Plugins screen (`docs/wp-admin-plugins.png`).
 
+### Changed
+
+- WordPress pinned to 7.1.2 (`wordpress:7.1.2-php8.3-apache`).
+- `docs/development.md`: a `WORDPRESS_IMAGE` bump needs `./bin/wp core update`, since core lives in the volume.
+
 ## [0.2.0] - 2026-09-29
 
 ### Added
