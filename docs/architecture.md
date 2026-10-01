@@ -348,7 +348,9 @@ wp-agent-harness/
 │   ├── agents/                  contract · runtime policy
 │   ├── architecture · claude-code · codex · development
 │   ├── ai-skills · security · troubleshooting
-│   └── hero.png · og.png · og.svg (1280×640 social)├── examples/                    prompts that work against this site
+│   ├── hero.png · og.png · og.svg (1280×640 social)
+│   └── wp-admin-plugins.png     README screenshot
+├── examples/                    prompts that work against this site
 ├── tests/
 │   ├── lib.sh                   assertions and a minimal MCP HTTP client
 │   ├── repo.sh                  layer 0, no Docker needed
