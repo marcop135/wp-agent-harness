@@ -60,7 +60,7 @@ Two services in `docker-compose.yml`:
   `<project>_db_data`. Health-checked with MariaDB's own `healthcheck.sh
   --connect --innodb_initialized`; the WordPress service waits for it.
 - **`wordpress`** — built from `docker/wordpress/Dockerfile` on top of
-  `wordpress:7.1.0-php8.3-apache`. The whole install lives in the named volume
+  `wordpress:7.1.2-php8.3-apache`. The whole install lives in the named volume
   `<project>_wp_data`. Health-checked by curling `/wp-json/`.
 
 Both publish to `127.0.0.1` only. Neither is reachable from another machine on
@@ -90,7 +90,7 @@ leaves root-owned files in `wp-content` that Apache then cannot write.
 
 ### WordPress
 
-WordPress 7.1 on PHP 8.3. Installed and configured by
+WordPress 7.1.2 on PHP 8.3. Installed and configured by
 `docker/wordpress/bin/wp-provision`, which runs inside the container and is
 idempotent: it checks the current state of every item before changing it, so
 re-running `./bin/setup` creates no duplicate users, plugins or settings and
@@ -330,6 +330,7 @@ wp-agent-harness/
 │   ├── AGENTS.md                Cursor precedence shim
 │   └── skills/                  same pack for Cursor
 ├── .github/                     CI, issue and PR templates, Dependabot
+│   └── brand/                   README, OG and social images (SVG source + PNG)
 ├── bin/                         the developer commands
 │   ├── lib.sh                   shared helpers, sourced by the rest
 │   ├── setup  start  stop  reset
@@ -348,7 +349,8 @@ wp-agent-harness/
 │   ├── agents/                  contract · runtime policy
 │   ├── architecture · claude-code · codex · development
 │   ├── ai-skills · security · troubleshooting
-│   └── hero.png · og.png · og.svg (1280×640 social)├── examples/                    prompts that work against this site
+│   └── wp-admin-plugins.png     README screenshot
+├── examples/                    prompts that work against this site
 ├── tests/
 │   ├── lib.sh                   assertions and a minimal MCP HTTP client
 │   ├── repo.sh                  layer 0, no Docker needed
