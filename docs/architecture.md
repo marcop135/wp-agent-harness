@@ -60,7 +60,7 @@ Two services in `docker-compose.yml`:
   `<project>_db_data`. Health-checked with MariaDB's own `healthcheck.sh
   --connect --innodb_initialized`; the WordPress service waits for it.
 - **`wordpress`** — built from `docker/wordpress/Dockerfile` on top of
-  `wordpress:7.1.0-php8.3-apache`. The whole install lives in the named volume
+  `wordpress:7.1.2-php8.3-apache`. The whole install lives in the named volume
   `<project>_wp_data`. Health-checked by curling `/wp-json/`.
 
 Both publish to `127.0.0.1` only. Neither is reachable from another machine on
@@ -90,7 +90,7 @@ leaves root-owned files in `wp-content` that Apache then cannot write.
 
 ### WordPress
 
-WordPress 7.1 on PHP 8.3. Installed and configured by
+WordPress 7.1.2 on PHP 8.3. Installed and configured by
 `docker/wordpress/bin/wp-provision`, which runs inside the container and is
 idempotent: it checks the current state of every item before changing it, so
 re-running `./bin/setup` creates no duplicate users, plugins or settings and

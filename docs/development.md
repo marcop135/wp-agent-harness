@@ -246,7 +246,7 @@ inline in [`.env.example`](../.env.example). Current pins are listed under
 
 | Component | Version | Source |
 |-----------|---------|--------|
-| WordPress | 7.1 | `wordpress:7.1.0-php8.3-apache` |
+| WordPress | 7.1.2 | `wordpress:7.1.2-php8.3-apache` |
 | PHP | 8.3 | same image |
 | Apache | 2.4 | same image |
 | MariaDB | 11.8.9 | `mariadb:11.8.9` |
@@ -312,7 +312,9 @@ $EDITOR .env .env.example
 
 `wp-provision` compares the installed plugin version against the pin and
 reinstalls in place when they differ, so a plugin bump needs no reset. Image and
-WP-CLI changes are picked up by the rebuild `./bin/setup` runs. A **MariaDB major
+WP-CLI changes are picked up by the rebuild `./bin/setup` runs, but WordPress core
+lives in the `wp_data` volume, so a `WORDPRESS_IMAGE` bump also needs
+`./bin/wp core update --version=<x.y.z>` (or `./bin/reset`). A **MariaDB major
 version** change needs `./bin/reset`, because the data directory format changes.
 
 Before pinning a new upstream version, check its requirements. Both plugins
