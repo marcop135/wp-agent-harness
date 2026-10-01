@@ -8,7 +8,7 @@
 # Abilities plugins are installed at provision time by /usr/local/bin/wp-provision
 # so they can be updated without rebuilding.
 
-ARG WORDPRESS_IMAGE=wordpress:7.1.0-php8.3-apache
+ARG WORDPRESS_IMAGE=wordpress:7.1.2-php8.3-apache
 FROM ${WORDPRESS_IMAGE}
 
 ARG WP_CLI_VERSION=2.12.0
