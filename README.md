@@ -67,6 +67,10 @@ More detail: [Claude Code](docs/claude-code.md) · [Codex](docs/codex.md) ·
 | Tests | four layers: repo → infra → WordPress/abilities → MCP → Claude Code |
 | Skills | curated WordPress agent skills under `.claude/skills/` and `.cursor/skills/` |
 
+<p align="center">
+  <img src="./docs/wp-admin-plugins.png" alt="wp-admin Plugins screen with MCP Adapter 0.6.1 and MS WordPress Abilities 1.12.0 active" width="760" />
+</p>
+
 Worked prompts: [examples/](examples/README.md). Stack diagram:
 [docs/architecture.md](docs/architecture.md).
 
