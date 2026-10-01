@@ -271,7 +271,7 @@ that matters should ever live only in there.
 
 Infrastructure and documentation only: `docker-compose.yml`, `docker/`, `bin/`,
 `tests/`, `docs/`, `examples/`, `.env.example`, `CLAUDE.md`, `Makefile`,
-`README.md`, `LICENSE`, `CHANGELOG.md`, `.github/`, plus the curated
+`README.md`, `LICENSE`, `NOTICE`, `CHANGELOG.md`, `.github/`, plus the curated
 WordPress agent skills under `.claude/skills/` and `.cursor/skills/`
 (GPL-2.0-or-later upstream copies; see [claude-code.md](claude-code.md)).
 
@@ -348,8 +348,7 @@ wp-agent-harness/
 │   ├── AGENTS.md                canonical agent index
 │   ├── agents/                  contract · runtime policy
 │   ├── architecture · claude-code · codex · development
-│   ├── ai-skills · security · troubleshooting
-│   └── wp-admin-plugins.png     README screenshot
+│   └── ai-skills · security · troubleshooting
 ├── examples/                    prompts that work against this site
 ├── tests/
 │   ├── lib.sh                   assertions and a minimal MCP HTTP client

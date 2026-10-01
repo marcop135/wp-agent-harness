@@ -23,7 +23,7 @@ cd wp-agent-harness
 ./bin/status         # every layer, in order
 ```
 
-Requirements are in the [README](README.md#requirements). `shellcheck` is not
+Requirements are in [Development](docs/development.md#requirements). `shellcheck` is not
 required locally, but CI runs it, so install it if you touch `bin/` or `tests/`.
 
 ## The loop
