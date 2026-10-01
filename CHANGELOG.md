@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-01
+
+### Added
+
+- README screenshot of the wp-admin Plugins screen (`docs/wp-admin-plugins.png`).
+- `.github/brand/`: README, OG and GitHub social images as SVG source + PNG in Catamaran, Cabin and Roboto Mono, rendered by `render.mjs` (`--check` for staleness).
+
+### Removed
+
+- `docs/hero.png`, `docs/og.png`, `docs/og.svg`, replaced by `.github/brand/readme.png`, `og.png` and `social.png`.
+
+### Changed
+
+- WordPress pinned to 7.1.2 (`wordpress:7.1.2-php8.3-apache`).
+- `docs/development.md`: a `WORDPRESS_IMAGE` bump needs `./bin/wp core update`, since core lives in the volume.
+
 ## [0.2.0] - 2026-09-29
 
 ### Added
@@ -31,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Four test layers: repository, smoke, MCP, optional headless Claude Code.
 - Curated WordPress agent skills under `.claude/skills/` and `.cursor/skills/`.
 
-[Unreleased]: https://github.com/marcop135/wp-agent-harness/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/marcop135/wp-agent-harness/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/marcop135/wp-agent-harness/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/marcop135/wp-agent-harness/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/marcop135/wp-agent-harness/releases/tag/v0.1.0
