@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - README screenshot of the wp-admin Plugins screen (`docs/wp-admin-plugins.png`).
+- `.github/brand/`: README, OG and GitHub social images as SVG source + PNG in Catamaran, Cabin and Roboto Mono, rendered by `render.mjs` (`--check` for staleness).
+
+### Removed
+
+- `docs/hero.png`, `docs/og.png`, `docs/og.svg`, replaced by `.github/brand/readme.png`, `og.png` and `social.png`.
 
 ### Changed
 
