@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/hero.png" alt="wp-agent-harness: agent, MCP Adapter, Abilities API, local WordPress" width="900" />
+  <img src="./.github/brand/readme.png" alt="wp-agent-harness: local disposable WordPress for coding agents, over MCP. Agent, MCP Adapter, Abilities API, WordPress stack." width="900" />
 </p>
 
 # wp-agent-harness
