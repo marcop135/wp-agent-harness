@@ -28,7 +28,7 @@ services:
     build:
       context: ./docker/wordpress
       args:
-        WORDPRESS_IMAGE: ${WORDPRESS_IMAGE:-wordpress:7.1.0-php8.3-apache}
+        WORDPRESS_IMAGE: ${WORDPRESS_IMAGE:-wordpress:7.1.2-php8.3-apache}
         WP_CLI_VERSION: ${WP_CLI_VERSION:-2.12.0}
         WP_CLI_ABILITY_COMMAND_VERSION: ${WP_CLI_ABILITY_COMMAND_VERSION:-1.0.2}
     image: ${COMPOSE_PROJECT_NAME:-wp-agent-harness}-wordpress:local
