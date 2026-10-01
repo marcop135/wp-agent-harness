@@ -30,7 +30,7 @@ Ports|127.0.0.1 only (WP + DB)
 
 Paths are repo-relative from project root unless noted.
 
-|root:{README.md,CHANGELOG.md,AGENTS.md,CLAUDE.md,llms.txt,CONTRIBUTING.md,SECURITY.md,CODE_OF_CONDUCT.md,LICENSE,Makefile,docker-compose.yml,.env.example}
+|root:{README.md,CHANGELOG.md,AGENTS.md,CLAUDE.md,llms.txt,CONTRIBUTING.md,SECURITY.md,CODE_OF_CONDUCT.md,LICENSE,NOTICE,Makefile,docker-compose.yml,.env.example}
 |docs:{AGENTS.md,ai-skills.md,architecture.md,claude-code.md,codex.md,development.md,security.md,troubleshooting.md}
 |docs/agents:{README.md,agent-contract.md,runtime-policy.md}
 |examples:{README.md,inspect-site.md,create-content.md,modify-content.md,media.md,theme.md,plugins.md,site-development.md}
