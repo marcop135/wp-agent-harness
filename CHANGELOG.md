@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-01
+
+### Added
+
+- `NOTICE` for third-party and runtime licence notes (vendored skills, setup installs).
+- CI status badge on the README.
+
+### Removed
+
+- `docs/wp-admin-plugins.png` README screenshot (redundant with version pins and badges).
+
+### Changed
+
+- `LICENSE` is pure MIT so GitHub detects SPDX MIT; third-party notes live in `NOTICE`.
+- README License badge/heading; License section links `NOTICE` and Dependencies.
+- `CONTRIBUTING.md` requirements link points at `docs/development.md#requirements`.
+
 ## [0.3.0] - 2026-10-01
 
 ### Added
@@ -47,7 +64,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Four test layers: repository, smoke, MCP, optional headless Claude Code.
 - Curated WordPress agent skills under `.claude/skills/` and `.cursor/skills/`.
 
-[Unreleased]: https://github.com/marcop135/wp-agent-harness/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/marcop135/wp-agent-harness/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/marcop135/wp-agent-harness/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/marcop135/wp-agent-harness/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/marcop135/wp-agent-harness/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/marcop135/wp-agent-harness/releases/tag/v0.1.0
