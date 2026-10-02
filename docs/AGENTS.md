@@ -17,7 +17,7 @@ Portable task contract: [agents/agent-contract.md](agents/agent-contract.md).
 ```text
 WordPress|7.1.2 (image wordpress:7.1.2-php8.3-apache) | PHP 8.3 | Apache 2.4
 MariaDB|11.8.9
-MCP Adapter|0.6.1 (GitHub release ZIP)
+MCP Adapter|0.7.0 (GitHub release ZIP)
 MS WordPress Abilities|1.12.0 (GitHub release ZIP)
 WP-CLI|2.12.0 + ability-command 1.0.2
 MCP|meta-tools: discover / get-ability-info / execute-ability

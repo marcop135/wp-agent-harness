@@ -51,7 +51,7 @@ services:
       WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL:-admin@wp-agent-harness.test}
       WP_ADMIN_PASSWORD: ${WP_ADMIN_PASSWORD:?WP_ADMIN_PASSWORD is required — run ./bin/setup}
       WP_THEME: ${WP_THEME:-twentytwentyfive}
-      MCP_ADAPTER_VERSION: ${MCP_ADAPTER_VERSION:-0.6.1}
+      MCP_ADAPTER_VERSION: ${MCP_ADAPTER_VERSION:-0.7.0}
       MS_WP_ABILITIES_VERSION: ${MS_WP_ABILITIES_VERSION:-1.12.0}
       MCP_APP_PASSWORD_NAME: ${MCP_APP_PASSWORD_NAME:-claude-code-mcp}
       WORDPRESS_CONFIG_EXTRA: |
