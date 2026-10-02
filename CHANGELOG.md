@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-10-02
+
 ### Changed
 
 - MCP Adapter pin 0.6.1 → 0.7.0.
@@ -68,7 +70,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Four test layers: repository, smoke, MCP, optional headless Claude Code.
 - Curated WordPress agent skills under `.claude/skills/` and `.cursor/skills/`.
 
-[Unreleased]: https://github.com/marcop135/wp-agent-harness/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/marcop135/wp-agent-harness/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/marcop135/wp-agent-harness/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/marcop135/wp-agent-harness/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/marcop135/wp-agent-harness/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/marcop135/wp-agent-harness/compare/v0.1.0...v0.2.0
