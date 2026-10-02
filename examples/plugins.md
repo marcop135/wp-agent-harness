@@ -24,7 +24,7 @@ warning at the bottom.
 Exactly two plugins, both active:
 
 ```
-mcp-adapter/mcp-adapter.php        MCP Adapter               0.6.1   active
+mcp-adapter/mcp-adapter.php        MCP Adapter               0.7.0   active
 ms-wp-abilities/ms-wp-abilities.php  MS WordPress Abilities  1.12.0  active
 ```
 

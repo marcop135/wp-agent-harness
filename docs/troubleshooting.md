@@ -156,7 +156,7 @@ The fallback, if you need to reach the API while diagnosing this, is
 ```bash
 ./bin/logs wordpress
 docker compose exec wordpress curl -sI \
-  https://github.com/WordPress/mcp-adapter/releases/download/v0.6.1/mcp-adapter.zip
+  https://github.com/WordPress/mcp-adapter/releases/download/v0.7.0/mcp-adapter.zip
 ```
 
 The ZIPs come from GitHub release assets. A download failure is almost always
@@ -168,7 +168,7 @@ Retry by hand:
 
 ```bash
 ./bin/wp plugin install \
-  https://github.com/WordPress/mcp-adapter/releases/download/v0.6.1/mcp-adapter.zip --force
+  https://github.com/WordPress/mcp-adapter/releases/download/v0.7.0/mcp-adapter.zip --force
 ```
 
 A wrong `MCP_ADAPTER_VERSION` or `MS_WP_ABILITIES_VERSION` in `.env` gives a 404.
