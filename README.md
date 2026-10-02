@@ -19,7 +19,7 @@ its own. Upstream: [Abilities API](https://developer.wordpress.org/apis/abilitie
 [![WordPress 7.1.2](https://img.shields.io/badge/WordPress-7.1.2-21759b.svg)](https://wordpress.org/)
 [![MariaDB 11.8](https://img.shields.io/badge/MariaDB-11.8-C3363F.svg)](https://mariadb.org/)
 [![Docker Compose v2](https://img.shields.io/badge/Docker_Compose-v2-2496ED.svg)](https://docs.docker.com/compose/)
-[![MCP Adapter 0.6.1](https://img.shields.io/badge/MCP_Adapter-0.6.1-555.svg)](https://github.com/WordPress/mcp-adapter)
+[![MCP Adapter 0.7.0](https://img.shields.io/badge/MCP_Adapter-0.7.0-555.svg)](https://github.com/WordPress/mcp-adapter)
 [![MS Abilities 1.12.0](https://img.shields.io/badge/MS_Abilities-1.12.0-555.svg)](https://github.com/miriamschwab/ms-wp-abilities)
 
 **Development only.** Localhost only, no production data.
@@ -79,7 +79,7 @@ Worked prompts: [examples/](examples/README.md). Stack diagram:
 
 ## Versions
 
-WordPress 7.1.2 · PHP 8.3 · MariaDB 11.8 · MCP Adapter 0.6.1 · MS Abilities 1.12.0.
+WordPress 7.1.2 · PHP 8.3 · MariaDB 11.8 · MCP Adapter 0.7.0 · MS Abilities 1.12.0.
 
 Full list: [docs/development.md](docs/development.md#versions).
 How to update them: [Updating dependencies](docs/development.md#updating-dependencies).

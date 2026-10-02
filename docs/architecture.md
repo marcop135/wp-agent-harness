@@ -21,7 +21,7 @@
       │  docker compose exec                             ▼
       └───────────────────────────────────────▶   WordPress 7.1 REST API
                                                          │
-  ./bin/wp ability list ──────────────────────▶   MCP Adapter 0.6.1
+  ./bin/wp ability list ──────────────────────▶   MCP Adapter 0.7.0
       (WP-CLI, bypasses MCP entirely)                    │  HttpTransport
                                                          │  session store (user meta)
                                                          │  three meta-tools
