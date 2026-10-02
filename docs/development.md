@@ -252,10 +252,10 @@ inline in [`.env.example`](../.env.example). Current pins are listed under
 | MariaDB | 11.8.9 | `mariadb:11.8.9` |
 | WP-CLI | 2.12.0 | GitHub release phar, SHA-512 verified |
 | `wp-cli/ability-command` | 1.0.2 | GitHub release tarball |
-| MCP Adapter | 0.6.1 | GitHub release ZIP |
+| MCP Adapter | 0.7.0 | GitHub release ZIP |
 | MS WordPress Abilities | 1.12.0 | GitHub release ZIP |
 | Twenty Twenty-Five | 1.5 | wordpress.org |
-| MCP protocol | 2025-11-25 | negotiated; the adapter also supports 2025-06-18 and 2024-11-05 |
+| MCP protocol | 2025-11-25 | negotiated default; adapter also serves 2026-07-28. Legacy clients on 2025-06-18 / 2024-11-05 still connect via the 2025-11-25 schema |
 
 Pins live in [`.env.example`](../.env.example). How to bump them:
 [Updating dependencies](#updating-dependencies).
@@ -268,7 +268,7 @@ Nothing here tracks a moving upstream branch. Versions are pinned in `.env` /
 
 | Component | Role | How it gets here | Licence | Pin |
 |-----------|------|------------------|---------|-----|
-| **MCP Adapter** | Exposes abilities over MCP | WordPress plugin, GitHub release ZIP at `./bin/setup` | GPL-2.0-or-later | `MCP_ADAPTER_VERSION` |
+| **MCP Adapter** | Exposes abilities over MCP | WordPress plugin, GitHub release ZIP at `./bin/setup` (also on [wordpress.org/plugins/mcp-adapter](https://wordpress.org/plugins/mcp-adapter/)); this repo pins the GitHub ZIP | GPL-2.0-or-later | `MCP_ADAPTER_VERSION` |
 | **MS WordPress Abilities** | Registers site-management abilities | WordPress plugin, GitHub release ZIP at `./bin/setup` | GPL-2.0-or-later | `MS_WP_ABILITIES_VERSION` |
 | **WP-CLI** | CLI inside the container | Phar in the Docker image build | MIT | `WP_CLI_VERSION` |
 | **wp-cli/ability-command** | `wp ability` diagnostic path (not MCP) | Tarball in the Docker image build | MIT | `WP_CLI_ABILITY_COMMAND_VERSION` |

@@ -26,7 +26,7 @@ On a freshly provisioned site:
 
 - WordPress 7.1.2, PHP 8.3, MariaDB 11.8.9, environment type `local`
 - Active theme **Twenty Twenty-Five 1.5**
-- Exactly two plugins, both active: **MCP Adapter 0.6.1** and **MS WordPress Abilities 1.12.0**
+- Exactly two plugins, both active: **MCP Adapter 0.7.0** and **MS WordPress Abilities 1.12.0**
 - Post types `post`, `page`, `attachment`
 - The stock WordPress content: one post, a sample page, a privacy policy draft
 
