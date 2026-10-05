@@ -7,6 +7,15 @@
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-10-05
+
+### Changed
+
+- Replace the Keep a Changelog prose preamble with Format/Voice/Length/Links bullets.
+- Link issues, docs, and paths inline across historical changelog entries.
+- Drop footer compare-URL reference links in favor of inline links.
+- Order version sections Added → Changed → Removed → Fixed → Security.
+
 ## [0.4.1] - 2026-10-02
 
 ### Changed
