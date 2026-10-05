@@ -20,15 +20,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `NOTICE` for third-party and runtime licence notes (vendored skills, setup installs).
 - CI status badge on the README.
 
-### Removed
-
-- `docs/wp-admin-plugins.png` README screenshot (redundant with version pins and badges).
-
 ### Changed
 
 - `LICENSE` is pure MIT so GitHub detects SPDX MIT; third-party notes live in `NOTICE`.
 - README License badge/heading; License section links `NOTICE` and Dependencies.
 - `CONTRIBUTING.md` requirements link points at `docs/development.md#requirements`.
+
+### Removed
+
+- `docs/wp-admin-plugins.png` README screenshot (redundant with version pins and badges).
 
 ## [0.3.0] - 2026-10-01
 
@@ -37,14 +37,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - README screenshot of the wp-admin Plugins screen (`docs/wp-admin-plugins.png`).
 - `.github/brand/`: README, OG and GitHub social images as SVG source + PNG in Catamaran, Cabin and Roboto Mono, rendered by `render.mjs` (`--check` for staleness).
 
-### Removed
-
-- `docs/hero.png`, `docs/og.png`, `docs/og.svg`, replaced by `.github/brand/readme.png`, `og.png` and `social.png`.
-
 ### Changed
 
 - WordPress pinned to 7.1.2 (`wordpress:7.1.2-php8.3-apache`).
 - `docs/development.md`: a `WORDPRESS_IMAGE` bump needs `./bin/wp core update`, since core lives in the volume.
+
+### Removed
+
+- `docs/hero.png`, `docs/og.png`, `docs/og.svg`, replaced by `.github/brand/readme.png`, `og.png` and `social.png`.
 
 ## [0.2.0] - 2026-09-29
 
@@ -69,10 +69,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Application Password wiring and `./bin/connect` for Claude Code.
 - Four test layers: repository, smoke, MCP, optional headless Claude Code.
 - Curated WordPress agent skills under `.claude/skills/` and `.cursor/skills/`.
-
-[Unreleased]: https://github.com/marcop135/wp-agent-harness/compare/v0.4.1...HEAD
-[0.4.1]: https://github.com/marcop135/wp-agent-harness/compare/v0.4.0...v0.4.1
-[0.4.0]: https://github.com/marcop135/wp-agent-harness/compare/v0.3.0...v0.4.0
-[0.3.0]: https://github.com/marcop135/wp-agent-harness/compare/v0.2.0...v0.3.0
-[0.2.0]: https://github.com/marcop135/wp-agent-harness/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/marcop135/wp-agent-harness/releases/tag/v0.1.0
