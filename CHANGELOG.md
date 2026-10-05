@@ -7,6 +7,12 @@
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-10-05
+
+### Changed
+
+- Standardize the changelog on Format/Voice/Length/Links, inline links, and KaC section order.
+
 ## [0.4.1] - 2026-10-02
 
 ### Changed
