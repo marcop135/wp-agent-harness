@@ -17,14 +17,14 @@
 
 ### Added
 
-- `NOTICE` for third-party and runtime licence notes (vendored skills, setup installs).
+- [`NOTICE`](https://github.com/marcop135/wp-agent-harness/blob/develop/NOTICE) for third-party and runtime licence notes (vendored skills, setup installs).
 - CI status badge on the README.
 
 ### Changed
 
-- `LICENSE` is pure MIT so GitHub detects SPDX MIT; third-party notes live in `NOTICE`.
-- README License badge/heading; License section links `NOTICE` and Dependencies.
-- `CONTRIBUTING.md` requirements link points at `docs/development.md#requirements`.
+- `LICENSE` is pure MIT so GitHub detects SPDX MIT; third-party notes live in [`NOTICE`](https://github.com/marcop135/wp-agent-harness/blob/develop/NOTICE).
+- README License badge/heading; License section links [`NOTICE`](https://github.com/marcop135/wp-agent-harness/blob/develop/NOTICE) and Dependencies.
+- [`CONTRIBUTING.md`](https://github.com/marcop135/wp-agent-harness/blob/develop/CONTRIBUTING.md) requirements link points at [`docs/development.md#requirements`](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/development.md#requirements).
 
 ### Removed
 
@@ -35,30 +35,30 @@
 ### Added
 
 - README screenshot of the wp-admin Plugins screen (`docs/wp-admin-plugins.png`).
-- `.github/brand/`: README, OG and GitHub social images as SVG source + PNG in Catamaran, Cabin and Roboto Mono, rendered by `render.mjs` (`--check` for staleness).
+- [`.github/brand/`](https://github.com/marcop135/wp-agent-harness/blob/develop/.github/brand/): README, OG and GitHub social images as SVG source + PNG in Catamaran, Cabin and Roboto Mono, rendered by `render.mjs` (`--check` for staleness).
 
 ### Changed
 
 - WordPress pinned to 7.1.2 (`wordpress:7.1.2-php8.3-apache`).
-- `docs/development.md`: a `WORDPRESS_IMAGE` bump needs `./bin/wp core update`, since core lives in the volume.
+- [`docs/development.md`](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/development.md): a `WORDPRESS_IMAGE` bump needs `./bin/wp core update`, since core lives in the volume.
 
 ### Removed
 
-- `docs/hero.png`, `docs/og.png`, `docs/og.svg`, replaced by `.github/brand/readme.png`, `og.png` and `social.png`.
+- `docs/hero.png`, `docs/og.png`, `docs/og.svg`, replaced by [`.github/brand/readme.png`](https://github.com/marcop135/wp-agent-harness/blob/develop/.github/brand/readme.png), `og.png` and `social.png`.
 
 ## [0.2.0] - 2026-09-29
 
 ### Added
 
-- Agent docs layer: `AGENTS.md`, `docs/AGENTS.md`, `.cursor/AGENTS.md`, `llms.txt`, `docs/ai-skills.md`, `docs/agents/`.
-- Codex MCP: `.codex/config.toml`, `docs/codex.md`; `./bin/connect --print` works without Claude and exports `WORDPRESS_MCP_BASIC_AUTH`.
+- Agent docs layer: [`AGENTS.md`](https://github.com/marcop135/wp-agent-harness/blob/develop/AGENTS.md), [`docs/AGENTS.md`](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/AGENTS.md), `.cursor/AGENTS.md`, [`llms.txt`](https://github.com/marcop135/wp-agent-harness/blob/develop/llms.txt), [`docs/ai-skills.md`](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/ai-skills.md), [`docs/agents/`](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/agents/).
+- Codex MCP: `.codex/config.toml`, [`docs/codex.md`](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/codex.md); `./bin/connect --print` works without Claude and exports `WORDPRESS_MCP_BASIC_AUTH`.
 - README hero/OG assets and static shields (WordPress, MariaDB, Docker Compose, MCP Adapter, MS Abilities).
 
 ### Changed
 
-- README trimmed; requirements, commands, URLs, versions, and test layers live in `docs/development.md`.
+- README trimmed; requirements, commands, URLs, versions, and test layers live in [`docs/development.md`](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/development.md).
 - Multi-agent quick start (Claude Code, Cursor, Codex).
-- `CLAUDE.md` points at `docs/AGENTS.md`; architecture tree lists agent entry files and social assets.
+- [`CLAUDE.md`](https://github.com/marcop135/wp-agent-harness/blob/develop/CLAUDE.md) points at [`docs/AGENTS.md`](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/AGENTS.md); architecture tree lists agent entry files and social assets.
 
 ## [0.1.0] - 2026-09-28
 
