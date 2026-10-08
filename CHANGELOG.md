@@ -17,7 +17,7 @@
 
 - Brand images: light pipeline layout (agent → mcp → ability; WP / MariaDB / Docker below).
 - Docs: layers 0–4, MariaDB 11.8.9, abilities 26+3, multi-client `--print`.
-- Harden `.secrets` / `.env` modes, reset wipe, `--print` auth warning, CI `jq` host_ip checks.
+- Harden `.secrets` / `.env` modes, reset wipe, `--print` auth warning, CI `jq` host_ip checks and `chmod 600` on lint `.env`.
 - Security docs: modes, checksums, override risk, argv hygiene.
 
 ### Fixed
