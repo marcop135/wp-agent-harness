@@ -44,7 +44,7 @@ Common mistakes:
 
 ## Git and PR rules (summary)
 
-- Branch from **`main`**. One subject per PR. Template: `.github/PULL_REQUEST_TEMPLATE.md`.
+- Branch from **`develop`** for day-to-day PRs; release cuts merge into **`main`**. One subject per PR. Template: `.github/PULL_REQUEST_TEMPLATE.md`.
 - Never add agent attribution (`Co-authored-by: Cursor`, `@cursoragent`, Made/Generated with Cursor).
 - Changelog: behaviour agents rely on → `## [Unreleased]` in `CHANGELOG.md`.
 

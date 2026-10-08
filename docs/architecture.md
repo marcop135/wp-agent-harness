@@ -146,8 +146,9 @@ visible to MCP when its `meta.public` or `meta.mcp.public` is `true`.
 
 ### MS WP Abilities
 
-Registers 26 abilities in the `miriamschwab/` namespace and opts three WordPress
-core abilities into MCP visibility. Current set on this site:
+Registers **26** abilities in the `miriamschwab/` namespace and opts **3**
+WordPress core abilities into MCP visibility (**26 + 3 = 29** total). Current
+set on this site:
 
 ```
 posts/pages   get-posts get-pages get-post-meta get-post-types create-post

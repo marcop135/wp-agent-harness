@@ -347,8 +347,9 @@ Then restart Claude Code. Confirm the endpoint independently first:
 ### Only three tools are listed
 
 Correct. `mcp-adapter-discover-abilities`, `mcp-adapter-get-ability-info` and
-`mcp-adapter-execute-ability` are the whole public surface; the 29 abilities sit
-behind them. See
+`mcp-adapter-execute-ability` are the whole public surface; the 29 abilities
+(26 `miriamschwab/*` + 3 `core/*`) sit behind them. See
+[architecture.md](architecture.md#ms-wp-abilities) and
 [architecture.md](architecture.md#why-three-tools-and-not-thirty).
 
 ### The port changed and calls stopped working

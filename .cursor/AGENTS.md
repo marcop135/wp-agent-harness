@@ -47,14 +47,17 @@ Common mistakes:
 | Task | Command |
 | --- | --- |
 | Provision | `./bin/setup` |
+| MCP URL + auth export | `./bin/connect --print` |
 | Health | `./bin/status` |
 | WP-CLI / abilities | `./bin/wp …` |
 | Tests 0–3 | `./bin/test --skip-claude` |
 | Reset volumes | `./bin/reset` (explicit ask only) |
 
-MCP registration via `./bin/connect` is Claude Code-specific. Cursor uses the same skills under `.cursor/skills/`; reach the site with the `wordpress` MCP server when configured, or with `./bin/wp`.
+`./bin/connect` registers Claude Code. For Cursor, use `./bin/connect --print`
+for the HTTP URL and Authorization header, plus skills under `.cursor/skills/`,
+or `./bin/wp` for diagnostics.
 
 ## Git (summary)
 
-- Branch from **`main`**. No agent attribution on commits or PRs.
+- Branch from **`develop`** for day-to-day PRs; release cuts merge into **`main`**. No agent attribution on commits or PRs.
 - Full contract: [docs/agents/agent-contract.md](../docs/agents/agent-contract.md).
