@@ -1,10 +1,10 @@
 # Troubleshooting
 
-Start with `./bin/status`. It walks the stack in order — containers, WordPress,
-abilities, MCP endpoint, Claude Code registration — and the first failing check
-tells you which layer to read about below.
+Start with `./bin/status`. It checks the stack in order: containers, WordPress,
+abilities, MCP endpoint, Claude Code registration. The first failing check tells
+you which section below to read.
 
-```
+```text
 WordPress works  →  abilities work  →  MCP works  →  Claude Code works
  ./bin/status       ./bin/wp ability   tests/         tests/
                     list               integration.sh claude-code.sh
@@ -13,31 +13,42 @@ WordPress works  →  abilities work  →  MCP works  →  Claude Code works
 If `./bin/wp ability run core/get-site-info --user=admin` works but MCP does
 not, the fault is in the MCP or authentication layer, not in WordPress.
 
+## Quick index
+
+| Symptom | Section |
+|---------|---------|
+| Docker not running, Compose v1, permission denied | [Docker](#docker) |
+| Port 8080 or 3307 already taken | [Ports](#ports) |
+| `db` never healthy, `Error establishing a database connection` | [Database](#database) |
+| Site does not load, setup fails at install, `/wp-json/` 404 | [WordPress](#wordpress) |
+| Plugin will not install or activate | [Plugins](#plugins) |
+| `wp ability` missing, empty list, ability not over MCP | [Abilities](#abilities) |
+| MCP 404, 401, session errors, `GET` 405 | [MCP endpoint](#mcp-endpoint) |
+| Claude Code sees no tools, or calls fail | [Claude Code](#claude-code) |
+| Filesystem errors, `Permission denied` on `bin/*` | [Permissions and file ownership](#permissions-and-file-ownership) |
+| `.env` changes ignored, full reset, disk space | [Stale volumes and resetting](#stale-volumes-and-resetting) |
+| Rotate admin, database or Application Password | [Changing local credentials](#changing-local-credentials) |
+
 ---
 
 ## Docker
 
 ### `The Docker daemon is not running`
 
-```bash
-docker info
-```
+Check with `docker info`.
 
-macOS / Windows: start Docker Desktop and wait for the whale to settle.
-Linux: `sudo systemctl start docker`.
+- macOS / Windows: start Docker Desktop and wait until it reports running.
+- Linux: `sudo systemctl start docker`.
 
 ### `docker compose (v2) is unavailable`
 
-```bash
-docker compose version    # must print v2.x or later
-```
-
-Compose v1 (`docker-compose`, with a hyphen) is not supported. Install the
-Compose plugin, or update Docker Desktop.
+`docker compose version` must print v2.x or later. Compose v1
+(`docker-compose`, with a hyphen) is not supported. Install the Compose plugin,
+or update Docker Desktop.
 
 ### `docker: permission denied` on Linux
 
-Add yourself to the `docker` group and start a new login shell:
+Your user is not in the `docker` group. Add it, then start a new login shell:
 
 ```bash
 sudo usermod -aG docker "$USER"
@@ -49,7 +60,7 @@ sudo usermod -aG docker "$USER"
 
 ### `127.0.0.1:8080 is already in use by something else`
 
-Find the holder:
+Find what holds the port:
 
 ```bash
 # macOS / Linux
@@ -58,7 +69,7 @@ lsof -nP -iTCP:8080 -sTCP:LISTEN
 netstat -ano -p tcp | grep ':8080 .*LISTENING'
 ```
 
-Then either stop it, or move this project:
+Stop it, or move this project to another port:
 
 ```bash
 sed -i.bak 's/^WP_PORT=.*/WP_PORT=8081/' .env    # or edit .env by hand
@@ -66,11 +77,11 @@ sed -i.bak 's/^WP_PORT=.*/WP_PORT=8081/' .env    # or edit .env by hand
 ./bin/connect          # the registered MCP URL still points at the old port
 ```
 
-No reinstall is needed — `WP_HOME` reads the port from the container's
-environment at runtime.
+No reinstall needed: `WP_HOME` reads the port from the container environment at
+runtime.
 
-The same applies to `DB_PORT`; 3307 is the default precisely because a local
-MySQL usually holds 3306.
+`DB_PORT` works the same way. Its default is 3307 because a local MySQL usually
+holds 3306.
 
 ---
 
@@ -83,19 +94,17 @@ MySQL usually holds 3306.
 docker compose ps
 ```
 
-Common causes:
-
-- **Changed `MYSQL_PASSWORD` or `MYSQL_USER` after the first run.** The volume
-  still holds the old credentials; the image only applies them on an empty data
-  directory. Fix: `./bin/reset`.
-- **A corrupt volume** after an abrupt shutdown. Fix: `./bin/reset`.
-- **Not enough memory.** Raise Docker Desktop's memory limit to 4 GB or more.
+| Cause | Fix |
+|-------|-----|
+| `MYSQL_PASSWORD` or `MYSQL_USER` changed after the first run. The image applies them only to an empty data directory, so the volume keeps the old ones. | `./bin/reset` |
+| Corrupt volume after an abrupt shutdown | `./bin/reset` |
+| Not enough memory | Raise Docker Desktop's memory limit to 4 GB or more |
 
 ### `Error establishing a database connection`
 
-The WordPress container starts before MariaDB finishes its first-run
-initialisation on a cold volume. `depends_on: service_healthy` handles this; if
-you see it anyway:
+On a cold volume WordPress can start before MariaDB finishes its first-run
+initialisation. `depends_on: service_healthy` normally prevents this. If you see
+it anyway:
 
 ```bash
 ./bin/stop && ./bin/start
@@ -114,8 +123,8 @@ you see it anyway:
 curl -i http://localhost:8080/
 ```
 
-If the container is healthy but curl times out, something on the host is
-intercepting loopback traffic — a VPN in full-tunnel mode is the usual culprit.
+Container healthy but curl times out: something on the host intercepts loopback
+traffic. Usually a VPN in full-tunnel mode.
 
 ### `./bin/setup` fails during `wp core install`
 
@@ -125,14 +134,13 @@ intercepting loopback traffic — a VPN in full-tunnel mode is the usual culprit
 ./bin/wp core version
 ```
 
-An install that got half-way leaves the database in a state
-`wp core is-installed` rejects. `./bin/reset` is the reliable fix; nothing here
-is precious.
+A half-finished install leaves the database in a state `wp core is-installed`
+rejects. Run `./bin/reset`; nothing here is precious.
 
 ### `/wp-json/` returns 404
 
-Pretty permalinks are not being rewritten. Provisioning fails loudly on this,
-but to check by hand:
+Pretty permalinks are not being rewritten. Provisioning fails loudly on this; to
+check by hand:
 
 ```bash
 docker compose exec wordpress cat /var/www/html/.htaccess
@@ -141,10 +149,10 @@ docker compose exec wordpress apache2ctl -M | grep rewrite
 ./bin/wp rewrite flush
 ```
 
-`docker/wordpress/apache-wordpress.conf` sets `AllowOverride All`; if you edited
+`docker/wordpress/apache-wordpress.conf` sets `AllowOverride All`. If you edited
 it, `./bin/setup` rebuilds the image.
 
-The fallback, if you need to reach the API while diagnosing this, is
+While diagnosing, the API is still reachable at
 `http://localhost:8080/?rest_route=/`.
 
 ---
@@ -153,16 +161,15 @@ The fallback, if you need to reach the API while diagnosing this, is
 
 ### A plugin fails to install
 
+The ZIPs are GitHub release assets, downloaded from inside the container. A
+failure is almost always the network: a proxy, a corporate TLS interceptor, or a
+VPN that geo-blocks the host. Test the URL from inside the container:
+
 ```bash
 ./bin/logs wordpress
 docker compose exec wordpress curl -sI \
   https://github.com/WordPress/mcp-adapter/releases/download/v0.7.0/mcp-adapter.zip
 ```
-
-The ZIPs come from GitHub release assets. A download failure is almost always
-the network — a proxy, a corporate TLS interceptor, or a VPN that geo-blocks the
-host. Check the URL resolves *from inside the container*, which is where the
-download happens.
 
 Retry by hand:
 
@@ -171,7 +178,7 @@ Retry by hand:
   https://github.com/WordPress/mcp-adapter/releases/download/v0.7.0/mcp-adapter.zip --force
 ```
 
-A wrong `MCP_ADAPTER_VERSION` or `MS_WP_ABILITIES_VERSION` in `.env` gives a 404.
+A 404 means a wrong `MCP_ADAPTER_VERSION` or `MS_WP_ABILITIES_VERSION` in `.env`.
 The ms-wp-abilities asset name includes the version:
 `ms-wp-abilities-<version>.zip`.
 
@@ -182,7 +189,7 @@ The ms-wp-abilities asset name includes the version:
 ./bin/logs --debug
 ```
 
-Both plugins require WordPress 6.9+ and PHP 7.4+:
+Both plugins need WordPress 6.9+ and PHP 7.4+. Check:
 
 ```bash
 ./bin/wp core version
@@ -190,7 +197,7 @@ docker compose exec wordpress php -v
 ```
 
 MS WP Abilities also needs MCP Adapter active first. Provisioning installs them
-in that order; if you are doing it by hand, keep it.
+in that order; keep it when doing it by hand.
 
 ---
 
@@ -206,7 +213,7 @@ docker compose exec wordpress ls /usr/local/lib/wp-cli-packages/ability-command
 ./bin/wp --info
 ```
 
-If the directory is missing or empty the image is stale. Rebuild:
+A missing or empty directory means a stale image. Rebuild:
 
 ```bash
 docker compose build --no-cache wordpress && ./bin/start
@@ -219,27 +226,26 @@ docker compose build --no-cache wordpress && ./bin/start
 ./bin/wp eval 'var_dump( function_exists( "wp_register_ability" ) );'
 ```
 
-`false` means WordPress is older than 6.9 — check `WORDPRESS_IMAGE` in `.env`.
-`true` with an empty list means ms-wp-abilities is inactive.
+- `false`: WordPress is older than 6.9. Check `WORDPRESS_IMAGE` in `.env`.
+- `true` with an empty list: ms-wp-abilities is inactive.
 
 ### An ability is registered but does not appear over MCP
 
-Abilities are private by default; only `meta.public` or `meta.mcp.public`
-exposes them. Compare the two lists:
+Abilities are private by default. Only `meta.public` or `meta.mcp.public`
+exposes them over MCP. Check an ability's meta:
 
 ```bash
 ./bin/wp ability list --field=name | sort > /tmp/registered
 ./bin/wp ability get miriamschwab/get-posts --fields=name,meta
 ```
 
-**Tools → WP Abilities** in wp-admin shows the MCP-public flag for every
-ability on the site, which is faster than reading source.
+Faster: **Tools → WP Abilities** in wp-admin shows the MCP-public flag for every
+ability on the site.
 
 ### An ability execution fails
 
 The MCP response carries `isError: true` and the WordPress error message. Run
-the same ability without MCP to see whether the fault is in the ability or the
-transport:
+the same ability without MCP to tell an ability fault from a transport fault:
 
 ```bash
 ./bin/wp ability can-run miriamschwab/create-post --user=admin
@@ -248,9 +254,9 @@ transport:
 ./bin/logs --debug
 ```
 
-`permission_denied` means the user lacks the capability the ability requires —
-`edit_posts` for content, `activate_plugins` for plugin work. Check
-`WP_ADMIN_USER` really is an administrator:
+`permission_denied` means the user lacks the required capability: `edit_posts`
+for content, `activate_plugins` for plugin work. Check `WP_ADMIN_USER` is an
+administrator:
 
 ```bash
 ./bin/wp user list --fields=user_login,roles
@@ -262,13 +268,14 @@ transport:
 
 ### 404 at `/wp-json/mcp/mcp-adapter-default-server`
 
+Cause: MCP Adapter inactive, or rewrite rules not flushed. `./bin/setup` fixes
+both. To check:
+
 ```bash
 ./bin/wp plugin is-active mcp-adapter && echo active
 curl -s http://localhost:8080/wp-json/ | grep -o '"mcp[^"]*"' | head
 ./bin/wp rewrite flush
 ```
-
-An inactive MCP Adapter, or unflushed rewrite rules. `./bin/setup` fixes both.
 
 ### 401 with the right credential
 
@@ -279,41 +286,40 @@ curl -s -u "admin:$(cat .secrets/application-password)" \
   http://localhost:8080/wp-json/wp/v2/users/me
 ```
 
-- `wp-app-password available` failing means WordPress does not consider the site
+- **`wp-app-password available` fails:** WordPress does not consider the site
   local. Check `WP_ENVIRONMENT_TYPE`:
   ```bash
   ./bin/wp eval 'echo wp_get_environment_type();'     # expects: local
   ```
-- `/wp/v2/users/me` returning 401 while the password is correct means Apache is
-  not passing the `Authorization` header to PHP. The image handles this in two
-  places — `docker/wordpress/apache-wordpress.conf` and the `.htaccess` rewrite —
-  so check both survive:
+- **`/wp/v2/users/me` returns 401 with a correct password:** Apache is not
+  passing the `Authorization` header to PHP. The image handles this in two
+  places, `docker/wordpress/apache-wordpress.conf` and the `.htaccess` rewrite.
+  Check both are intact:
   ```bash
   docker compose exec wordpress grep -r Authorization /etc/apache2/conf-enabled/
   docker compose exec wordpress grep Authorization /var/www/html/.htaccess
   ```
-- If the password was rotated, re-issue and re-register:
+- **Password was rotated:** re-issue and re-register:
   ```bash
   rm .secrets/application-password && ./bin/setup && ./bin/connect
   ```
 
 ### `Missing Mcp-Session-Id header`
 
-Your client is not doing the handshake. Every request after `initialize` must
-carry the `Mcp-Session-Id` the initialize response returned. Claude Code does
-this automatically; hand-rolled curl does not. See
-[architecture.md](architecture.md#mcp-transport), or read
+The client skips the handshake. Every request after `initialize` must carry the
+`Mcp-Session-Id` from the initialize response. Claude Code does this; hand-rolled
+curl does not. See [architecture.md](architecture.md#mcp-transport), or
 `mcp_request()` in `tests/lib.sh` for a 20-line reference implementation.
 
 ### `Invalid or expired session`
 
-Sessions expire after a day of inactivity, and each user keeps at most 32. Start
-a new one — `initialize` again.
+Sessions expire after a day of inactivity, and each user keeps at most 32. Send
+`initialize` again to start a new one.
 
 ### `GET` returns 405
 
-Expected. The adapter has not implemented SSE streaming; the endpoint is
-POST/DELETE only.
+Expected. The adapter has no SSE streaming yet; the endpoint is POST/DELETE
+only.
 
 ---
 
@@ -321,8 +327,8 @@ POST/DELETE only.
 
 ### `claude mcp get wordpress` finds nothing
 
-Run it from the repository directory. The registration is `local` scope, keyed
-to the project path. If you are in the right place, `./bin/connect`.
+The registration is `local` scope, keyed to the project path. Run the command
+from the repository directory. If you already are, run `./bin/connect`.
 
 ### Connected, but no WordPress tools in the session
 
@@ -330,38 +336,38 @@ Claude Code reads MCP configuration at start. Restart the session.
 
 ### Tools are there but every call fails
 
-Almost always a rotated Application Password — `./bin/reset` issues a new one and
-the old one is still in `~/.claude.json`:
-
-```bash
-./bin/setup && ./bin/connect
-```
-
-Then restart Claude Code. Confirm the endpoint independently first:
+Almost always a rotated Application Password: `./bin/reset` issues a new one,
+and `~/.claude.json` still holds the old one. First confirm the endpoint works:
 
 ```bash
 ./bin/status
 ./bin/test integration
 ```
 
+Then re-register and restart Claude Code:
+
+```bash
+./bin/setup && ./bin/connect
+```
+
 ### Only three tools are listed
 
 Correct. `mcp-adapter-discover-abilities`, `mcp-adapter-get-ability-info` and
-`mcp-adapter-execute-ability` are the whole public surface; the 29 abilities
+`mcp-adapter-execute-ability` are the whole public surface. The 29 abilities
 (26 `miriamschwab/*` + 3 `core/*`) sit behind them. See
 [architecture.md](architecture.md#ms-wp-abilities) and
 [architecture.md](architecture.md#why-three-tools-and-not-thirty).
 
 ### The port changed and calls stopped working
 
-The registered URL still points at the old port. `./bin/connect` rewrites it,
-then restart Claude Code.
+The registered URL still points at the old port. Run `./bin/connect`, then
+restart Claude Code.
 
 ### `./bin/connect` fails with `claude is not on PATH`
 
-Claude Code is not installed, or not in this shell's `PATH`. `./bin/setup` warns
-about it rather than failing — everything except `./bin/connect` and test layer 4
-works without it.
+Claude Code is not installed, or not on this shell's `PATH`. `./bin/setup` only
+warns about it: everything except `./bin/connect` and test layer 4 works without
+it.
 
 ---
 
@@ -369,9 +375,8 @@ works without it.
 
 ### Uploads or plugin installs fail with a filesystem error
 
-WordPress owns `/var/www/html` as `www-data`. `./bin/wp` drops to that user
-precisely so WP-CLI does not leave root-owned files behind. If something else
-did:
+WordPress owns `/var/www/html` as `www-data`. `./bin/wp` runs as that user so
+WP-CLI leaves no root-owned files. If something else did:
 
 ```bash
 docker compose exec wordpress chown -R www-data:www-data /var/www/html/wp-content
@@ -379,13 +384,13 @@ docker compose exec wordpress chown -R www-data:www-data /var/www/html/wp-conten
 
 ### `bin/*: Permission denied` after cloning
 
-Git did not preserve the executable bit (some Windows configurations):
+Git did not keep the executable bit (some Windows configurations):
 
 ```bash
 chmod +x bin/* tests/*.sh docker/wordpress/bin/*
 ```
 
-Or invoke through bash: `bash bin/setup`.
+Or run through bash: `bash bin/setup`.
 
 ---
 
@@ -393,12 +398,13 @@ Or invoke through bash: `bash bin/setup`.
 
 ### Changes to `.env` seem to have no effect
 
-Values consumed at **install** time — `MYSQL_USER`, `MYSQL_PASSWORD`,
-`MYSQL_DATABASE` — are baked into the volume on first run. Values consumed at
-**provision** time — `WP_SITE_TITLE`, `WP_ADMIN_PASSWORD`, `WP_THEME`, the
-version pins — are re-applied by `./bin/setup`. `WP_PORT` is read at runtime.
+When each value is read decides how to apply a change:
 
-If a database credential changed, only `./bin/reset` will do.
+| Read at | Values | Apply with |
+|---------|--------|------------|
+| Install (first run, stored in the volume) | `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_DATABASE` | `./bin/reset` |
+| Provision | `WP_SITE_TITLE`, `WP_ADMIN_PASSWORD`, `WP_THEME`, version pins | `./bin/setup` |
+| Runtime | `WP_PORT` | `./bin/start` |
 
 ### Full reset
 
@@ -424,23 +430,17 @@ docker builder prune
 
 ## Changing local credentials
 
-**Administrator password** — edit `WP_ADMIN_PASSWORD` in `.env`, then
-`./bin/setup`. Provisioning synchronises it.
-
-**Database passwords** — edit `.env`, then `./bin/reset`. There is no way to
-change them in place; the volume holds the old ones.
-
-**Application Password** — rotate and re-register:
-
-```bash
-rm .secrets/application-password
-./bin/setup
-./bin/connect
-```
+| Credential | How |
+|------------|-----|
+| Administrator password | Edit `WP_ADMIN_PASSWORD` in `.env`, then `./bin/setup`. Provisioning syncs it. |
+| Database passwords | Edit `.env`, then `./bin/reset`. They cannot change in place; the volume holds the old ones. |
+| Application Password | `rm .secrets/application-password && ./bin/setup && ./bin/connect` |
 
 ---
 
 ## Still stuck
+
+These six commands give the full picture:
 
 ```bash
 ./bin/status
@@ -451,8 +451,8 @@ rm .secrets/application-password
 docker compose config
 ```
 
-Those six give the full picture. If the failure is in the MCP Adapter or MS WP
-Abilities rather than in this wiring, it belongs upstream:
+A failure in the MCP Adapter or MS WP Abilities themselves, not in this wiring,
+belongs upstream:
 
 - https://github.com/WordPress/mcp-adapter/issues
 - https://github.com/miriamschwab/ms-wp-abilities/issues

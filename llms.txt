@@ -31,7 +31,8 @@ do not invent names or parameters from memory.
 - **Inspect before change.** State what you found.
 - **Destructive ops need an explicit ask:** trash, deactivate plugins, change
   site settings, `./bin/reset`.
-- **Never expose** the MCP endpoint or WordPress beyond localhost.
+- **Never expose** this harness's MCP endpoint or WordPress beyond localhost.
+  A separate live site is outside the harness: [docs/remote-site.md](docs/remote-site.md).
 - **Never put credentials** in a tracked file (`.env`, `.secrets/` stay
   ignored).
 - **Do not edit infra** (`docker-compose.yml`, `docker/`, `bin/`, `.env`) for a
@@ -52,6 +53,7 @@ do not invent names or parameters from memory.
 - Development loop: [docs/development.md](docs/development.md)
 - Claude Code MCP: [docs/claude-code.md](docs/claude-code.md)
 - Codex MCP: [docs/codex.md](docs/codex.md) · [.codex/config.toml](.codex/config.toml)
+- Live site (outside the harness): [docs/remote-site.md](docs/remote-site.md)
 - Security: [docs/security.md](docs/security.md) · [SECURITY.md](SECURITY.md)
 - Troubleshooting: [docs/troubleshooting.md](docs/troubleshooting.md)
 - Contributing: [CONTRIBUTING.md](CONTRIBUTING.md)
