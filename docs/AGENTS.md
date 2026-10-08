@@ -50,6 +50,7 @@ Paths are repo-relative from project root unless noted.
 | --- | --- |
 | First-time / idempotent provision | `./bin/setup` |
 | Register MCP with Claude Code | `./bin/connect` |
+| Print MCP URL + auth export (Codex / Cursor) | `./bin/connect --print` |
 | Container / WP / ability / MCP health | `./bin/status` |
 | WP-CLI inside the container | `./bin/wp <args>` |
 | List abilities without MCP | `./bin/wp ability list` |

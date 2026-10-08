@@ -50,16 +50,17 @@ Application Password, or the abilities the test drives.
   stay idempotent, and must never destroy content: that is `./bin/reset`'s job
   alone.
 - Tests name their content uniquely and delete it in an `EXIT` trap.
-- Shell is Bash for `bin/` and `tests/`, POSIX `sh` for
-  `docker/wordpress/bin/`, which CI shellchecks with `--shell=sh`.
+- Shell is Bash for `bin/`, `tests/`, and `docker/wordpress/bin/wp-provision`
+  / `wp-app-password`; POSIX `sh` for `docker/wordpress/bin/wp`.
 - PHP, JS and CSS follow the WordPress coding standards.
 - Versions are pinned in `.env`, mirrored in `.env.example`. Nothing follows a
   moving branch. Moving a pin is
   [docs/development.md](docs/development.md#updating-dependencies).
 - Documentation grows by replacing, not appending. Each topic has one home:
-  AGENTS (and `docs/agents/`), ai-skills, architecture, claude-code, development,
-  security, troubleshooting. Agent entry surfaces stay in parity: `docs/AGENTS.md`,
-  root `AGENTS.md`, `CLAUDE.md`, `.cursor/AGENTS.md`, and `llms.txt`.
+  AGENTS (and `docs/agents/`), ai-skills, architecture, claude-code, codex,
+  development, security, troubleshooting. Agent entry surfaces stay in parity:
+  `docs/AGENTS.md`, root `AGENTS.md`, `CLAUDE.md`, `.cursor/AGENTS.md`, and
+  `llms.txt`.
 
 ## Before opening a pull request
 
@@ -73,10 +74,11 @@ docker compose config --quiet
 CI runs the same checks plus a full stack build, a reset and a rebuild on
 Ubuntu, so a change that only works on your machine fails there.
 
-Branch from `main`, keep the pull request to one subject, and say in the
-description what you ran. If you changed a version pin, say which upstream
-release and why. If you changed documentation, say which file is now the single
-home for that topic.
+Day-to-day work branches from `develop` and opens a PR into `develop`. Release
+cuts merge `develop` into `main`. Keep the pull request to one subject, and say
+in the description what you ran. If you changed a version pin, say which
+upstream release and why. If you changed documentation, say which file is now
+the single home for that topic.
 
 ## Reporting
 

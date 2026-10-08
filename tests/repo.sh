@@ -141,8 +141,10 @@ for f in README.md CLAUDE.md AGENTS.md llms.txt CHANGELOG.md LICENSE NOTICE Make
          docs/security.md docs/troubleshooting.md \
          docs/agents/README.md docs/agents/agent-contract.md docs/agents/runtime-policy.md \
          .github/brand/README.md .github/brand/brand.config.json .github/brand/render.mjs \
-         .github/brand/readme.svg .github/brand/readme.png .github/brand/social.svg \
-         .github/brand/social.png .github/brand/og.svg .github/brand/og.png \
+         .github/brand/readme-light.svg .github/brand/readme-light.png \
+         .github/brand/readme-dark.svg .github/brand/readme-dark.png \
+         .github/brand/social.svg .github/brand/social.png \
+         .github/brand/og.svg .github/brand/og.png \
          examples/README.md examples/inspect-site.md examples/create-content.md \
          examples/modify-content.md examples/media.md examples/theme.md \
          examples/plugins.md examples/site-development.md \
@@ -183,18 +185,71 @@ suite 'Repository — Docker Compose'
 
 if have docker && docker info >/dev/null 2>&1 && [[ -f "$ENV_FILE" ]]; then
     assert_ok 'docker-compose.yml is valid' dc config --quiet
+    assert_ok 'Compose ports and network_mode stay loopback-safe' check_loopback_bindings
     binding="$(dc config --format json 2>/dev/null \
         | jq -r '.services.wordpress.ports[0].host_ip // empty' || true)"
     assert_eq 'the WordPress port binds to loopback' '127.0.0.1' "$binding"
     binding="$(dc config --format json 2>/dev/null \
         | jq -r '.services.db.ports[0].host_ip // empty' || true)"
     assert_eq 'the database port binds to loopback' '127.0.0.1' "$binding"
+    host_modes="$(dc config --format json 2>/dev/null \
+        | jq -r '[.services[]? | select((.network_mode // "") == "host") | .] | length' || true)"
+    assert_eq 'no service uses network_mode: host' '0' "$host_modes"
 else
     note 'Docker or .env unavailable — skipping Compose validation'
 fi
 
 # Guard against the bindings being widened in the source file itself.
 assert_fails 'no service publishes on 0.0.0.0' \
-    grep -qE '^\s*-\s*"?0\.0\.0\.0:' docker-compose.yml
+    grep -qE '^\s*-\s*["'\'']?0\.0\.0\.0:' docker-compose.yml
+assert_fails 'no service sets network_mode: host in the base file' \
+    grep -qEi '^\s*network_mode:\s*["'\'']?host["'\'']?\s*$' docker-compose.yml
+
+# ===========================================================================
+suite 'Repository — secret file modes (when the FS enforces them)'
+# ===========================================================================
+
+# Probe whether chmod sticks on this repo mount (WSL /mnt/c often does not).
+mode_probe="$REPO_ROOT/.mode-probe.$$"
+: >"$mode_probe"
+chmod 600 "$mode_probe" 2>/dev/null || true
+probe_mode="$(stat -c '%a' "$mode_probe" 2>/dev/null || stat -f '%OLp' "$mode_probe" 2>/dev/null || echo '')"
+rm -f "$mode_probe"
+probe_mode="${probe_mode#0}"
+
+if [[ "$probe_mode" != '600' ]]; then
+    note 'filesystem does not enforce Unix modes — skipping secret mode asserts'
+else
+    if [[ -d "$REPO_ROOT/.secrets" ]]; then
+        dir_mode="$(stat -c '%a' "$REPO_ROOT/.secrets" 2>/dev/null || stat -f '%OLp' "$REPO_ROOT/.secrets")"
+        dir_mode="${dir_mode#0}"
+        if [[ "$dir_mode" == '700' ]]; then
+            _record_pass '.secrets is mode 700'
+        else
+            _record_fail '.secrets is mode 700' "mode=$dir_mode"
+        fi
+    else
+        note '.secrets/ absent — run ./bin/setup to create it'
+    fi
+    if [[ -f "$REPO_ROOT/.env" ]]; then
+        env_mode="$(stat -c '%a' "$REPO_ROOT/.env" 2>/dev/null || stat -f '%OLp' "$REPO_ROOT/.env")"
+        env_mode="${env_mode#0}"
+        if [[ "$env_mode" == '600' ]]; then
+            _record_pass '.env is mode 600'
+        else
+            _record_fail '.env is mode 600' "mode=$env_mode"
+        fi
+    fi
+    if [[ -f "$REPO_ROOT/.secrets/application-password" ]]; then
+        pw_mode="$(stat -c '%a' "$REPO_ROOT/.secrets/application-password" 2>/dev/null \
+            || stat -f '%OLp' "$REPO_ROOT/.secrets/application-password")"
+        pw_mode="${pw_mode#0}"
+        if [[ "$pw_mode" == '600' ]]; then
+            _record_pass 'application-password is mode 600'
+        else
+            _record_fail 'application-password is mode 600' "mode=$pw_mode"
+        fi
+    fi
+fi
 
 test_summary

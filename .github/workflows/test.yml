@@ -29,10 +29,11 @@ jobs:
             tests/lib.sh tests/repo.sh tests/smoke.sh \
             tests/integration.sh tests/claude-code.sh
 
-      - name: shellcheck (container scripts, POSIX sh)
+      - name: shellcheck (container scripts)
         run: |
           shellcheck --severity=warning --shell=sh \
-            docker/wordpress/bin/wp \
+            docker/wordpress/bin/wp
+          shellcheck --severity=warning --shell=bash \
             docker/wordpress/bin/wp-provision \
             docker/wordpress/bin/wp-app-password
 
@@ -44,7 +45,10 @@ jobs:
           cp .env.example .env
           sed -i 's/^\([A-Z_]*\)=CHANGE_ME$/\1=ci-placeholder-not-a-secret/' .env
           docker compose config --quiet
-          docker compose config | grep -q '127.0.0.1'
+          docker compose config --format json | jq -e '
+            ([.services[]? | select((.network_mode // "") == "host")] | length) == 0
+            and ([.services[]?.ports[]? | .host_ip // ""] | all(. == "127.0.0.1"))
+          ' >/dev/null
 
       - name: repository integrity
         run: bash tests/repo.sh

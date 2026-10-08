@@ -60,10 +60,12 @@ them as durable, and do not store anything there that is not reproducible.
 ## Commands
 
     ./bin/status              container, WordPress, ability and MCP health
+    ./bin/connect             register MCP with Claude Code
+    ./bin/connect --print     MCP URL + auth export (Codex / Cursor)
     ./bin/wp <wp-cli args>    WP-CLI inside the container
     ./bin/wp ability list     the abilities this site registers, without MCP
     ./bin/logs --debug        WordPress's own PHP debug log
-    ./bin/test --skip-claude  layers 1-3 of the test suite
+    ./bin/test --skip-claude  layers 0–3 of the test suite
 
 `./bin/wp ability list` and `./bin/wp ability run` are the independent
 diagnostic path: if an ability works there but not over MCP, the problem is in
