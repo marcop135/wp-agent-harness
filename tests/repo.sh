@@ -138,7 +138,7 @@ for f in README.md CLAUDE.md AGENTS.md llms.txt CHANGELOG.md LICENSE NOTICE Make
          .github/ISSUE_TEMPLATE/2-feature.yml .github/ISSUE_TEMPLATE/3-question.yml \
          .cursor/AGENTS.md .codex/config.toml \
          docs/AGENTS.md docs/ai-skills.md docs/architecture.md docs/claude-code.md docs/codex.md docs/development.md \
-         docs/security.md docs/troubleshooting.md \
+         docs/remote-site.md docs/security.md docs/troubleshooting.md \
          docs/agents/README.md docs/agents/agent-contract.md docs/agents/runtime-policy.md \
          .github/brand/README.md .github/brand/brand.config.json .github/brand/render.mjs \
          .github/brand/readme-light.svg .github/brand/readme-light.png \
