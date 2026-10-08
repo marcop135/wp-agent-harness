@@ -1,15 +1,13 @@
 # Connecting Claude Code
 
-For OpenAI Codex, see [codex.md](codex.md). For the shared agent map, see
-[ai-skills.md](ai-skills.md). `./bin/connect --print` works without Claude Code
-and prints URL plus `WORDPRESS_MCP_BASIC_AUTH` for other MCP clients.
-
-## The short version
-
 ```bash
 ./bin/connect
-cd /path/to/wp-agent-harness && claude
+claude          # from the repository root
 ```
+
+Other clients: [Codex](codex.md). `./bin/connect --print` prints the URL and a
+`WORDPRESS_MCP_BASIC_AUTH` export for any HTTP MCP client, without needing
+Claude Code. How the pieces fit: [ai-skills.md](ai-skills.md).
 
 ## The registration
 
@@ -19,10 +17,10 @@ cd /path/to/wp-agent-harness && claude
 | Transport | `http` |
 | URL | `http://localhost:8080/wp-json/mcp/mcp-adapter-default-server` |
 | Authentication | `Authorization: Basic <base64 of admin:application-password>` |
-| Scope | `local`, this project only, stored in `~/.claude.json` |
+| Scope | `local`: this project only, stored in `~/.claude.json` |
 
-`./bin/connect` is exactly this, with the endpoint and credential filled in from
-`.env` and `.secrets/application-password`:
+`./bin/connect` runs exactly this, filled in from `.env` and
+`.secrets/application-password`:
 
 ```bash
 claude mcp add --transport http --scope local \
@@ -31,30 +29,20 @@ claude mcp add --transport http --scope local \
   --header "Authorization: Basic YWRtaW46..."
 ```
 
-It removes any existing registration of the same name first, so re-running it
-after `./bin/reset` picks up the new Application Password instead of leaving a
-stale one behind.
+It removes an existing registration of the same name first, so re-running it
+after `./bin/reset` picks up the new Application Password.
 
-To see what it would write without writing anything:
-
-```bash
-./bin/connect --print
-```
-
-## Scopes
-
-Claude Code has three:
+## Why `local` scope
 
 | Scope | Applies to | Stored in |
 |-------|------------|-----------|
 | `local` (used here) | this project, this user | `~/.claude.json`, under the project's path |
-| `project` | this project, shared via version control | `.mcp.json` in the repository root |
+| `project` | this project, shared via Git | `.mcp.json` in the repository root |
 | `user` | every project | `~/.claude.json`, top level |
 
-`local` is the right one here. It is already project-scoped, and it keeps the
-Application Password out of the repository. `project` scope would put a tracked
-`.mcp.json` next to the code; since the credential cannot go in it, it would
-need an environment-variable indirection:
+`local` is already project-scoped and keeps the Application Password out of the
+repository. `project` scope would need a tracked `.mcp.json` that reads the
+secret from the environment:
 
 ```json
 {
@@ -68,20 +56,22 @@ need an environment-variable indirection:
 }
 ```
 
-That works, `.mcp.json` expands `${VAR}` and `${VAR:-default}` in `url`,
-`headers`, `command`, `args` and `env`, but it means exporting
-`WORDPRESS_MCP_BASIC_AUTH` in every shell that starts Claude Code, and it adds a
-file whose only purpose is to reference a secret stored elsewhere. `.mcp.json` is
-in `.gitignore` here so an experiment cannot be committed by accident.
+That works (`.mcp.json` expands `${VAR}` and `${VAR:-default}` in `url`,
+`headers`, `command`, `args` and `env`), but every shell that starts Claude Code
+then needs `WORDPRESS_MCP_BASIC_AUTH` exported. `.mcp.json` is in `.gitignore`
+so an experiment cannot be committed by accident.
 
-## Verifying the connection
+## Verify the connection
+
+Run from the repository root; a `local`-scope server does not exist anywhere
+else.
 
 ```bash
 claude mcp list
 claude mcp get wordpress
 ```
 
-A working registration reads:
+A working registration shows:
 
 ```
 wordpress:
@@ -93,11 +83,8 @@ wordpress:
     Authorization: Basic ...
 ```
 
-Run both from the repository directory, a `local`-scope server does not exist
-anywhere else.
-
-Inside an interactive session, `/mcp` lists the connected servers and their
-tools. You should see three:
+In a session, `/mcp` lists exactly three tools. That is complete: the abilities
+sit behind them ([why](architecture.md#why-three-tools-and-not-thirty)).
 
 ```
 mcp__wordpress__mcp-adapter-discover-abilities
@@ -105,21 +92,28 @@ mcp__wordpress__mcp-adapter-get-ability-info
 mcp__wordpress__mcp-adapter-execute-ability
 ```
 
-Three is correct and complete. The abilities live behind them, see
-[architecture.md](architecture.md#why-three-tools-and-not-thirty).
+End-to-end check with a real headless session: `./bin/test claude-code`.
 
-The end-to-end check, which drives a real headless session:
+## Headless use
+
+Each `./bin/test claude-code` step is one non-interactive turn:
 
 ```bash
-./bin/test claude-code
+claude -p "Using the WordPress MCP server, list the active plugins." \
+  --output-format json \
+  --allowedTools "mcp__wordpress" \
+  --permission-prompts none
 ```
+
+`--allowedTools "mcp__wordpress"` allows the whole server. `--permission-prompts
+none` denies anything that would prompt, so the turn cannot hang.
 
 ## WordPress agent skills
 
-This repository vendors a curated subset of
-[WordPress/agent-skills](https://github.com/WordPress/agent-skills) (GPL-2.0-or-later)
-into `.claude/skills/` and `.cursor/skills/` so Claude Code and Cursor share the
-same pack:
+A curated subset of
+[WordPress/agent-skills](https://github.com/WordPress/agent-skills)
+(GPL-2.0-or-later) is vendored into `.claude/skills/` and `.cursor/skills/`, so
+Claude Code and Cursor share one pack:
 
 | Skill | Role |
 |-------|------|
@@ -135,13 +129,12 @@ same pack:
 | `wp-abilities-audit` | Audit REST surface for Abilities registrations |
 | `wp-abilities-verify` | Verify Abilities registrations |
 
-Not installed on purpose: `wp-env`, `wp-playground`, `blueprint`, and other
-skills that compete with this repo's Docker + MCP stack. [CLAUDE.md](../CLAUDE.md)
-is authoritative: site ops stay on MCP abilities and `./bin/wp`. See also
-[ai-skills.md](ai-skills.md) for how entry docs, MCP, and coding skills relate,
-and [AGENTS.md](AGENTS.md) for the canonical agent index.
+Left out on purpose: `wp-env`, `wp-playground`, `blueprint` and other skills
+that compete with this repo's Docker and MCP stack. Site work stays on MCP
+abilities and `./bin/wp` ([CLAUDE.md](../CLAUDE.md)). Agent index:
+[AGENTS.md](AGENTS.md).
 
-Refresh the curated set from upstream:
+Refresh from upstream:
 
 ```bash
 npx skills add WordPress/agent-skills \
@@ -158,41 +151,26 @@ npx skills add WordPress/agent-skills \
   --skill wp-abilities-verify
 ```
 
-Or clone the upstream repo, run `skillpack-build.mjs` / `skillpack-install.mjs`
-with `--targets=claude,cursor` and the same `--skills=` list. Confirm discovery
-with `claude /skills` (or Cursor's skill list) from the repository root.
+Or clone upstream and run `skillpack-build.mjs` / `skillpack-install.mjs` with
+`--targets=claude,cursor` and the same `--skills=` list. Confirm with
+`claude /skills` (or Cursor's skill list) from the repository root.
 
-## Removing the connection
+## Remove the connection
 
 ```bash
 ./bin/connect --remove       # or: claude mcp remove wordpress -s local
 ```
 
-This only unregisters the server. WordPress keeps running and the Application
-Password stays valid; to revoke that too, delete it in
-**Users → Profile → Application Passwords**, or:
+This only unregisters the server. The Application Password stays valid; revoke
+it under **Users → Profile → Application Passwords**, or:
 
 ```bash
 docker compose exec -T wordpress wp-app-password delete
 rm .secrets/application-password
 ```
 
-## Using it headlessly
-
-Every `./bin/test claude-code` step is a single non-interactive turn:
-
-```bash
-claude -p "Using the WordPress MCP server, list the active plugins." \
-  --output-format json \
-  --allowedTools "mcp__wordpress" \
-  --permission-prompts none
-```
-
-`--allowedTools "mcp__wordpress"` permits the whole server; `--permission-prompts
-none` denies anything that would otherwise prompt, so the turn cannot hang.
-
 ## When it does not connect
 
 [troubleshooting.md](troubleshooting.md#claude-code) covers the four failure
-modes, server not found, status not `Connected`, connected but no tools, tools
-that fail on every call, along with the WordPress-side causes behind them.
+modes (server not found, status not `Connected`, connected but no tools, every
+call failing) and their WordPress-side causes.
