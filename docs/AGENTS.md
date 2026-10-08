@@ -4,13 +4,20 @@ Canonical narrative, documentation index, and working rules for this repository.
 
 **Repo root [`AGENTS.md`](../AGENTS.md)** duplicates the retrieval index and condensed rules for tools that only read `AGENTS.md` at the repository root (see [Vercel: AGENTS.md vs skills](https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals)).
 
-**Coding agents:** [Cursor agent](https://docs.cursor.com/agent) loads repo guidance via root [`AGENTS.md`](../AGENTS.md) and [`.cursor/AGENTS.md`](../.cursor/AGENTS.md) (precedence there). [Cursor CLI](https://cursor.com/docs/cli/using) reads root [`AGENTS.md`](../AGENTS.md) and [`CLAUDE.md`](../CLAUDE.md); it does not load `.cursor/AGENTS.md`. [Claude Code](https://code.claude.com/docs) reads [`CLAUDE.md`](../CLAUDE.md) at session start. Project skills live under [`.claude/skills/`](../.claude/skills/) and [`.cursor/skills/`](../.cursor/skills/) (same curated set). **Update this file** when changing shared narrative; then refresh the root mirror, `CLAUDE.md`, and `.cursor/AGENTS.md` pins if needed (see [agents/agent-contract.md](agents/agent-contract.md) Cross-tool parity).
+**Which file each agent loads:**
+
+- [Claude Code](https://code.claude.com/docs): [`CLAUDE.md`](../CLAUDE.md) at session start.
+- [Cursor agent](https://docs.cursor.com/agent): root [`AGENTS.md`](../AGENTS.md) and [`.cursor/AGENTS.md`](../.cursor/AGENTS.md) (precedence there).
+- [Cursor CLI](https://cursor.com/docs/cli/using): root [`AGENTS.md`](../AGENTS.md) and [`CLAUDE.md`](../CLAUDE.md); not `.cursor/AGENTS.md`.
+- Project skills: [`.claude/skills/`](../.claude/skills/) and [`.cursor/skills/`](../.cursor/skills/) (same curated set).
+
+**Update this file** when changing shared narrative, then refresh the root mirror, `CLAUDE.md`, and `.cursor/AGENTS.md` (see [agents/agent-contract.md](agents/agent-contract.md), Cross-tool parity).
 
 Portable task contract: [agents/agent-contract.md](agents/agent-contract.md).
 
 **IMPORTANT: Prefer retrieval-led reasoning over pre-training-led reasoning** for WordPress abilities, MCP tools, Docker commands, and this harness's `./bin/*` surface. Discover abilities and schemas at runtime; do not invent ability names or parameters from memory.
 
-**What this repo is:** a local, disposable WordPress harness for coding agents. It does **not** ship an MCP server, an abilities framework, or a WordPress plugin of its own. Those live upstream. What lives here is Docker Compose, provisioning, Application Password auth for the MCP endpoint, four test layers, docs, examples, and a curated set of WordPress agent skills. Nothing here is public and nothing here is production.
+**What this repo is:** a local, disposable WordPress harness for coding agents. It does **not** ship an MCP server, an abilities framework, or a WordPress plugin of its own. Those live upstream. What lives here is Docker Compose, provisioning, Application Password auth for the MCP endpoint, five test layers (0–4), docs, examples, and a curated set of WordPress agent skills. Nothing here is public and nothing here is production.
 
 ## Stack pin
 
@@ -31,7 +38,7 @@ Ports|127.0.0.1 only (WP + DB)
 Paths are repo-relative from project root unless noted.
 
 |root:{README.md,CHANGELOG.md,AGENTS.md,CLAUDE.md,llms.txt,CONTRIBUTING.md,SECURITY.md,CODE_OF_CONDUCT.md,LICENSE,NOTICE,Makefile,docker-compose.yml,.env.example}
-|docs:{AGENTS.md,ai-skills.md,architecture.md,claude-code.md,codex.md,development.md,security.md,troubleshooting.md}
+|docs:{AGENTS.md,ai-skills.md,architecture.md,claude-code.md,codex.md,development.md,remote-site.md,security.md,troubleshooting.md}
 |docs/agents:{README.md,agent-contract.md,runtime-policy.md}
 |examples:{README.md,inspect-site.md,create-content.md,modify-content.md,media.md,theme.md,plugins.md,site-development.md}
 |bin:{setup,start,stop,status,reset,connect,wp,logs,test,lib.sh}
@@ -73,8 +80,8 @@ Paths are repo-relative from project root unless noted.
 
 **Skills:** Curated [WordPress/agent-skills](https://github.com/WordPress/agent-skills) under `.claude/skills/` and `.cursor/skills/` (blocks, themes, plugins, REST, Abilities API, WP-CLI, router/triage). They do not replace this stack. Site work still goes through the `wordpress` MCP abilities or `./bin/wp`. Do not switch to `@wordpress/env`, WordPress Playground, or Blueprints for the local site.
 
-**Boundaries:** Never expose the MCP endpoint or the WordPress site beyond localhost. Never put credentials in a tracked file (`.env` and `.secrets/` stay ignored). Test content must be uniquely named and cleaned up. `./bin/reset` is the only thing allowed to destroy unrelated development content.
+**Boundaries:** Never expose this harness's MCP endpoint or WordPress site beyond localhost. A separate live site is outside the harness: [remote-site.md](remote-site.md). Never put credentials in a tracked file (`.env` and `.secrets/` stay ignored). Test content must be uniquely named and cleaned up. `./bin/reset` is the only thing allowed to destroy unrelated development content.
 
-**Git:** Branch from `main`. Conventional subjects. PRs use `.github/PULL_REQUEST_TEMPLATE.md`. Never add agent attribution (`Co-authored-by: Cursor`, `@cursoragent`, Made/Generated with Cursor). Detail: [CONTRIBUTING.md](../CONTRIBUTING.md), [agents/agent-contract.md](agents/agent-contract.md).
+**Git:** Branch from `develop`; releases merge to `main`. Conventional subjects. PRs use `.github/PULL_REQUEST_TEMPLATE.md`. Never add agent attribution (`Co-authored-by: Cursor`, `@cursoragent`, Made/Generated with Cursor). Detail: [CONTRIBUTING.md](../CONTRIBUTING.md), [agents/agent-contract.md](agents/agent-contract.md).
 
 **Upstream bugs:** Ability, MCP protocol, or adapter bugs belong upstream ([WordPress/mcp-adapter](https://github.com/WordPress/mcp-adapter/issues), [miriamschwab/ms-wp-abilities](https://github.com/miriamschwab/ms-wp-abilities/issues)), not here. Use `./bin/wp ability run <name> --user=admin` to tell the layers apart.
