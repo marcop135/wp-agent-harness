@@ -7,6 +7,22 @@
 
 ## [Unreleased]
 
+## [0.4.4] - 2026-10-08
+
+### Added
+
+- Add [`docs/remote-site.md`](docs/remote-site.md): connect an agent to a live WordPress site, outside the harness.
+
+### Changed
+
+- Restructure `docs/` for scanning: symptom index in troubleshooting, tables over prose, shorter sentences.
+- Scope the localhost-only boundary to the harness in `CLAUDE.md`, `AGENTS.md` mirrors, and `llms.txt`.
+
+### Fixed
+
+- Correct docs: five test layers, branch from `develop`, public repo, Apache mod_php (not PHP-FPM).
+- Correct the layer 0 description: it compares `.env.example` with `docs/development.md`, not the README.
+
 ## [0.4.3] - 2026-10-08
 
 ### Changed
