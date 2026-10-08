@@ -251,9 +251,9 @@ inline in [`.env.example`](../.env.example). Current pins are listed under
 | Apache | 2.4 | same image |
 | MariaDB | 11.8.9 | `mariadb:11.8.9` |
 | WP-CLI | 2.12.0 | GitHub release phar, SHA-512 verified |
-| `wp-cli/ability-command` | 1.0.2 | GitHub release tarball |
-| MCP Adapter | 0.7.0 | GitHub release ZIP |
-| MS WordPress Abilities | 1.12.0 | GitHub release ZIP |
+| `wp-cli/ability-command` | 1.0.2 | GitHub release tarball, SHA-256 verified (`WP_CLI_ABILITY_COMMAND_SHA256`) |
+| MCP Adapter | 0.7.0 | GitHub release ZIP, SHA-256 verified (`MCP_ADAPTER_SHA256`) |
+| MS WordPress Abilities | 1.12.0 | GitHub release ZIP, SHA-256 verified (`MS_WP_ABILITIES_SHA256`) |
 | Twenty Twenty-Five | 1.5 | wordpress.org |
 | MCP protocol | 2025-11-25 | negotiated default; adapter also serves 2026-07-28. Legacy clients on 2025-06-18 / 2024-11-05 still connect via the 2025-11-25 schema |
 
@@ -288,12 +288,12 @@ clone inherits it. Nothing follows a moving branch.
 
 | Variable | Source | Update by |
 |----------|--------|-----------|
-| `MCP_ADAPTER_VERSION` | GitHub release ZIP | `gh release list --repo WordPress/mcp-adapter` |
-| `MS_WP_ABILITIES_VERSION` | GitHub release ZIP | `gh release list --repo miriamschwab/ms-wp-abilities` |
+| `MCP_ADAPTER_VERSION` / `MCP_ADAPTER_SHA256` | GitHub release ZIP | `gh release list --repo WordPress/mcp-adapter`; recompute SHA-256 of the ZIP |
+| `MS_WP_ABILITIES_VERSION` / `MS_WP_ABILITIES_SHA256` | GitHub release ZIP | `gh release list --repo miriamschwab/ms-wp-abilities`; recompute SHA-256 |
 | `WORDPRESS_IMAGE` | Docker Hub | `docker run --rm wordpress:7.1-php8.3-apache wp core version` |
 | `MARIADB_IMAGE` | Docker Hub | the MariaDB LTS line |
 | `WP_CLI_VERSION` | GitHub release phar | `gh release list --repo wp-cli/wp-cli` |
-| `WP_CLI_ABILITY_COMMAND_VERSION` | GitHub release tarball | `gh release list --repo wp-cli/ability-command` |
+| `WP_CLI_ABILITY_COMMAND_VERSION` / `WP_CLI_ABILITY_COMMAND_SHA256` | GitHub release tarball | `gh release list --repo wp-cli/ability-command`; recompute SHA-256 |
 | `WP_THEME` | wordpress.org | `./bin/wp theme update twentytwentyfive` |
 
 ### Runtime plugins and image pins
