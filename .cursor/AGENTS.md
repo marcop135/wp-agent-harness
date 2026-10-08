@@ -22,7 +22,7 @@ If any instruction conflicts, use this order:
 
 ## What this repo is
 
-Local, disposable WordPress harness for coding agents. Docker Compose runs WordPress and MariaDB on loopback; agents talk to a real site over the official WordPress MCP Adapter. This repository does **not** ship an MCP server, abilities framework, or WordPress plugin of its own. Nothing here is public or production.
+Local, disposable WordPress harness for coding agents. Docker Compose runs WordPress and MariaDB on loopback; agents talk to a real site over the official WordPress MCP Adapter. This repository does **not** ship an MCP server, abilities framework, or WordPress plugin of its own. Nothing here is public or production. Connecting an agent to a separate live site is outside the harness: [remote-site.md](../docs/remote-site.md).
 
 ## Stack pin
 

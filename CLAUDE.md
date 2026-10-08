@@ -86,7 +86,9 @@ inspect before change, no destructive ops without an explicit ask).
 
 ## Boundaries
 
-- Never expose the MCP endpoint or the WordPress site beyond localhost.
+- Never expose this harness's MCP endpoint or WordPress site beyond localhost.
+  Connecting an agent to a separate live site is documented in
+  [docs/remote-site.md](docs/remote-site.md) and is outside the harness.
 - Never put credentials in a tracked file. `.env` and `.secrets/` are ignored
   and must stay that way; the Application Password lives in Claude Code's own
   config, outside this repository.
