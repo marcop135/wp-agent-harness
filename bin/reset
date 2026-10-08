@@ -30,7 +30,7 @@ printf '%sThis destroys the local WordPress site completely.%s\n\n' "$C_BOLD$C_Y
 printf '  project          %s\n' "$project"
 printf '  database volume  %s_db_data\n' "$project"
 printf '  wordpress volume %s_wp_data\n' "$project"
-printf '  credential       %s\n' "${APP_PASSWORD_FILE#"$REPO_ROOT/"}"
+printf '  secrets dir      %s\n' "${SECRETS_DIR#"$REPO_ROOT/"}"
 printf '\n  .env is kept. Every post, page, upload, plugin and setting is not.\n\n'
 
 if [[ "$assume_yes" != true ]]; then
@@ -42,10 +42,19 @@ step 'Removing containers and volumes'
 dc down --volumes --remove-orphans
 ok 'Containers and volumes removed'
 
-if [[ -f "$APP_PASSWORD_FILE" ]]; then
-    rm -f "$APP_PASSWORD_FILE"
-    ok 'Removed the stored Application Password'
+if [[ -d "$SECRETS_DIR" ]]; then
+    rm -rf "$SECRETS_DIR"
+    ok 'Removed .secrets/'
 fi
+
+if have claude; then
+    server_name="$(env_get MCP_SERVER_NAME wordpress)"
+    if ( cd "$REPO_ROOT" && claude mcp remove "$server_name" >/dev/null 2>&1 ); then
+        ok "Removed Claude Code MCP server '$server_name'"
+    fi
+fi
+
+note 'Unset WORDPRESS_MCP_BASIC_AUTH in any shell that exported it (./bin/connect --print).'
 
 if [[ "$run_setup" == true ]]; then
     step 'Rebuilding from scratch'

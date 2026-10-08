@@ -148,4 +148,21 @@ assert_ok 'the Claude Code Application Password exists in WordPress' \
     wpx wp-app-password exists
 assert_ok 'the Application Password is stored outside Git' test -s "$APP_PASSWORD_FILE"
 
+# Mode checks when this repo's filesystem enforces Unix permissions.
+mode_probe="$REPO_ROOT/.mode-probe.$$"
+: >"$mode_probe"
+chmod 600 "$mode_probe" 2>/dev/null || true
+probe_mode="$(stat -c '%a' "$mode_probe" 2>/dev/null || stat -f '%OLp' "$mode_probe" 2>/dev/null || echo '')"
+rm -f "$mode_probe"
+probe_mode="${probe_mode#0}"
+if [[ "$probe_mode" == '600' ]]; then
+    dir_mode="$(stat -c '%a' "$SECRETS_DIR" 2>/dev/null || stat -f '%OLp' "$SECRETS_DIR")"
+    pw_mode="$(stat -c '%a' "$APP_PASSWORD_FILE" 2>/dev/null || stat -f '%OLp' "$APP_PASSWORD_FILE")"
+    dir_mode="${dir_mode#0}"; pw_mode="${pw_mode#0}"
+    assert_eq '.secrets is mode 700' '700' "$dir_mode"
+    assert_eq 'application-password is mode 600' '600' "$pw_mode"
+else
+    note 'repo filesystem does not enforce Unix modes — skipping secret mode asserts'
+fi
+
 test_summary

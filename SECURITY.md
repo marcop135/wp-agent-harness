@@ -44,12 +44,16 @@ code, and a report there reaches the people who can fix it:
 
 ## In scope
 
-- A port binding, tunnel or configuration here that reaches beyond loopback.
+- A port binding, tunnel, override, or configuration here that reaches beyond
+  loopback.
 - A credential written to a tracked file, a log, a build layer or process
-  output.
+  output, or left world-readable under `.secrets/` / `.env`.
 - A privilege the setup grants that it does not document.
 - A default that weakens WordPress authentication or capability checks beyond
   `WP_ENVIRONMENT_TYPE = 'local'`, which is documented and deliberate.
+
+Threat model detail (secret modes, checksum pins, `--print` hygiene):
+[docs/security.md](docs/security.md).
 
 ## Out of scope
 

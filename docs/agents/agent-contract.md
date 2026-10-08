@@ -19,7 +19,9 @@ Portable rules for AI agents (Cursor agent, Claude Code, and similar). Canonical
 
 ## Git and PRs
 
-- Branch from **`main`**. Keep the pull request to one subject.
+- Integration work lands on **`develop`**; cut releases to **`main`**. Branch
+  feature work from `develop` (or from `main` only when cutting a release PR).
+  Keep the pull request to one subject.
 - Use `.github/PULL_REQUEST_TEMPLATE.md`.
 - **No agent attribution:** never add `Co-authored-by: Cursor`, `@cursoragent`, Made/Generated with Cursor, Claude trailers, or any copy that puts an agent in GitHub Contributors.
 - Upstream ability/adapter bugs: file upstream, not here. Prove with `./bin/wp ability run` when split matters.
@@ -56,6 +58,5 @@ Tool loading matrix: [README.md](README.md).
 
 ## Cursor CLI
 
-- **Model:** Composer 2.5 standard (`maxMode: false`).
 - **Context:** loads root `AGENTS.md` + `CLAUDE.md` + project skills.
 - **Headless:** `agent -p --force` from the repository root with parent guidance loaded in context.

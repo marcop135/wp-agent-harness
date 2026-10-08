@@ -125,3 +125,94 @@ mcp_basic_auth() {
     pass="$(app_password)" || return 1
     printf '%s:%s' "$(env_get WP_ADMIN_USER admin)" "$pass"
 }
+
+# --- secret file modes -----------------------------------------------------
+
+# True when chmod/stat modes are meaningful on this repo's filesystem
+# (WSL /mnt/c and some NTFS mounts report 777 regardless of chmod).
+modes_enforceable() {
+    local probe="$REPO_ROOT/.mode-probe.$$"
+    : >"$probe" || return 1
+    chmod 600 "$probe" 2>/dev/null || { rm -f "$probe"; return 1; }
+    local mode
+    mode="$(stat -c '%a' "$probe" 2>/dev/null || stat -f '%OLp' "$probe" 2>/dev/null || echo '')"
+    rm -f "$probe"
+    mode="${mode#0}"
+    [[ "$mode" == '600' ]]
+}
+
+secure_chmod() {
+    local mode="$1" path="$2"
+    chmod "$mode" "$path" 2>/dev/null || die "cannot chmod $mode $path"
+    if modes_enforceable; then
+        local got
+        got="$(stat -c '%a' "$path" 2>/dev/null || stat -f '%OLp' "$path" 2>/dev/null || echo '')"
+        # macOS stat -f %OLp may return 600 without leading zero; normalize.
+        got="${got#0}"
+        local want="${mode#0}"
+        [[ "$got" == "$want" ]] || die "chmod $mode $path did not stick (mode=$got)"
+    fi
+}
+
+# --- loopback bindings -----------------------------------------------------
+
+# Return 0 when every published service port binds to 127.0.0.1 and no
+# service uses network_mode: host (which ignores ports and binds all
+# interfaces). Prints a reason on stderr and returns 1 on failure.
+check_loopback_bindings() {
+    local override="$REPO_ROOT/docker-compose.override.yml"
+    if [[ -f "$override" ]]; then
+        if grep -qEi '^\s*network_mode:\s*["'\'']?host["'\'']?\s*$' "$override"; then
+            printf 'docker-compose.override.yml sets network_mode: host; that exposes the site beyond loopback (docs/security.md)\n' >&2
+            return 1
+        fi
+        # Short-form publishes without an explicit 127.0.0.1 host (0.0.0.0,
+        # bare host:container, or quoted variants). Long-form / merged
+        # config is caught by the jq check below when Docker is available.
+        if grep -qE '^\s*-\s*["'\'']?0\.0\.0\.0:' "$override" \
+            || grep -qE '^\s*-\s*["'\'']?[0-9]+:[0-9]+' "$override"; then
+            printf 'docker-compose.override.yml publishes a non-loopback port; bind to 127.0.0.1 (docs/security.md)\n' >&2
+            return 1
+        fi
+    fi
+
+    have docker || return 0
+    docker info >/dev/null 2>&1 || return 0
+    [[ -f "$ENV_FILE" ]] || return 0
+
+    local cfg bad host_modes
+    cfg="$(dc config --format json 2>/dev/null)" || return 0
+
+    host_modes="$(printf '%s' "$cfg" | jq -r '
+        .services // {}
+        | to_entries[]
+        | select((.value.network_mode // "") == "host")
+        | .key
+    ' 2>/dev/null || true)"
+    if [[ -n "$host_modes" ]]; then
+        printf 'Compose network_mode: host on %s; that exposes the site beyond loopback (docs/security.md)\n' \
+            "$(tr '\n' ' ' <<<"$host_modes")" >&2
+        return 1
+    fi
+
+    bad="$(printf '%s' "$cfg" | jq -r '
+        .services // {}
+        | to_entries[]
+        | .key as $svc
+        | (.value.ports // [])[]
+        | select((.host_ip // "") != "127.0.0.1")
+        | "\($svc) host_ip=\(.host_ip // "<empty>")"
+    ' 2>/dev/null || true)"
+    if [[ -n "$bad" ]]; then
+        printf 'Compose port not bound to 127.0.0.1: %s (docs/security.md)\n' "$(tr '\n' '; ' <<<"$bad")" >&2
+        return 1
+    fi
+    return 0
+}
+
+require_loopback_bindings() {
+    local err
+    if ! err="$(check_loopback_bindings 2>&1)"; then
+        die "$err"
+    fi
+}
