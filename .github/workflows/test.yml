@@ -43,6 +43,7 @@ jobs:
       - name: docker compose configuration is valid
         run: |
           cp .env.example .env
+          chmod 600 .env
           sed -i 's/^\([A-Z_]*\)=CHANGE_ME$/\1=ci-placeholder-not-a-secret/' .env
           docker compose config --quiet
           docker compose config --format json | jq -e '
