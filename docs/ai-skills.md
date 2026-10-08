@@ -1,31 +1,36 @@
 # AI skills in this harness
 
-Three surfaces agents use here. Do not conflate them.
+Agents use four separate surfaces here. Keep them apart.
 
-| Path | Audience | Role |
+| Path | For | Role |
 | --- | --- | --- |
-| `llms.txt`, `AGENTS.md`, `docs/AGENTS.md`, `CLAUDE.md`, `.cursor/AGENTS.md` | Any coding agent (Claude Code, Cursor, Codex, …) | How to work in this repository: MCP loop, drafts-by-default, infra vs site, commands |
+| `llms.txt`, `AGENTS.md`, `docs/AGENTS.md`, `CLAUDE.md`, `.cursor/AGENTS.md` | Any coding agent (Claude Code, Cursor, Codex, …) | How to work in this repository: MCP loop, drafts by default, infra vs site, commands |
 | `wordpress` MCP / `./bin/wp` | Site work | Drive the local WordPress install (discover → schema → execute, or WP-CLI abilities) |
-| `.claude/skills/` and `.cursor/skills/` | WordPress coding | Curated [WordPress/agent-skills](https://github.com/WordPress/agent-skills) for blocks, themes, plugins, REST, Abilities API, WP-CLI |
-| `.codex/config.toml` | OpenAI Codex | Project MCP URL + `WORDPRESS_MCP_BASIC_AUTH` env header (see [codex.md](codex.md)) |
+| `.claude/skills/`, `.cursor/skills/` | WordPress coding | Curated [WordPress/agent-skills](https://github.com/WordPress/agent-skills): blocks, themes, plugins, REST, Abilities API, WP-CLI |
+| `.codex/config.toml` | OpenAI Codex | Project MCP URL + `WORDPRESS_MCP_BASIC_AUTH` header ([codex.md](codex.md)) |
 
-This harness does **not** ship an installable consumer skill CLI (unlike a design-system `skills install` flow). The skills pack is already in the clone. Site ops stay on MCP and `./bin/wp`; the coding skills do not replace that stack.
+There is no skill installer to run: the skills are already in the clone. Site
+work stays on MCP and `./bin/wp`; the coding skills do not replace them.
 
 ## Agent entry
 
-Start at [llms.txt](../llms.txt) or [docs/AGENTS.md](AGENTS.md). Task shape and risk tiers: [agents/](agents/).
+Start at [llms.txt](../llms.txt) or [docs/AGENTS.md](AGENTS.md). Task shape and
+risk tiers: [agents/](agents/).
 
 | Client | MCP wiring |
 | --- | --- |
-| Claude Code | `./bin/connect` then `claude` ([claude-code.md](claude-code.md)) |
-| Codex | trust project, `eval "$(./bin/connect --print \| grep '^export ')"`, then `codex` ([codex.md](codex.md)) |
+| Claude Code | `./bin/connect`, then `claude` ([claude-code.md](claude-code.md)) |
+| Codex | trust the project, `eval "$(./bin/connect --print \| grep '^export ')"`, then `codex` ([codex.md](codex.md)) |
 | Cursor | skills under `.cursor/skills/`; HTTP MCP from `./bin/connect --print` in Cursor settings |
 
 ## Coding skills
 
-Skill table, what is intentionally omitted (`wp-env`, Playground, Blueprints), and how to refresh from upstream: [claude-code.md](claude-code.md#wordpress-agent-skills).
+The skill table, what is left out on purpose (`wp-env`, Playground,
+Blueprints) and how to refresh from upstream:
+[claude-code.md](claude-code.md#wordpress-agent-skills).
 
-Keep `.claude/skills/` and `.cursor/skills/` in sync. After a refresh, confirm discovery with `claude /skills` or Cursor's skill list from the repository root.
+Keep `.claude/skills/` and `.cursor/skills/` in sync. After a refresh, check
+discovery with `claude /skills` or Cursor's skill list from the repository root.
 
 ## Precedence
 

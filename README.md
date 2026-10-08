@@ -3,14 +3,16 @@
 
 # wp-agent-harness
 
-Production-shaped local WordPress for coding agents: pinned stack, localhost-only
-ports, five automated test layers (0–4), one-command reset. Agents drive a real site
-over the official [WordPress MCP Adapter](https://github.com/WordPress/mcp-adapter).
+A local WordPress site for coding agents (Claude Code, Codex, Cursor) to build
+and edit through the official
+[WordPress MCP Adapter](https://github.com/WordPress/mcp-adapter). It runs in
+Docker on localhost with pinned versions, five test layers (0 to 4), and
+`./bin/reset` to rebuild it in one command.
 
-This repository is the glue (Compose, provisioning, auth, tests, docs, skills).
-It does **not** ship an MCP server, abilities framework, or WordPress plugin of
-its own. Upstream: [Abilities API](https://developer.wordpress.org/apis/abilities-api/),
-[MCP Adapter](https://github.com/WordPress/mcp-adapter),
+This repo only wires the pieces together. The MCP server, abilities and plugins
+come from upstream: the
+[Abilities API](https://developer.wordpress.org/apis/abilities-api/), the
+[MCP Adapter](https://github.com/WordPress/mcp-adapter) and
 [MS WordPress Abilities](https://github.com/miriamschwab/ms-wp-abilities).
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
@@ -91,6 +93,7 @@ How to update them: [Updating dependencies](docs/development.md#updating-depende
 | [Architecture](docs/architecture.md) | Stack, MCP meta-tools, project structure |
 | [Claude Code](docs/claude-code.md) | Claude MCP registration, scopes, skills |
 | [Codex](docs/codex.md) | Codex AGENTS.md + `.codex/config.toml` MCP |
+| [Live site](docs/remote-site.md) | Pointing an agent at a remote site, outside the harness |
 | [Security](docs/security.md) | Threat model, bindings, credentials |
 | [Troubleshooting](docs/troubleshooting.md) | Common failure modes |
 | [Agents](docs/AGENTS.md) | Agent index and domain rules |
