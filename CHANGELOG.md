@@ -7,6 +7,23 @@
 
 ## [Unreleased]
 
+### Added
+
+- SHA-256 pins for MCP Adapter, MS WP Abilities, and `ability-command`.
+- Loopback binding checks; refuse non-loopback overrides and `network_mode: host`.
+- Secret-mode asserts when the repo filesystem enforces Unix modes.
+
+### Changed
+
+- Brand images: light pipeline layout (agent → mcp → ability; WP / MariaDB / Docker below).
+- Docs: layers 0–4, MariaDB 11.8.9, abilities 26+3, multi-client `--print`.
+- Harden `.secrets` / `.env` modes, reset wipe, `--print` auth warning, CI `jq` host_ip checks and `chmod 600` on lint `.env`.
+- Security docs: modes, checksums, override risk, argv hygiene.
+
+### Fixed
+
+- [`CLAUDE.md`](CLAUDE.md): `--skip-claude` is layers 0–3, not 1–3.
+
 ## [0.4.2] - 2026-10-05
 
 ### Changed
