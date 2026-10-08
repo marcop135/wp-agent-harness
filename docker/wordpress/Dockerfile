@@ -13,6 +13,7 @@ FROM ${WORDPRESS_IMAGE}
 
 ARG WP_CLI_VERSION=2.12.0
 ARG WP_CLI_ABILITY_COMMAND_VERSION=1.0.2
+ARG WP_CLI_ABILITY_COMMAND_SHA256=aec68d8df8cf6d63f9ade5151a54c3b95266522857aacd2141f521fe0720991a
 
 # less     — WP-CLI pager
 # unzip    — WordPress plugin/theme ZIP installs
@@ -59,6 +60,7 @@ RUN set -eux; \
     mkdir -p /usr/local/lib/wp-cli-packages/ability-command; \
     curl -fsSL -o /tmp/ability-command.tar.gz \
         "https://github.com/wp-cli/ability-command/archive/refs/tags/v${WP_CLI_ABILITY_COMMAND_VERSION}.tar.gz"; \
+    echo "${WP_CLI_ABILITY_COMMAND_SHA256}  /tmp/ability-command.tar.gz" | sha256sum -c -; \
     tar -xzf /tmp/ability-command.tar.gz --strip-components=1 \
         -C /usr/local/lib/wp-cli-packages/ability-command; \
     rm -f /tmp/ability-command.tar.gz; \

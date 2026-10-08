@@ -56,14 +56,23 @@ administrator's login password:
   **Users → Profile → Application Passwords**
 - stored in `.secrets/application-password` (git-ignored) and in Claude Code's
   own `~/.claude.json`, outside this repository
+- `./bin/setup` keeps `.secrets/` at mode `0700` and `.env` /
+  `application-password` at `0600` where the filesystem enforces Unix modes
 
 Revoke it at any time:
 
 ```bash
 docker compose exec -T wordpress wp-app-password delete
-rm .secrets/application-password
+rm -rf .secrets
 ./bin/connect --remove
+unset WORDPRESS_MCP_BASIC_AUTH   # if you exported it from --print
 ```
+
+`./bin/connect --print` writes the live Basic auth header to stdout (needed for
+Codex / Cursor). Treat that output as a secret: do not paste it into tickets or
+logs, and clear it from shell history on shared machines. `claude mcp add
+--header` also puts the header on the process argv briefly; do not run connect
+on a multi-user host you do not trust.
 
 WordPress refuses Application Password authentication over plain HTTP unless the
 site is a local environment, so `wp-config.php` sets
@@ -90,9 +99,14 @@ widened it would fail CI.
 Things that would break this and must not be done:
 
 - changing the bindings to `0.0.0.0` or omitting the host part
+- publishing the same ports from a `docker-compose.override.yml`
+- setting `network_mode: host` (Compose ignores `ports` and binds all interfaces)
 - tunnelling the port (ngrok, Cloudflare Tunnel, `ssh -R`)
 - running this on a shared or public host
 - putting a reverse proxy in front of it
+
+`./bin/setup` and `./bin/status` refuse any Compose publish whose `host_ip` is
+not `127.0.0.1`, and refuse `network_mode: host`, including overrides.
 
 ## Why credentials are excluded from Git
 
@@ -109,6 +123,13 @@ visibility.
 CI re-checks this on every push — the workflow fails if a tracked file matches a
 credential pattern, or if `.env`, `.secrets/` or a `.sql` dump ever appears in
 `git ls-files`.
+
+## Download integrity
+
+Pinned MCP Adapter and MS WP Abilities release ZIPs are SHA-256-checked by
+`wp-provision` before install. The `wp-cli/ability-command` tarball is
+SHA-256-checked in the Docker image build (same pattern as the WP-CLI phar's
+SHA-512). Digests live next to the version pins in `.env.example`.
 
 ## What this setup deliberately does not do
 

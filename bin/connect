@@ -44,6 +44,8 @@ basic="$(printf '%s' "$creds" | base64 | tr -d '\r\n')"
 auth_header="Basic $basic"
 
 if [[ "$action" == 'print' ]]; then
+    printf '%sWarning:%s stdout includes a live Basic auth header. Do not paste it into\n' "$C_YELLOW" "$C_RESET" >&2
+    printf '    tickets or logs; clear it from shell history on shared machines.\n\n' >&2
     printf 'transport   http\n'
     printf 'name        %s\n' "$server_name"
     printf 'url         %s\n' "$endpoint"

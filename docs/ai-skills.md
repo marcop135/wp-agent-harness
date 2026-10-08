@@ -20,6 +20,7 @@ Start at [llms.txt](../llms.txt) or [docs/AGENTS.md](AGENTS.md). Task shape and 
 | Claude Code | `./bin/connect` then `claude` ([claude-code.md](claude-code.md)) |
 | Codex | trust project, `eval "$(./bin/connect --print \| grep '^export ')"`, then `codex` ([codex.md](codex.md)) |
 | Cursor | skills under `.cursor/skills/`; HTTP MCP from `./bin/connect --print` in Cursor settings |
+
 ## Coding skills
 
 Skill table, what is intentionally omitted (`wp-env`, Playground, Blueprints), and how to refresh from upstream: [claude-code.md](claude-code.md#wordpress-agent-skills).

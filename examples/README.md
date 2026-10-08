@@ -6,8 +6,9 @@ server connected:
 
 ```bash
 ./bin/start
-./bin/connect      # once, or again after ./bin/reset
-cd . && claude
+./bin/connect                 # Claude Code
+# or: eval "$(./bin/connect --print | grep '^export ')"   # Codex / Cursor
+claude                        # or: codex
 ```
 
 | Example | What it covers |
