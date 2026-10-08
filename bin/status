@@ -14,6 +14,15 @@ failures=0
 bad() { printf '    %sfail%s %s\n' "$C_RED" "$C_RESET" "$*"; failures=$((failures + 1)); }
 
 # ---------------------------------------------------------------------------
+step 'Loopback bindings'
+# ---------------------------------------------------------------------------
+if err="$(check_loopback_bindings 2>&1)"; then
+    ok 'Compose ports bind to 127.0.0.1 only'
+else
+    bad "$err"
+fi
+
+# ---------------------------------------------------------------------------
 step 'Containers'
 # ---------------------------------------------------------------------------
 dc ps --format 'table {{.Service}}\t{{.State}}\t{{.Status}}\t{{.Ports}}' || true

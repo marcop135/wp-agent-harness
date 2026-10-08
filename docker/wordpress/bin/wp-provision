@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Idempotent WordPress provisioning, run inside the WordPress container.
 #
 # Invoked by ./bin/setup on the host as:
@@ -7,14 +7,16 @@
 # Every step checks the current state before changing it. Re-running creates no
 # duplicate users, no duplicate plugins and destroys no existing content.
 # Destroying state is ./bin/reset's job, never this script's.
-set -eu
+set -euo pipefail
 
 WP_SITE_TITLE="${WP_SITE_TITLE:-WP Agent Harness}"
 WP_ADMIN_USER="${WP_ADMIN_USER:-admin}"
 WP_ADMIN_EMAIL="${WP_ADMIN_EMAIL:-admin@wp-agent-harness.test}"
 WP_THEME="${WP_THEME:-twentytwentyfive}"
 MCP_ADAPTER_VERSION="${MCP_ADAPTER_VERSION:-0.7.0}"
+MCP_ADAPTER_SHA256="${MCP_ADAPTER_SHA256:-9168c18dbd018428ff14ee28e7018aa0399d4b8819b7c98b406f6610731c3a79}"
 MS_WP_ABILITIES_VERSION="${MS_WP_ABILITIES_VERSION:-1.12.0}"
+MS_WP_ABILITIES_SHA256="${MS_WP_ABILITIES_SHA256:-978a1a0679dd0defdf0d84ecd8cfb79154e1677e3f5996540c45aa060ed45e97}"
 SITE_URL="${WORDPRESS_SITE_URL:-http://localhost:8080}"
 
 step() { printf '\n\033[1m==> %s\033[0m\n' "$*"; }
@@ -125,6 +127,8 @@ install_pinned_plugin() {
     slug="$1"
     want="$2"
     url="$3"
+    sha256="$4"
+    zip="/tmp/${slug}-${want}.zip"
 
     have=''
     if wp plugin is-installed "$slug" >/dev/null 2>&1; then
@@ -133,12 +137,18 @@ install_pinned_plugin() {
 
     if [ "$have" = "$want" ]; then
         info "$slug $want already installed"
-    elif [ -n "$have" ]; then
-        wp plugin install "$url" --force >/dev/null
-        info "$slug $have -> $want"
     else
-        wp plugin install "$url" >/dev/null
-        info "$slug $want installed"
+        curl -fsSL -o "$zip" "$url"
+        echo "${sha256}  ${zip}" | sha256sum -c - >/dev/null \
+            || fail "$slug ZIP SHA-256 mismatch for $url"
+        if [ -n "$have" ]; then
+            wp plugin install "$zip" --force >/dev/null
+            info "$slug $have -> $want (checksum ok)"
+        else
+            wp plugin install "$zip" >/dev/null
+            info "$slug $want installed (checksum ok)"
+        fi
+        rm -f "$zip"
     fi
 
     if wp plugin is-active "$slug" >/dev/null 2>&1; then
@@ -150,10 +160,12 @@ install_pinned_plugin() {
 }
 
 install_pinned_plugin mcp-adapter "$MCP_ADAPTER_VERSION" \
-    "https://github.com/WordPress/mcp-adapter/releases/download/v${MCP_ADAPTER_VERSION}/mcp-adapter.zip"
+    "https://github.com/WordPress/mcp-adapter/releases/download/v${MCP_ADAPTER_VERSION}/mcp-adapter.zip" \
+    "$MCP_ADAPTER_SHA256"
 
 install_pinned_plugin ms-wp-abilities "$MS_WP_ABILITIES_VERSION" \
-    "https://github.com/miriamschwab/ms-wp-abilities/releases/download/v${MS_WP_ABILITIES_VERSION}/ms-wp-abilities-${MS_WP_ABILITIES_VERSION}.zip"
+    "https://github.com/miriamschwab/ms-wp-abilities/releases/download/v${MS_WP_ABILITIES_VERSION}/ms-wp-abilities-${MS_WP_ABILITIES_VERSION}.zip" \
+    "$MS_WP_ABILITIES_SHA256"
 
 # The base image ships Akismet and Hello Dolly. This toolkit's plugin set is
 # exactly the two above, so the defaults are removed on first run.
