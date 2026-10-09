@@ -7,6 +7,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Redraw `.github/brand/og.png` in the light README header design.
+
 ## [0.4.4] - 2026-10-08
 
 ### Added
