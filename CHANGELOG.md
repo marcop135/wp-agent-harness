@@ -7,9 +7,12 @@
 
 ## [Unreleased]
 
+## [0.4.5] - 2026-10-09
+
 ### Changed
 
-- Redraw `.github/brand/og.png` in the light README header design; re-render the README and social PNGs.
+- Redraw `.github/brand/og.png` in the light README header design.
+- Re-render the README and social PNGs with the pinned render toolchain.
 
 ## [0.4.4] - 2026-10-08
 
