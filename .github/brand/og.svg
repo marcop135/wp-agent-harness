@@ -41,43 +41,33 @@
   <rect width="1200" height="630" fill="url(#grid)"/>
   <rect width="1200" height="630" fill="url(#vignette)"/>
 
-  <g transform="translate(40 35)">
+  <g transform="translate(40 91)">
     <text class="title" x="560" y="114" text-anchor="middle" font-size="92"><tspan fill="#0369A1">wp-</tspan>agent-harness</text>
     <text class="tag" x="560" y="168" text-anchor="middle" font-size="34">Local disposable WordPress for coding agents, over MCP</text>
-    <path d="M210.0 318.0 H910.0" fill="none" stroke="#7DD3FC" stroke-width="4" stroke-linecap="round" opacity="0.55"/>
-    <g transform="translate(55.0 232)" filter="url(#shadow)">
+    <g transform="translate(25.0 232)" filter="url(#shadow)">
       <g clip-path="url(#clip-card)">
         <rect width="310" height="172" fill="url(#card)"/>
-        <rect x="0" y="164" width="310" height="8" fill="#7DD3FC"/>
-        <text class="label" x="155.0" y="78" text-anchor="middle" font-size="42" fill="#0369A1">Agent</text>
-        <text class="muted" x="155.0" y="120" text-anchor="middle" font-size="26">Claude / Cursor / Codex</text>
+        <text class="label" x="155.0" y="101" text-anchor="middle" font-size="42" fill="#0369A1">Agent</text>
       </g>
       <rect width="310" height="172" rx="18" fill="none" stroke="#D0D7DE" stroke-width="2"/>
     </g>
-    <path d="M375.0 318.0 L389.0 318.0" stroke="#0369A1" stroke-width="3" stroke-linecap="round"/>
-    <path d="M381.0 311.0 L393.0 318.0 L381.0 325.0" fill="none" stroke="#0369A1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M348.0 318.0 L366.0 318.0" stroke="#0369A1" stroke-width="4" stroke-linecap="round"/>
+    <path d="M360.0 306.0 L382.0 318.0 L360.0 330.0" fill="none" stroke="#0369A1" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
     <g transform="translate(405.0 232)" filter="url(#shadow)">
       <g clip-path="url(#clip-card)">
         <rect width="310" height="172" fill="url(#card)"/>
-        <rect x="0" y="164" width="310" height="8" fill="#38BDF8"/>
-        <text class="label" x="155.0" y="78" text-anchor="middle" font-size="42" fill="#0369A1">MCP</text>
-        <text class="muted" x="155.0" y="120" text-anchor="middle" font-size="26">Adapter</text>
+        <text class="label" x="155.0" y="101" text-anchor="middle" font-size="42" fill="#0369A1">MCP</text>
       </g>
       <rect width="310" height="172" rx="18" fill="none" stroke="#D0D7DE" stroke-width="2"/>
     </g>
-    <path d="M725.0 318.0 L739.0 318.0" stroke="#0369A1" stroke-width="3" stroke-linecap="round"/>
-    <path d="M731.0 311.0 L743.0 318.0 L731.0 325.0" fill="none" stroke="#0369A1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-    <g transform="translate(755.0 232)" filter="url(#shadow)">
+    <path d="M728.0 318.0 L746.0 318.0" stroke="#0369A1" stroke-width="4" stroke-linecap="round"/>
+    <path d="M740.0 306.0 L762.0 318.0 L740.0 330.0" fill="none" stroke="#0369A1" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(785.0 232)" filter="url(#shadow)">
       <g clip-path="url(#clip-card)">
         <rect width="310" height="172" fill="url(#card)"/>
-        <rect x="0" y="164" width="310" height="8" fill="#0284C7"/>
-        <text class="label" x="155.0" y="78" text-anchor="middle" font-size="42" fill="#0369A1">Ability</text>
-        <text class="muted" x="155.0" y="120" text-anchor="middle" font-size="26">Abilities API</text>
+        <text class="label" x="155.0" y="101" text-anchor="middle" font-size="42" fill="#0369A1">Ability</text>
       </g>
       <rect width="310" height="172" rx="18" fill="none" stroke="#D0D7DE" stroke-width="2"/>
     </g>
-    <text class="muted" x="210.0" y="490" text-anchor="middle" font-size="34">WordPress</text>
-    <text class="muted" x="560.0" y="490" text-anchor="middle" font-size="34">MariaDB</text>
-    <text class="muted" x="910.0" y="490" text-anchor="middle" font-size="34">Docker</text>
   </g>
 </svg>
