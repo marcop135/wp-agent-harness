@@ -325,6 +325,7 @@ wp-agent-harness/
 │   ├── architecture · claude-code · codex · development
 │   └── ai-skills · remote-site · security · troubleshooting
 ├── examples/                    prompts that work against this site
+├── site/                        public marketing landing (not the WP harness)
 ├── tests/
 │   ├── lib.sh                   assertions and a minimal MCP HTTP client
 │   ├── repo.sh                  layer 0, no Docker needed
@@ -336,8 +337,12 @@ wp-agent-harness/
 ├── CLAUDE.md                    Claude Code entry (points at docs/AGENTS.md)
 ├── llms.txt                     LLM entry: hard rules and file map
 ├── docker-compose.yml
+├── netlify.toml                 Netlify publish root for site/
 └── Makefile
 ```
+
+The WordPress install stays on localhost. `site/` is a separate static page for
+GitHub and Netlify; it does not expose the harness MCP endpoint.
 
 Not tracked, by design: `.env`, `.secrets/`, the database, the WordPress
 install, uploads, logs, and Claude Code's MCP registration.
