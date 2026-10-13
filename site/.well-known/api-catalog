@@ -1,0 +1,34 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://wp-agent-harness.netlify.app/",
+      "item": [
+        {
+          "href": "https://wp-agent-harness.netlify.app/",
+          "type": "text/html",
+          "title": "Home"
+        },
+        {
+          "href": "https://wp-agent-harness.netlify.app/index.md",
+          "type": "text/markdown",
+          "title": "Markdown home"
+        },
+        {
+          "href": "https://wp-agent-harness.netlify.app/llms.txt",
+          "type": "text/plain",
+          "title": "llms.txt"
+        },
+        {
+          "href": "https://wp-agent-harness.netlify.app/privacy.html",
+          "type": "text/html",
+          "title": "Privacy"
+        },
+        {
+          "href": "https://wp-agent-harness.netlify.app/sitemap.xml",
+          "type": "application/xml",
+          "title": "Sitemap"
+        }
+      ]
+    }
+  ]
+}
