@@ -6,7 +6,7 @@ Focused entry for [Claude Code](https://code.claude.com/docs). Full index and ru
 
 ## What this repo is
 
-Local, disposable WordPress harness for coding agents. WordPress and MariaDB run in Docker on this machine; you reach the site through the `wordpress` MCP server (local WordPress MCP Adapter endpoint). Nothing here is public and nothing here is production. This repository does **not** ship an MCP server, abilities framework, or WordPress plugin of its own.
+Local, disposable WordPress harness for coding agents. WordPress and MariaDB run in Docker on this machine; you reach the site through the `wordpress` MCP server (local WordPress MCP Adapter endpoint). The WordPress harness is localhost-only (not a production WordPress deploy); [`site/`](site/) is the public marketing page. This repository does **not** ship an MCP server, abilities framework, or WordPress plugin of its own.
 
 MCP registration and scopes: [docs/claude-code.md](docs/claude-code.md). Task contract: [docs/agents/agent-contract.md](docs/agents/agent-contract.md).
 
