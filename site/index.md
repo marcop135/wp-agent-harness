@@ -19,7 +19,7 @@ dateModified: 2026-10-13
 
 ## Quick start
 
-Needs Docker Compose v2, Git, Bash, and MariaDB.
+Needs Docker Compose v2, Git, and Bash.
 
 ```bash
 git clone https://github.com/marcop135/wp-agent-harness.git
