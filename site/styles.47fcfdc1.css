@@ -297,7 +297,7 @@ a:hover {
 .setup {
   margin-top: var(--space-6);
   padding: 0;
-  background: light-dark(#0b1220, #000);
+  background: light-dark(#1e293b, #000);
   border: 1px solid var(--border);
   border-radius: 0.5rem;
   overflow: clip;
@@ -310,7 +310,7 @@ a:hover {
   font-family: var(--font-code);
   font-size: 0.9rem;
   line-height: 1.6;
-  background: light-dark(#0b1220, #000);
+  background: light-dark(#1e293b, #000);
   border-radius: 0;
   text-shadow: none;
 }

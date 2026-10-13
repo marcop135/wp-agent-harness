@@ -13,9 +13,7 @@
 
 ### Fixed
 
-- Stop the marketing site hero grid drift animation.
-- Soften code-block black in light mode; improve GitHub CTA hover contrast in dark mode.
-- Keep MariaDB out of the Quick start host tools list; it arrives via the Docker image, not a host install.
+- Marketing site: stop hero grid drift, slate code blocks in light mode, stronger GitHub CTA hover in dark mode.
 
 ## [0.5.1] - 2026-10-13
 
