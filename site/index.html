@@ -15,7 +15,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="preload" href="/fonts/catamaran-v28-latin-800.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/styles.1c881dbf.css">
+  <link rel="stylesheet" href="/styles.3e90c3db.css">
   <link rel="stylesheet" href="/prism/prism-okaidia.min.css">
   <title>wp-agent-harness: local WordPress for AI agents</title>
   <meta name="description" content="Run disposable WordPress in Docker for Claude Code, Cursor, and Codex via the official MCP Adapter. Loopback-only, pinned versions, one-command reset.">
@@ -128,6 +128,10 @@
         {
           "@type": "HowToTool",
           "name": "Bash"
+        },
+        {
+          "@type": "HowToTool",
+          "name": "MariaDB"
         }
       ],
       "step": [
@@ -235,7 +239,7 @@
 
     <section class="section shell" id="setup" aria-labelledby="setup-title">
       <h2 id="setup-title" class="section-title">Quick start</h2>
-      <p class="section-lede">Needs Docker Compose v2, Git, and Bash.</p>
+      <p class="section-lede">Needs Docker Compose v2, Git, Bash, and MariaDB.</p>
       <div class="setup">
         <pre class="language-bash"><code class="language-bash">git clone https://github.com/marcop135/wp-agent-harness.git
 cd wp-agent-harness
