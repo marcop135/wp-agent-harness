@@ -1,4 +1,4 @@
-# Claude Code: wp-agent-harness
+# Claude Code: Agent Harness for WordPress
 
 Focused entry for [Claude Code](https://code.claude.com/docs). Full index and rules: **[docs/AGENTS.md](docs/AGENTS.md)**. Do not duplicate the long docs index here; read that file for retrieval paths.
 

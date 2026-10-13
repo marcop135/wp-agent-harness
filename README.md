@@ -1,5 +1,7 @@
-![wp-agent-harness: local disposable WordPress for coding agents, over MCP. Agent, MCP Adapter, Abilities API, WordPress stack.](.github/brand/readme-light.png#gh-light-mode-only)
-![wp-agent-harness: local disposable WordPress for coding agents, over MCP. Agent, MCP Adapter, Abilities API, WordPress stack.](.github/brand/readme-dark.png#gh-dark-mode-only)
+![Agent Harness for WordPress: local disposable WordPress for coding agents. Agent, MCP Adapter, Abilities API, WordPress stack.](.github/brand/readme-light.png#gh-light-mode-only)
+![Agent Harness for WordPress: local disposable WordPress for coding agents. Agent, MCP Adapter, Abilities API, WordPress stack.](.github/brand/readme-dark.png#gh-dark-mode-only)
+
+# Agent Harness for WordPress
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 [![CI](https://img.shields.io/github/actions/workflow/status/marcop135/wp-agent-harness/test.yml?branch=develop&style=flat-square&label=CI)](https://github.com/marcop135/wp-agent-harness/actions/workflows/test.yml)
@@ -8,8 +10,6 @@
 [![Docker Compose v2](https://img.shields.io/badge/Docker_Compose-v2-2496ED.svg?style=flat-square)](https://docs.docker.com/compose/)
 [![MCP Adapter 0.7.0](https://img.shields.io/badge/MCP_Adapter-0.7.0-555.svg?style=flat-square)](https://github.com/WordPress/mcp-adapter)
 [![MS Abilities 1.12.0](https://img.shields.io/badge/MS_Abilities-1.12.0-555.svg?style=flat-square)](https://github.com/miriamschwab/ms-wp-abilities)
-
-# wp-agent-harness
 
 A local WordPress site for coding agents (Claude Code, Codex, Cursor) to build
 and edit through the official
@@ -24,9 +24,6 @@ come from upstream: the
 [MS WordPress Abilities](https://github.com/miriamschwab/ms-wp-abilities).
 
 **Development only.** Localhost only, no production data.
-[Security](docs/security.md).
-
-Site: [wp-agent-harness.netlify.app](https://wp-agent-harness.netlify.app).
 
 ## Quick start
 

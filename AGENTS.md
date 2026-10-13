@@ -1,4 +1,4 @@
-# Agents (wp-agent-harness)
+# Agents (Agent Harness for WordPress)
 
 Canonical narrative + tables: **[docs/AGENTS.md](docs/AGENTS.md)**.
 
