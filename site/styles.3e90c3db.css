@@ -151,7 +151,6 @@ a:hover {
   background-size: 2.5rem 2.5rem;
   mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 20%, transparent 75%);
   pointer-events: none;
-  animation: grid-drift 28s linear infinite;
 }
 
 .hero-inner {
@@ -231,7 +230,8 @@ a:hover {
 }
 
 .btn-primary:hover {
-  background: var(--accent);
+  background: light-dark(#0284c7, #38bdf8);
+  color: light-dark(#fff, #05070e);
 }
 
 .btn-ghost {
@@ -297,7 +297,7 @@ a:hover {
 .setup {
   margin-top: var(--space-6);
   padding: 0;
-  background: #000;
+  background: light-dark(#0b1220, #000);
   border: 1px solid var(--border);
   border-radius: 0.5rem;
   overflow: clip;
@@ -310,7 +310,7 @@ a:hover {
   font-family: var(--font-code);
   font-size: 0.9rem;
   line-height: 1.6;
-  background: #000;
+  background: light-dark(#0b1220, #000);
   border-radius: 0;
   text-shadow: none;
 }
@@ -456,21 +456,11 @@ a:hover {
   }
 }
 
-@keyframes grid-drift {
-  from {
-    background-position: 0 0, 0 0;
-  }
-  to {
-    background-position: 0 2.5rem, 2.5rem 0;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
-  .hero::before,
   .brand,
   .headline,
   .lede,
