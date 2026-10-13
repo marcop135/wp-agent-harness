@@ -26,6 +26,7 @@ come from upstream: the
 **Development only.** Localhost only, no production data.
 [Security](docs/security.md).
 
+Site: [wp-agent-harness.netlify.app](https://wp-agent-harness.netlify.app).
 Agents: [docs/AGENTS.md](docs/AGENTS.md) · [llms.txt](llms.txt) · [docs/ai-skills.md](docs/ai-skills.md).
 
 ## Quick start

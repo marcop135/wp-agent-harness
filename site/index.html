@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>wp-agent-harness: local WordPress for AI agents</title>
+  <meta name="description" content="Run disposable WordPress in Docker for Claude Code, Cursor, and Codex via the official MCP Adapter. Loopback-only, pinned versions, one-command reset.">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="author" content="marcop135">
+  <meta name="theme-color" content="#0369A1" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#05070E" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="canonical" href="https://wp-agent-harness.netlify.app/">
+  <link rel="alternate" type="text/markdown" href="https://wp-agent-harness.netlify.app/index.md" title="Markdown">
+  <link rel="alternate" type="text/plain" href="https://wp-agent-harness.netlify.app/llms.txt" title="llms.txt">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="wp-agent-harness">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:url" content="https://wp-agent-harness.netlify.app/">
+  <meta property="og:title" content="wp-agent-harness: local WordPress for AI agents">
+  <meta property="og:description" content="Run disposable WordPress in Docker for Claude Code, Cursor, and Codex via the official MCP Adapter.">
+  <meta property="og:image" content="https://wp-agent-harness.netlify.app/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="wp-agent-harness: Agent, MCP, and Ability on a light sky gradient">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="prism/prism-okaidia.min.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://wp-agent-harness.netlify.app/#website",
+        "url": "https://wp-agent-harness.netlify.app/",
+        "name": "wp-agent-harness",
+        "description": "Local disposable WordPress harness for coding agents over the official MCP Adapter.",
+        "inLanguage": "en-US",
+        "publisher": { "@id": "https://wp-agent-harness.netlify.app/#organization" }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://wp-agent-harness.netlify.app/#organization",
+        "name": "marcop135",
+        "url": "https://github.com/marcop135",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://wp-agent-harness.netlify.app/android-chrome-512x512.png",
+          "width": 512,
+          "height": 512
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://wp-agent-harness.netlify.app/#webpage",
+        "url": "https://wp-agent-harness.netlify.app/",
+        "name": "wp-agent-harness: local WordPress for AI agents",
+        "description": "Run disposable WordPress in Docker for Claude Code, Cursor, and Codex via the official MCP Adapter. Loopback-only, pinned versions, one-command reset.",
+        "isPartOf": { "@id": "https://wp-agent-harness.netlify.app/#website" },
+        "about": { "@id": "https://wp-agent-harness.netlify.app/#software" },
+        "primaryImageOfPage": { "@id": "https://wp-agent-harness.netlify.app/#primaryimage" },
+        "dateModified": "2026-10-13",
+        "inLanguage": "en-US"
+      },
+      {
+        "@type": "ImageObject",
+        "@id": "https://wp-agent-harness.netlify.app/#primaryimage",
+        "url": "https://wp-agent-harness.netlify.app/og.png",
+        "width": 1200,
+        "height": 630,
+        "caption": "wp-agent-harness brand artwork"
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://wp-agent-harness.netlify.app/#software",
+        "name": "wp-agent-harness",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Linux, macOS, Windows (Docker)",
+        "license": "https://github.com/marcop135/wp-agent-harness/blob/main/LICENSE",
+        "url": "https://github.com/marcop135/wp-agent-harness",
+        "sameAs": ["https://github.com/marcop135/wp-agent-harness"],
+        "description": "Local, disposable WordPress site for coding agents (Claude Code, Codex, Cursor) over the official WordPress MCP Adapter.",
+        "author": { "@id": "https://wp-agent-harness.netlify.app/#organization" },
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      },
+      {
+        "@type": "HowTo",
+        "@id": "https://wp-agent-harness.netlify.app/#howto",
+        "name": "Set up wp-agent-harness",
+        "description": "Clone the repo, provision Docker WordPress, and connect a coding agent over MCP.",
+        "totalTime": "PT10M",
+        "tool": [
+          { "@type": "HowToTool", "name": "Docker Compose v2" },
+          { "@type": "HowToTool", "name": "Git" },
+          { "@type": "HowToTool", "name": "Bash" }
+        ],
+        "step": [
+          {
+            "@type": "HowToStep",
+            "position": 1,
+            "name": "Clone",
+            "text": "git clone https://github.com/marcop135/wp-agent-harness.git && cd wp-agent-harness"
+          },
+          {
+            "@type": "HowToStep",
+            "position": 2,
+            "name": "Provision",
+            "text": "Run ./bin/setup to start WordPress and MariaDB on localhost and install the MCP Adapter."
+          },
+          {
+            "@type": "HowToStep",
+            "position": 3,
+            "name": "Connect",
+            "text": "Run ./bin/connect for Claude Code, or ./bin/connect --print for Cursor and Codex MCP auth."
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://wp-agent-harness.netlify.app/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is wp-agent-harness?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "wp-agent-harness is a local Docker WordPress environment for coding agents. Agents talk to a real site through the official WordPress MCP Adapter and Abilities API. It is not a hosted WordPress product and does not ship its own MCP server or plugin."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which AI coding agents work with it?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Claude Code, Cursor, and Codex connect over HTTP MCP. Use ./bin/connect for Claude Code, or ./bin/connect --print for the MCP URL and Authorization header other clients need."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is the WordPress site public?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. The harness binds WordPress and MariaDB to 127.0.0.1 only. This Netlify page is marketing only and does not expose the MCP endpoint."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do you reset the local site?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Run ./bin/reset. It destroys the Docker volumes and rebuilds a clean WordPress install. ./bin/setup alone is idempotent and does not wipe content."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="hero">
+    <div class="shell hero-inner">
+      <p class="brand"><span class="brand-prefix">wp-</span>agent-harness</p>
+      <h1 class="headline">Local WordPress for coding agents</h1>
+      <p class="lede">Docker on localhost, the official MCP Adapter, and pinned versions. Claude Code, Cursor, and Codex drive a real site; <code>./bin/reset</code> rebuilds it.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://github.com/marcop135/wp-agent-harness">View on GitHub</a>
+        <a class="btn btn-ghost" href="#setup">Quick start</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section shell answer" aria-labelledby="what-is-title">
+      <h2 id="what-is-title" class="section-title">What is wp-agent-harness?</h2>
+      <p class="answer-block"><strong>wp-agent-harness</strong> is a local, disposable WordPress install for AI coding agents. It runs WordPress and MariaDB in Docker on loopback, exposes site abilities through the official <a href="https://github.com/WordPress/mcp-adapter">WordPress MCP Adapter</a>, and resets with one command. The repo wires the stack; it does not ship an MCP server or plugin of its own.</p>
+    </section>
+
+    <section class="section shell" aria-labelledby="what-title">
+      <h2 id="what-title" class="section-title">What you get</h2>
+      <p class="section-lede">A disposable harness, not a hosted WordPress. The MCP server and abilities come from upstream.</p>
+      <div class="stack">
+        <div>
+          <h3>Docker</h3>
+          <p>WordPress and MariaDB on loopback only, with pinned images and one-command provision.</p>
+        </div>
+        <div>
+          <h3>MCP Adapter</h3>
+          <p>Three meta-tools: discover abilities, inspect schemas, execute. No invented tool names.</p>
+        </div>
+        <div>
+          <h3>Abilities</h3>
+          <p>MS WordPress Abilities plus core site info on a real local install agents can edit.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell" id="setup" aria-labelledby="setup-title">
+      <h2 id="setup-title" class="section-title">Quick start</h2>
+      <p class="section-lede">Needs Docker Compose v2, Git, and Bash.</p>
+      <div class="setup">
+        <pre class="language-bash"><code class="language-bash">git clone https://github.com/marcop135/wp-agent-harness.git
+cd wp-agent-harness
+./bin/setup
+./bin/connect</code></pre>
+      </div>
+      <ul class="links">
+        <li><a href="https://github.com/marcop135/wp-agent-harness#readme">README</a></li>
+        <li><a href="https://github.com/marcop135/wp-agent-harness/blob/develop/docs/AGENTS.md">Agent docs</a></li>
+        <li><a href="https://github.com/marcop135/wp-agent-harness/blob/develop/docs/architecture.md">Architecture</a></li>
+        <li><a href="https://github.com/marcop135/wp-agent-harness/tree/develop/examples">Examples</a></li>
+      </ul>
+    </section>
+
+    <section class="section shell" id="faq" aria-labelledby="faq-title">
+      <h2 id="faq-title" class="section-title">FAQ</h2>
+      <div class="faq">
+        <details open>
+          <summary>Which AI coding agents work with it?</summary>
+          <p>Claude Code, Cursor, and Codex connect over HTTP MCP. Use <code>./bin/connect</code> for Claude Code, or <code>./bin/connect --print</code> for the MCP URL and Authorization header other clients need.</p>
+        </details>
+        <details>
+          <summary>Is the WordPress site public?</summary>
+          <p>No. The harness binds WordPress and MariaDB to <code>127.0.0.1</code> only. This page is marketing only and does not expose the MCP endpoint.</p>
+        </details>
+        <details>
+          <summary>How do you reset the local site?</summary>
+          <p>Run <code>./bin/reset</code>. It destroys the Docker volumes and rebuilds a clean WordPress install. <code>./bin/setup</code> alone is idempotent and does not wipe content.</p>
+        </details>
+        <details>
+          <summary>Does this repo ship an MCP server or plugin?</summary>
+          <p>No. The MCP Adapter and MS WordPress Abilities come from upstream. This repository provides Docker Compose, provisioning, tests, docs, and curated WordPress agent skills.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer shell">
+    <p>Development only. The WordPress harness binds to localhost; this page is the public marketing surface.</p>
+    <p>MIT · <a href="https://github.com/marcop135/wp-agent-harness">marcop135/wp-agent-harness</a> · <a href="/llms.txt">llms.txt</a> · <a href="/index.md">Markdown</a></p>
+  </footer>
+  <script src="prism/prism-core.min.js"></script>
+  <script src="prism/prism-clike.min.js"></script>
+  <script src="prism/prism-bash.min.js"></script>
+</body>
+</html>
