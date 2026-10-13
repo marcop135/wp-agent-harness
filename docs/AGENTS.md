@@ -17,7 +17,7 @@ Portable task contract: [agents/agent-contract.md](agents/agent-contract.md).
 
 **IMPORTANT: Prefer retrieval-led reasoning over pre-training-led reasoning** for WordPress abilities, MCP tools, Docker commands, and this harness's `./bin/*` surface. Discover abilities and schemas at runtime; do not invent ability names or parameters from memory.
 
-**What this repo is:** a local, disposable WordPress harness for coding agents. It does **not** ship an MCP server, an abilities framework, or a WordPress plugin of its own. Those live upstream. What lives here is Docker Compose, provisioning, Application Password auth for the MCP endpoint, five test layers (0–4), docs, examples, and a curated set of WordPress agent skills. Nothing here is public and nothing here is production.
+**What this repo is:** a local, disposable WordPress harness for coding agents. It does **not** ship an MCP server, an abilities framework, or a WordPress plugin of its own. Those live upstream. What lives here is Docker Compose, provisioning, Application Password auth for the MCP endpoint, five test layers (0–4), docs, examples, and a curated set of WordPress agent skills. The WordPress harness is localhost-only (not a production WordPress deploy); [`site/`](../site/) is the public marketing page.
 
 ## Stack pin
 
