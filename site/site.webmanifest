@@ -1,7 +1,7 @@
 {
-  "name": "wp-agent-harness",
-  "short_name": "wp-harness",
-  "description": "Local disposable WordPress for coding agents, over MCP.",
+  "name": "Agent Harness for WordPress",
+  "short_name": "Agent Harness",
+  "description": "Agent Harness for WordPress: local disposable WordPress for coding agents.",
   "start_url": "/",
   "display": "browser",
   "background_color": "#EAF6FE",

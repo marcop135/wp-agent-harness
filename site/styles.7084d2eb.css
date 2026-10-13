@@ -163,7 +163,7 @@ a:hover {
   margin: 0;
   font-family: var(--font-title);
   font-weight: 800;
-  font-size: clamp(2.4rem, 8cqw + 1rem, 5.5rem);
+  font-size: clamp(2.35rem, 7cqw + 0.85rem, 4.5rem);
   letter-spacing: -0.03em;
   line-height: 1.05;
   text-wrap: balance;
@@ -176,12 +176,13 @@ a:hover {
 
 .headline {
   margin: var(--space-5) auto 0;
-  max-width: 28ch;
+  max-width: 42ch;
   font-family: var(--font-body);
-  font-weight: 600;
+  font-weight: 400;
   font-size: clamp(1.2rem, 2.2cqw + 0.7rem, 1.85rem);
   letter-spacing: -0.02em;
   line-height: 1.25;
+  color: var(--muted);
   text-wrap: balance;
   animation: rise 0.9s var(--ease) 0.08s both;
 }
@@ -216,7 +217,11 @@ a:hover {
   font-size: 1rem;
   text-decoration: none;
   border: 1px solid transparent;
-  transition: transform 0.2s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease);
+  transition:
+    background-color 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    color 0.2s var(--ease),
+    transform 0.2s var(--ease);
 }
 
 .btn:hover {
@@ -229,9 +234,11 @@ a:hover {
   color: #fff;
 }
 
-.btn-primary:hover {
-  background: light-dark(#0284c7, #38bdf8);
-  color: light-dark(#fff, #05070e);
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  background: light-dark(#0284c7, #0a5568);
+  color: #fff;
+  transform: none;
 }
 
 .btn-ghost {
@@ -240,7 +247,8 @@ a:hover {
   border-color: var(--border);
 }
 
-.btn-ghost:hover {
+.btn-ghost:hover,
+.btn-ghost:focus-visible {
   border-color: var(--accent);
   color: var(--accent);
 }

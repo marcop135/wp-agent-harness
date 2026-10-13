@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-label="wp-agent-harness: Local disposable WordPress for coding agents, over MCP">
-  <title>wp-agent-harness</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-label="Agent Harness for WordPress: Local disposable WordPress for coding agents">
+  <title>Agent Harness for WordPress</title>
   <defs>
     <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#EAF6FE"/>
@@ -42,8 +42,8 @@
   <rect width="1280" height="640" fill="url(#vignette)"/>
 
   <g transform="translate(80 96)">
-    <text class="title" x="560" y="114" text-anchor="middle" font-size="92"><tspan fill="#0369A1">wp-</tspan>agent-harness</text>
-    <text class="tag" x="560" y="168" text-anchor="middle" font-size="34">Local disposable WordPress for coding agents, over MCP</text>
+    <text class="title" x="560" y="114" text-anchor="middle" font-size="76">Agent Harness <tspan fill="#0369A1">for WordPress</tspan></text>
+    <text class="tag" x="560" y="168" text-anchor="middle" font-size="34">Local disposable WordPress for coding agents</text>
     <g transform="translate(25.0 232)" filter="url(#shadow)">
       <g clip-path="url(#clip-card)">
         <rect width="310" height="172" fill="url(#card)"/>

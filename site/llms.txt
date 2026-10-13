@@ -1,12 +1,12 @@
-# wp-agent-harness
+# Agent Harness for WordPress
 
-> Local disposable WordPress for coding agents (Claude Code, Cursor, Codex) over the official WordPress MCP Adapter.
+> Agent Harness for WordPress: local disposable WordPress for Claude Code, Cursor, and Codex via the official MCP Adapter.
 
 This Netlify site is the public marketing page. The WordPress harness itself runs on localhost only and is not hosted here.
 
 ## Primary
 
-- [Home](https://wp-agent-harness.netlify.app/): Product page with quick start and FAQ
+- [Home](https://wp-agent-harness.netlify.app/): Agent Harness for WordPress product page with quick start and FAQ
 - [Markdown home](https://wp-agent-harness.netlify.app/index.md): Same content as plain Markdown
 - [Privacy](https://wp-agent-harness.netlify.app/privacy.html): Marketing-site privacy notice
 - [GitHub repository](https://github.com/marcop135/wp-agent-harness): Source, Docker Compose, tests, docs

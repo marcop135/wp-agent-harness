@@ -9,11 +9,11 @@
 
 ### Changed
 
-- Clarify the README License section; move badges above the title; drop the Agents line and PR test reminder.
+- Rename the display name to Agent Harness for WordPress.
 
 ### Fixed
 
-- Marketing site: stop hero grid drift, slate code blocks in light mode, stronger GitHub CTA hover in dark mode.
+- Marketing site: stop hero grid drift.
 
 ## [0.5.1] - 2026-10-13
 
