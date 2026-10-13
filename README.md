@@ -1,6 +1,14 @@
 ![wp-agent-harness: local disposable WordPress for coding agents, over MCP. Agent, MCP Adapter, Abilities API, WordPress stack.](.github/brand/readme-light.png#gh-light-mode-only)
 ![wp-agent-harness: local disposable WordPress for coding agents, over MCP. Agent, MCP Adapter, Abilities API, WordPress stack.](.github/brand/readme-dark.png#gh-dark-mode-only)
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+[![CI](https://img.shields.io/github/actions/workflow/status/marcop135/wp-agent-harness/test.yml?branch=develop&style=flat-square&label=CI)](https://github.com/marcop135/wp-agent-harness/actions/workflows/test.yml)
+[![WordPress 7.1.2](https://img.shields.io/badge/WordPress-7.1.2-21759b.svg?style=flat-square)](https://wordpress.org/)
+[![MariaDB 11.8.9](https://img.shields.io/badge/MariaDB-11.8.9-C3363F.svg?style=flat-square)](https://mariadb.org/)
+[![Docker Compose v2](https://img.shields.io/badge/Docker_Compose-v2-2496ED.svg?style=flat-square)](https://docs.docker.com/compose/)
+[![MCP Adapter 0.7.0](https://img.shields.io/badge/MCP_Adapter-0.7.0-555.svg?style=flat-square)](https://github.com/WordPress/mcp-adapter)
+[![MS Abilities 1.12.0](https://img.shields.io/badge/MS_Abilities-1.12.0-555.svg?style=flat-square)](https://github.com/miriamschwab/ms-wp-abilities)
+
 # wp-agent-harness
 
 A local WordPress site for coding agents (Claude Code, Codex, Cursor) to build
@@ -15,19 +23,10 @@ come from upstream: the
 [MCP Adapter](https://github.com/WordPress/mcp-adapter) and
 [MS WordPress Abilities](https://github.com/miriamschwab/ms-wp-abilities).
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
-[![CI](https://img.shields.io/github/actions/workflow/status/marcop135/wp-agent-harness/test.yml?branch=develop&style=flat-square&label=CI)](https://github.com/marcop135/wp-agent-harness/actions/workflows/test.yml)
-[![WordPress 7.1.2](https://img.shields.io/badge/WordPress-7.1.2-21759b.svg?style=flat-square)](https://wordpress.org/)
-[![MariaDB 11.8.9](https://img.shields.io/badge/MariaDB-11.8.9-C3363F.svg?style=flat-square)](https://mariadb.org/)
-[![Docker Compose v2](https://img.shields.io/badge/Docker_Compose-v2-2496ED.svg?style=flat-square)](https://docs.docker.com/compose/)
-[![MCP Adapter 0.7.0](https://img.shields.io/badge/MCP_Adapter-0.7.0-555.svg?style=flat-square)](https://github.com/WordPress/mcp-adapter)
-[![MS Abilities 1.12.0](https://img.shields.io/badge/MS_Abilities-1.12.0-555.svg?style=flat-square)](https://github.com/miriamschwab/ms-wp-abilities)
-
 **Development only.** Localhost only, no production data.
 [Security](docs/security.md).
 
 Site: [wp-agent-harness.netlify.app](https://wp-agent-harness.netlify.app).
-Agents: [docs/AGENTS.md](docs/AGENTS.md) · [llms.txt](llms.txt) · [docs/ai-skills.md](docs/ai-skills.md).
 
 ## Quick start
 
@@ -102,10 +101,16 @@ How to update them: [Updating dependencies](docs/development.md#updating-depende
 
 ## Contributing
 
-[CONTRIBUTING.md](CONTRIBUTING.md). Run `./bin/test --skip-claude` before a PR.
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-MIT for the harness ([LICENSE](LICENSE)). Vendored WordPress agent skills are
-GPL-2.0-or-later. Runtime installs keep their upstream licences; see
-[NOTICE](NOTICE) and [Dependencies](docs/development.md#dependencies).
+**MIT** ([LICENSE](LICENSE)) covers this harness: Docker Compose, `bin/`, docs,
+tests, and the Netlify marketing site.
+
+Separately licensed:
+
+| Piece | Licence |
+|-------|---------|
+| Vendored WordPress agent skills (`.claude/skills/`, `.cursor/skills/`) | GPL-2.0-or-later |
+| Runtime installs (WordPress, MariaDB, MCP Adapter, MS Abilities, WP-CLI) | Upstream; see [NOTICE](NOTICE) and [Dependencies](docs/development.md#dependencies) |
