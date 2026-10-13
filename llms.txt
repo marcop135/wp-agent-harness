@@ -1,4 +1,4 @@
-# wp-agent-harness
+# Agent Harness for WordPress
 
 > Local, disposable WordPress harness for coding agents. Clone it, run one
 > command, and agents talk to a real site over the official WordPress MCP

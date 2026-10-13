@@ -1,4 +1,4 @@
-# Agent contract: wp-agent-harness
+# Agent contract: Agent Harness for WordPress
 
 Portable rules for AI agents (Cursor agent, Claude Code, and similar). Canonical narrative: [`docs/AGENTS.md`](../AGENTS.md).
 

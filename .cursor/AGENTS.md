@@ -1,4 +1,4 @@
-# Cursor agent instructions: wp-agent-harness
+# Cursor agent instructions: Agent Harness for WordPress
 
 Precedence shim for the **Cursor agent** (IDE agent mode). Full index and domain rules: **[docs/AGENTS.md](../docs/AGENTS.md)**.
 
