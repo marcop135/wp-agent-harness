@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-10-13
+
 ### Changed
 
 - Rename the display name to Agent Harness for WordPress.
