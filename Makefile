@@ -30,7 +30,7 @@ logs: ## Show Docker logs
 test: ## Run the full test suite, Claude Code layer included
 	@./bin/test
 
-test-fast: ## Run layers 1-3 only (no model turns)
+test-fast: ## Run layers 0-3 only (no model turns)
 	@./bin/test --skip-claude
 
 connect: ## Register the MCP server with Claude Code
