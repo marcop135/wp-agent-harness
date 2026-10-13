@@ -8,6 +8,7 @@ This Netlify site is the public marketing page. The WordPress harness itself run
 
 - [Home](https://wp-agent-harness.netlify.app/): Product page with quick start and FAQ
 - [Markdown home](https://wp-agent-harness.netlify.app/index.md): Same content as plain Markdown
+- [Privacy](https://wp-agent-harness.netlify.app/privacy.html): Marketing-site privacy notice
 - [GitHub repository](https://github.com/marcop135/wp-agent-harness): Source, Docker Compose, tests, docs
 
 ## Docs on GitHub

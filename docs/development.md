@@ -9,7 +9,7 @@
 | Bash | the `./bin` commands | Git Bash on Windows, the system shell elsewhere |
 | curl | health and MCP checks | ships with Git Bash and macOS |
 | Claude Code | MCP registration and test layer 4 | optional for layers 0–3 |
-| jq | the test suite only | `brew install jq` · `apt install jq` · `winget install jqlang.jq` |
+| jq | setup, status, and the test suite | `brew install jq` · `apt install jq` · `winget install jqlang.jq` |
 
 ## Daily loop
 
