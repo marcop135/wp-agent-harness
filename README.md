@@ -30,7 +30,7 @@ Site: [wp-agent-harness.netlify.app](https://wp-agent-harness.netlify.app).
 
 ## Quick start
 
-Needs Docker Compose v2, Git, Bash, and MariaDB.
+Needs Docker Compose v2, Git, and Bash.
 
 ```bash
 git clone https://github.com/marcop135/wp-agent-harness.git
