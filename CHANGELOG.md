@@ -7,6 +7,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Clarify the README License section; move badges above the title; drop the Agents line and PR test reminder.
+
 ### Fixed
 
 - Stop the marketing site hero grid drift animation.
