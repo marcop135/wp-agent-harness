@@ -31,7 +31,7 @@ Agents: [docs/AGENTS.md](docs/AGENTS.md) · [llms.txt](llms.txt) · [docs/ai-ski
 
 ## Quick start
 
-Needs Docker Compose v2, Git, and Bash.
+Needs Docker Compose v2, Git, Bash, and MariaDB.
 
 ```bash
 git clone https://github.com/marcop135/wp-agent-harness.git

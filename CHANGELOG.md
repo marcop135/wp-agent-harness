@@ -7,6 +7,12 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Stop the marketing site hero grid drift animation.
+- Soften code-block black in light mode; improve GitHub CTA hover contrast in dark mode.
+- Add MariaDB to the Quick start tools list (visible copy and HowTo JSON-LD).
+
 ## [0.5.1] - 2026-10-13
 
 ### Fixed
