@@ -1,4 +1,4 @@
-# Agents: wp-agent-harness
+# Agents: Agent Harness for WordPress
 
 Canonical narrative, documentation index, and working rules for this repository.
 
@@ -33,7 +33,7 @@ Ports|127.0.0.1 only (WP + DB)
 
 ---
 
-## [wp-agent-harness Docs Index]
+## [Agent Harness for WordPress Docs Index]
 
 Paths are repo-relative from project root unless noted.
 

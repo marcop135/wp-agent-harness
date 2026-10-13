@@ -1,13 +1,13 @@
 ---
-title: "wp-agent-harness: local WordPress for AI agents"
+title: "Agent Harness for WordPress: Docker for AI agents"
 canonical: https://wp-agent-harness.netlify.app/
-description: Run disposable WordPress in Docker for Claude Code, Cursor, and Codex via the official MCP Adapter. Loopback-only, pinned versions, one-command reset.
+description: Agent Harness for WordPress: local Docker WordPress for Claude Code, Cursor, and Codex. Loopback-only; one-command reset.
 dateModified: 2026-10-13
 ---
 
-# wp-agent-harness
+# Agent Harness for WordPress
 
-**wp-agent-harness** is a local, disposable WordPress install for AI coding agents. It runs WordPress and MariaDB in Docker on loopback, exposes site abilities through the official [WordPress MCP Adapter](https://github.com/WordPress/mcp-adapter), and resets with one command. The repo wires the stack; it does not ship an MCP server or plugin of its own.
+**Agent Harness for WordPress** is a local, disposable WordPress install for AI coding agents. It runs WordPress and MariaDB in Docker on loopback, exposes site abilities through the official [WordPress MCP Adapter](https://github.com/WordPress/mcp-adapter), and resets with one command. The repo wires the stack; it does not ship an MCP server or plugin of its own.
 
 ## What you get
 
@@ -34,6 +34,10 @@ cd wp-agent-harness
 - [Examples](https://github.com/marcop135/wp-agent-harness/tree/develop/examples)
 
 ## FAQ
+
+### What is Agent Harness for WordPress?
+
+Agent Harness for WordPress is a local Docker WordPress environment for coding agents. Agents talk to a real site through the official WordPress MCP Adapter and Abilities API. It is not a hosted WordPress product and does not ship its own MCP server or plugin.
 
 ### Which AI coding agents work with it?
 
