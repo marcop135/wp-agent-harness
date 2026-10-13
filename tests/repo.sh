@@ -130,7 +130,7 @@ suite 'Repository — documented files exist'
 # ===========================================================================
 
 for f in README.md CLAUDE.md AGENTS.md llms.txt CHANGELOG.md LICENSE NOTICE Makefile docker-compose.yml \
-         .env.example .gitignore .gitattributes \
+         .env.example .gitignore .gitattributes netlify.toml \
          CONTRIBUTING.md SECURITY.md CODE_OF_CONDUCT.md \
          .github/workflows/test.yml .github/dependabot.yml \
          .github/CODEOWNERS .github/PULL_REQUEST_TEMPLATE.md \
@@ -145,6 +145,7 @@ for f in README.md CLAUDE.md AGENTS.md llms.txt CHANGELOG.md LICENSE NOTICE Make
          .github/brand/readme-dark.svg .github/brand/readme-dark.png \
          .github/brand/social.svg .github/brand/social.png \
          .github/brand/og.svg .github/brand/og.png \
+         site/index.html site/styles.css \
          examples/README.md examples/inspect-site.md examples/create-content.md \
          examples/modify-content.md examples/media.md examples/theme.md \
          examples/plugins.md examples/site-development.md \
