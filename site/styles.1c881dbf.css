@@ -43,7 +43,7 @@
   --ground-from: light-dark(#eaf6fe, #05070e);
   --ground-to: light-dark(#ffffff, #0a101f);
   --accent: light-dark(#0369a1, #38bdf8);
-  --fill: light-dark(#0284c7, #0284c7);
+  --fill: light-dark(#0369a1, #0e7490);
   --text: light-dark(#0b1220, #e8faff);
   --muted: light-dark(#475569, #7f9ab8);
   --surface: light-dark(#ffffff, #111b2e);
@@ -73,6 +73,7 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -129,7 +130,7 @@ a:hover {
   margin-inline: auto;
 }
 
-/* —— Hero —— */
+/* Hero */
 
 .hero {
   position: relative;
@@ -166,6 +167,7 @@ a:hover {
   font-size: clamp(2.4rem, 8cqw + 1rem, 5.5rem);
   letter-spacing: -0.03em;
   line-height: 1.05;
+  text-wrap: balance;
   animation: rise 0.9s var(--ease) both;
 }
 
@@ -181,6 +183,7 @@ a:hover {
   font-size: clamp(1.2rem, 2.2cqw + 0.7rem, 1.85rem);
   letter-spacing: -0.02em;
   line-height: 1.25;
+  text-wrap: balance;
   animation: rise 0.9s var(--ease) 0.08s both;
 }
 
@@ -189,6 +192,7 @@ a:hover {
   max-width: 42ch;
   color: var(--muted);
   font-size: clamp(1rem, 0.9cqw + 0.85rem, 1.15rem);
+  text-wrap: pretty;
   animation: rise 0.9s var(--ease) 0.16s both;
 }
 
@@ -241,7 +245,7 @@ a:hover {
   color: var(--accent);
 }
 
-/* —— Sections —— */
+/* Sections */
 
 .section {
   padding-block: var(--space-8);
@@ -253,6 +257,7 @@ a:hover {
   font-weight: 800;
   font-size: clamp(1.6rem, 2cqw + 1rem, 2.2rem);
   letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
 .section-lede {
@@ -321,6 +326,60 @@ a:hover {
   max-width: 62ch;
   font-size: 1.05rem;
   line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.prose {
+  max-width: 62ch;
+}
+
+.prose p {
+  margin: var(--space-4) 0 0;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.prose p:first-child {
+  margin-top: var(--space-5);
+}
+
+.prose h2 {
+  margin: var(--space-7) 0 0;
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: clamp(1.25rem, 1.5cqw + 1rem, 1.6rem);
+  letter-spacing: -0.02em;
+  color: var(--text);
+  text-wrap: balance;
+}
+
+.prose ul {
+  margin: var(--space-3) 0 0;
+  padding-left: 1.25rem;
+  color: var(--muted);
+}
+
+.prose li + li {
+  margin-top: var(--space-2);
+}
+
+.error-panel {
+  padding-block: var(--space-8);
+  text-align: center;
+}
+
+.error-panel .headline {
+  margin-top: var(--space-4);
+}
+
+.error-code {
+  margin: 0;
+  font-family: var(--font-code);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
 }
 
 .faq {
@@ -422,4 +481,49 @@ a:hover {
   .btn:hover {
     transform: none;
   }
+}
+
+@media (forced-colors: active) {
+  .hero::before {
+    display: none;
+  }
+
+  .btn-primary,
+  .btn-ghost,
+  .faq details,
+  .setup {
+    border: 2px solid CanvasText;
+  }
+
+  .btn-primary {
+    background: Highlight;
+    color: HighlightText;
+  }
+}
+
+
+.page-top {
+  padding-block: var(--space-6);
+}
+
+.brand-compact {
+  font-size: clamp(1.6rem, 4cqw + 1rem, 2.4rem);
+}
+
+.brand-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.brand-link:hover {
+  text-decoration: none;
+}
+
+.site-footer nav p {
+  margin: 0;
+}
+
+.site-footer nav p + p,
+.site-footer > p + nav {
+  margin-top: var(--space-2);
 }

@@ -7,6 +7,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Close Website Spec gaps on the Netlify marketing site (404/privacy, headers, contrast, a11y, caching).
+
 ## [0.5.0] - 2026-10-13
 
 ### Added

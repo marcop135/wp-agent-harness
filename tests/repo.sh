@@ -145,7 +145,8 @@ for f in README.md CLAUDE.md AGENTS.md llms.txt CHANGELOG.md LICENSE NOTICE Make
          .github/brand/readme-dark.svg .github/brand/readme-dark.png \
          .github/brand/social.svg .github/brand/social.png \
          .github/brand/og.svg .github/brand/og.png \
-         site/index.html site/styles.css \
+         site/index.html site/privacy.html site/404.html site/500.html \
+         site/.well-known/security.txt site/.well-known/api-catalog \
          examples/README.md examples/inspect-site.md examples/create-content.md \
          examples/modify-content.md examples/media.md examples/theme.md \
          examples/plugins.md examples/site-development.md \
@@ -164,6 +165,19 @@ for f in README.md CLAUDE.md AGENTS.md llms.txt CHANGELOG.md LICENSE NOTICE Make
         _record_fail "$f is tracked" "$(git check-ignore -v "$f" 2>/dev/null || echo 'not in the index')"
     fi
 done
+
+shopt -s nullglob
+site_styles=(site/styles.*.css)
+shopt -u nullglob
+if (( ${#site_styles[@]} == 1 )) && grep -qxF "${site_styles[0]}" <<<"$tracked"; then
+    _record_pass "site/styles.*.css is tracked (${site_styles[0]})"
+elif (( ${#site_styles[@]} == 0 )); then
+    _record_fail 'site/styles.*.css is tracked' 'no fingerprinted stylesheet'
+elif (( ${#site_styles[@]} > 1 )); then
+    _record_fail 'site/styles.*.css is tracked' "expected one file, found: ${site_styles[*]}"
+else
+    _record_fail 'site/styles.*.css is tracked' "$(git check-ignore -v "${site_styles[0]}" 2>/dev/null || echo 'not in the index')"
+fi
 
 # ===========================================================================
 suite 'Repository — versions agree between .env.example and docs/development.md'
