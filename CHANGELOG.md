@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-13
+
 ### Added
 
 - Add a public marketing site in [`site/`](site/) (Netlify, Prism, favicons, JSON-LD/FAQ/sitemap/`llms.txt`).
