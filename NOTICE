@@ -14,6 +14,11 @@ is committed under `.claude/skills/` and `.cursor/skills/`. Those trees keep
 their upstream GPL-2.0-or-later licence (see `LICENSE` beside each skills root).
 They are not MIT.
 
+### Vendored in this repository (MIT)
+
+[PrismJS](https://github.com/PrismJS/prism) 1.30.0 under `site/prism/` (core,
+clike, bash, okaidia theme) for the marketing landing page code sample.
+
 ### Installed at setup or image build (not in git)
 
 Pinned upstream releases, fetched when you run `./bin/setup` or build the

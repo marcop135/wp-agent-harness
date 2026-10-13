@@ -1,0 +1,21 @@
+{
+  "name": "wp-agent-harness",
+  "short_name": "wp-harness",
+  "description": "Local disposable WordPress for coding agents, over MCP.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#EAF6FE",
+  "theme_color": "#0369A1",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
