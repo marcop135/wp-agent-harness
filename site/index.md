@@ -53,4 +53,4 @@ No. The MCP Adapter and MS WordPress Abilities come from upstream. This reposito
 
 ## License
 
-MIT · [marcop135/wp-agent-harness](https://github.com/marcop135/wp-agent-harness)
+MIT · [marcop135/wp-agent-harness](https://github.com/marcop135/wp-agent-harness) · [Privacy](https://wp-agent-harness.netlify.app/privacy.html)
