@@ -8,7 +8,7 @@ This repo-root mirror exists for tools that only read `AGENTS.md` at the reposit
 
 ## What this repo is
 
-Local, disposable WordPress harness for coding agents. Docker Compose runs WordPress and MariaDB on loopback; agents talk to a real site over the official [WordPress MCP Adapter](https://github.com/WordPress/mcp-adapter). This repository does **not** ship an MCP server, abilities framework, or WordPress plugin of its own. Nothing here is public or production. Connecting an agent to a separate live site is outside the harness: [remote-site.md](docs/remote-site.md).
+Local, disposable WordPress harness for coding agents. Docker Compose runs WordPress and MariaDB on loopback; agents talk to a real site over the official [WordPress MCP Adapter](https://github.com/WordPress/mcp-adapter). This repository does **not** ship an MCP server, abilities framework, or WordPress plugin of its own. The WordPress harness is localhost-only (not a production WordPress deploy); [`site/`](site/) is the public marketing page. Connecting an agent to a separate live site is outside the harness: [remote-site.md](docs/remote-site.md).
 
 ## Stack pin
 
