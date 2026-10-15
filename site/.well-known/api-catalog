@@ -1,30 +1,30 @@
 {
   "linkset": [
     {
-      "anchor": "https://wp-agent-harness.netlify.app/",
+      "anchor": "https://wpagent.marcopontili.com/",
       "item": [
         {
-          "href": "https://wp-agent-harness.netlify.app/",
+          "href": "https://wpagent.marcopontili.com/",
           "type": "text/html",
           "title": "Agent Harness for WordPress home"
         },
         {
-          "href": "https://wp-agent-harness.netlify.app/index.md",
+          "href": "https://wpagent.marcopontili.com/index.md",
           "type": "text/markdown",
           "title": "Markdown home"
         },
         {
-          "href": "https://wp-agent-harness.netlify.app/llms.txt",
+          "href": "https://wpagent.marcopontili.com/llms.txt",
           "type": "text/plain",
           "title": "llms.txt"
         },
         {
-          "href": "https://wp-agent-harness.netlify.app/privacy.html",
+          "href": "https://wpagent.marcopontili.com/privacy.html",
           "type": "text/html",
           "title": "Privacy"
         },
         {
-          "href": "https://wp-agent-harness.netlify.app/sitemap.xml",
+          "href": "https://wpagent.marcopontili.com/sitemap.xml",
           "type": "application/xml",
           "title": "Sitemap"
         }
