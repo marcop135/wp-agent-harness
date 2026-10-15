@@ -5,19 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-  <meta name="author" content="Marco Pontili">
-  <meta name="theme-color" content="#F6F5F0" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0B0E19" media="(prefers-color-scheme: dark)">
+  <meta name="author" content="marcop135">
+  <meta name="theme-color" content="#0369A1" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#05070E" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
-  <link rel="preload" href="/fonts/cabin-v35-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/styles.5003e629.css">
+  <link rel="preload" href="/fonts/catamaran-v28-latin-800.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/styles.93132f7b.css">
+  <link rel="stylesheet" href="/prism/prism-okaidia.min.css">
   <title>Agent Harness for WordPress: Docker for AI agents</title>
-  <meta name="description" content="Agent Harness for WordPress: local Docker WordPress for Claude Code, Cursor, and Codex over the official MCP Adapter. Loopback-only; one-command reset.">
+  <meta name="description" content="Agent Harness for WordPress: local Docker WordPress for Claude Code, Cursor, and Codex. Loopback-only; one-command reset.">
   <link rel="canonical" href="https://wpagent.marcopontili.com/">
   <link rel="alternate" type="text/markdown" href="https://wpagent.marcopontili.com/index.md" title="Markdown">
   <link rel="alternate" type="text/plain" href="https://wpagent.marcopontili.com/llms.txt" title="llms.txt">
@@ -26,14 +27,14 @@
   <meta property="og:locale" content="en_US">
   <meta property="og:url" content="https://wpagent.marcopontili.com/">
   <meta property="og:title" content="Agent Harness for WordPress: Docker for AI agents">
-  <meta property="og:description" content="Agent Harness for WordPress: local Docker WordPress for Claude Code, Cursor, and Codex over the official MCP Adapter. Loopback-only; one-command reset.">
+  <meta property="og:description" content="Agent Harness for WordPress: local Docker WordPress for Claude Code, Cursor, and Codex. Loopback-only; one-command reset.">
   <meta property="og:image" content="https://wpagent.marcopontili.com/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Agent Harness for WordPress: Agent, MCP, and Ability on a light sky gradient">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Agent Harness for WordPress: Docker for AI agents">
-  <meta name="twitter:description" content="Agent Harness for WordPress: local Docker WordPress for Claude Code, Cursor, and Codex over the official MCP Adapter. Loopback-only; one-command reset.">
+  <meta name="twitter:description" content="Agent Harness for WordPress: local Docker WordPress for Claude Code, Cursor, and Codex. Loopback-only; one-command reset.">
   <meta name="twitter:image" content="https://wpagent.marcopontili.com/og.png">
   <script type="application/ld+json">
 {
@@ -47,24 +48,27 @@
       "description": "Agent Harness for WordPress: local Docker WordPress for coding agents via the MCP Adapter.",
       "inLanguage": "en-US",
       "publisher": {
-        "@id": "https://wpagent.marcopontili.com/#person"
+        "@id": "https://wpagent.marcopontili.com/#organization"
       }
     },
     {
-      "@type": "Person",
-      "@id": "https://wpagent.marcopontili.com/#person",
-      "name": "Marco Pontili",
-      "url": "https://marcopontili.com/",
-      "sameAs": [
-        "https://github.com/marcop135"
-      ]
+      "@type": "Organization",
+      "@id": "https://wpagent.marcopontili.com/#organization",
+      "name": "marcop135",
+      "url": "https://github.com/marcop135",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://wpagent.marcopontili.com/android-chrome-512x512.png",
+        "width": 512,
+        "height": 512
+      }
     },
     {
       "@type": "WebPage",
       "@id": "https://wpagent.marcopontili.com/#webpage",
       "url": "https://wpagent.marcopontili.com/",
       "name": "Agent Harness for WordPress: Docker for AI agents",
-      "description": "Agent Harness for WordPress: local Docker WordPress for Claude Code, Cursor, and Codex over the official MCP Adapter. Loopback-only; one-command reset.",
+      "description": "Agent Harness for WordPress: local Docker WordPress for Claude Code, Cursor, and Codex. Loopback-only; one-command reset.",
       "isPartOf": {
         "@id": "https://wpagent.marcopontili.com/#website"
       },
@@ -74,7 +78,7 @@
       "primaryImageOfPage": {
         "@id": "https://wpagent.marcopontili.com/#primaryimage"
       },
-      "dateModified": "2026-10-15",
+      "dateModified": "2026-10-13",
       "inLanguage": "en-US"
     },
     {
@@ -86,20 +90,24 @@
       "caption": "Agent Harness for WordPress brand artwork"
     },
     {
-      "@type": "SoftwareSourceCode",
+      "@type": "SoftwareApplication",
       "@id": "https://wpagent.marcopontili.com/#software",
       "name": "Agent Harness for WordPress",
-      "codeRepository": "https://github.com/marcop135/wp-agent-harness",
-      "programmingLanguage": ["Shell", "PHP"],
-      "runtimePlatform": "Docker Compose v2",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Linux, macOS, Windows (Docker)",
       "license": "https://github.com/marcop135/wp-agent-harness/blob/main/LICENSE",
-      "url": "https://wpagent.marcopontili.com/",
+      "url": "https://github.com/marcop135/wp-agent-harness",
       "sameAs": [
         "https://github.com/marcop135/wp-agent-harness"
       ],
       "description": "Agent Harness for WordPress is a local disposable WordPress site for Claude Code, Cursor, and Codex over the official WordPress MCP Adapter.",
       "author": {
-        "@id": "https://wpagent.marcopontili.com/#person"
+        "@id": "https://wpagent.marcopontili.com/#organization"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
       }
     },
     {
@@ -126,20 +134,20 @@
         {
           "@type": "HowToStep",
           "position": 1,
-          "name": "Clone and provision",
-          "text": "git clone https://github.com/marcop135/wp-agent-harness.git, cd wp-agent-harness, then ./bin/setup to start WordPress and MariaDB on localhost and install the MCP Adapter."
+          "name": "Clone",
+          "text": "git clone https://github.com/marcop135/wp-agent-harness.git && cd wp-agent-harness"
         },
         {
           "@type": "HowToStep",
           "position": 2,
-          "name": "Connect an agent",
-          "text": "Run ./bin/connect for Claude Code, or ./bin/connect --print for the MCP URL and Authorization header Codex and Cursor need."
+          "name": "Provision",
+          "text": "Run ./bin/setup to start WordPress and MariaDB on localhost and install the MCP Adapter."
         },
         {
           "@type": "HowToStep",
           "position": 3,
-          "name": "Check the stack",
-          "text": "Run ./bin/status for container, WordPress, ability and MCP health, and ./bin/test --skip-claude for test layers 0 to 3."
+          "name": "Connect",
+          "text": "Run ./bin/connect for Claude Code, or ./bin/connect --print for Cursor and Codex MCP auth."
         }
       ]
     },
@@ -168,7 +176,7 @@
           "name": "Is the WordPress site public?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No. The harness binds WordPress and MariaDB to 127.0.0.1 only. This website is the project page and does not expose the MCP endpoint."
+            "text": "No. The harness binds WordPress and MariaDB to 127.0.0.1 only. This Netlify page is marketing only and does not expose the MCP endpoint."
           }
         },
         {
@@ -177,14 +185,6 @@
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Run ./bin/reset. It destroys the Docker volumes and rebuilds a clean WordPress install. ./bin/setup alone is idempotent and does not wipe content."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Does this repo ship an MCP server or plugin?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. The MCP Adapter and MS WordPress Abilities come from upstream. This repository provides Docker Compose, provisioning, tests, docs, and curated WordPress agent skills."
           }
         }
       ]
@@ -197,284 +197,92 @@
 <body>
   <a class="skip" href="#main">Skip to content</a>
 
-  <header class="masthead">
-    <div class="shell masthead-inner">
-      <a class="wordmark" href="/" aria-label="Agent Harness for WordPress, home">
-        <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect width="32" height="32" rx="4" fill="#3858E9"/><path fill="#FFFFFF" d="M7.2 9.2h3.1l2.05 9.35L14.55 9.2h2.9l2.2 9.35L21.7 9.2h3.1l-3.55 13.6h-3.05L16 13.15l-2.2 9.65H10.75Z"/></svg>
-        <span>Agent Harness<small>for WordPress</small></span>
-      </a>
-      <nav aria-label="Primary">
-        <ul>
-          <li class="nav-section"><a href="#architecture">Architecture</a></li>
-          <li class="nav-section"><a href="#quick-start">Quick start</a></li>
-          <li class="nav-section"><a href="#faq">FAQ</a></li>
-          <li><a href="https://github.com/marcop135/wp-agent-harness">GitHub</a></li>
-        </ul>
+  <header class="hero">
+    <div class="shell hero-inner">
+      <p class="brand">Agent Harness<br><span class="brand-prefix">for WordPress</span></p>
+      <h1 class="headline">Local Docker WordPress for Claude Code,<br>Cursor, and Codex.</h1>
+      <nav class="cta" aria-label="Primary">
+        <a class="btn btn-primary" href="https://github.com/marcop135/wp-agent-harness">View on GitHub</a>
+        <a class="btn btn-ghost" href="#setup">Quick start</a>
       </nav>
     </div>
   </header>
 
   <main id="main">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="shell hero-grid">
+    <section class="section shell answer" aria-labelledby="what-is-title">
+      <h2 id="what-is-title" class="section-title">What is Agent Harness for WordPress?</h2>
+      <p class="answer-block"><strong>Agent Harness for WordPress</strong> is a local, disposable WordPress install for AI coding agents. It runs WordPress and MariaDB in Docker on loopback, exposes site abilities through the official <a href="https://github.com/WordPress/mcp-adapter">WordPress MCP Adapter</a>, and resets with one command. The repo wires the stack; it does not ship an MCP server or plugin of its own.</p>
+    </section>
+
+    <section class="section shell" aria-labelledby="what-title">
+      <h2 id="what-title" class="section-title">What you get</h2>
+      <p class="section-lede">A disposable harness, not a hosted WordPress. The MCP server and abilities come from upstream.</p>
+      <div class="stack">
         <div>
-          <p class="kicker">Local WordPress for coding agents</p>
-          <h1 id="hero-title">Give your coding agent a <span class="mark">real WordPress site</span> on localhost.</h1>
-          <p class="lede">Agent Harness for WordPress runs WordPress and MariaDB in Docker on your machine and connects <strong>Claude Code, Cursor, or Codex</strong> through the official MCP Adapter. When the agent breaks something, one command rebuilds it.</p>
-          <div class="actions">
-            <a class="btn btn-primary" href="#quick-start">Read the quick start</a>
-            <a class="btn btn-quiet" href="https://github.com/marcop135/wp-agent-harness">View on GitHub</a>
-          </div>
+          <h3>Docker</h3>
+          <p>WordPress and MariaDB on loopback only, with pinned images and one-command provision.</p>
         </div>
-        <aside class="spec" aria-labelledby="spec-title">
-          <p class="spec-head" id="spec-title"><span>Stack pin</span><span>develop</span></p>
-          <dl>
-            <div><dt>WordPress</dt><dd>7.1.2</dd></div>
-            <div><dt>PHP / Apache</dt><dd>8.3 / 2.4</dd></div>
-            <div><dt>MariaDB</dt><dd>11.8.9</dd></div>
-            <div><dt>MCP Adapter</dt><dd>0.7.0</dd></div>
-            <div><dt>MS WordPress Abilities</dt><dd>1.12.0</dd></div>
-            <div><dt>Ports</dt><dd>127.0.0.1 only</dd></div>
-          </dl>
-        </aside>
-      </div>
-    </section>
-
-    <section class="section section-band" aria-labelledby="what-is-title">
-      <div class="shell answer">
         <div>
-          <p class="kicker"><b>01</b> In one paragraph</p>
-          <h2 id="what-is-title">What is Agent Harness for WordPress?</h2>
+          <h3>MCP Adapter</h3>
+          <p>Three meta-tools: discover abilities, inspect schemas, execute. No invented tool names.</p>
         </div>
-        <p><strong>Agent Harness for WordPress</strong> is a local, disposable WordPress install for AI coding agents. It runs WordPress and MariaDB in Docker on loopback, exposes site abilities through the official <a href="https://github.com/WordPress/mcp-adapter">WordPress MCP Adapter</a>, and resets with one command. The repo wires the stack; it does not ship an MCP server or plugin of its own.</p>
-      </div>
-    </section>
-
-    <section class="section" id="architecture" aria-labelledby="arch-title">
-      <div class="shell">
-        <div class="section-head">
-          <p class="kicker"><b>02</b> Architecture</p>
-          <h2 id="arch-title">Four layers, all on your machine</h2>
-          <p>The agent never touches the database or the filesystem directly. Every change goes through an ability that WordPress itself registers.</p>
-        </div>
-        <figure class="arch">
-          <ol class="arch-flow">
-            <li class="node">
-              <h3>Agent CLI</h3>
-              <p>Claude Code, Cursor, or Codex, connected as an HTTP MCP client.</p>
-              <ul class="tags" aria-label="Command">
-                <li>./bin/connect</li>
-              </ul>
-            </li>
-            <li class="node">
-              <h3>MCP Adapter</h3>
-              <p>The official WordPress endpoint, authenticated with an Application Password. Three meta-tools, not one tool per capability.</p>
-              <ul class="tags" aria-label="Version">
-                <li>0.7.0</li>
-              </ul>
-            </li>
-            <li class="node">
-              <h3>Abilities API</h3>
-              <p>26 <code>miriamschwab/*</code> abilities from MS WordPress Abilities plus 3 from WordPress core.</p>
-              <ul class="tags" aria-label="Version">
-                <li>1.12.0</li>
-              </ul>
-            </li>
-            <li class="node node-host">
-              <h3>WordPress in Docker</h3>
-              <p>WordPress on PHP 8.3 and Apache, MariaDB alongside, both bound to loopback.</p>
-              <ul class="tags" aria-label="Versions">
-                <li>WP 7.1.2</li>
-                <li>MariaDB 11.8.9</li>
-              </ul>
-            </li>
-          </ol>
-          <div class="reset-rail">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
-            <code>./bin/reset</code>
-            <p>Destroys the Docker volumes and rebuilds a clean install. <code>./bin/setup</code> alone is idempotent and keeps your content.</p>
-          </div>
-          <figcaption>Agent CLI to MCP Adapter to Abilities API to WordPress. Nothing listens beyond 127.0.0.1.</figcaption>
-        </figure>
-      </div>
-    </section>
-
-    <section class="section section-band" aria-labelledby="loop-title">
-      <div class="shell">
-        <div class="section-head">
-          <p class="kicker"><b>03</b> The loop</p>
-          <h2 id="loop-title">Discover, inspect, execute</h2>
-          <p>The MCP Adapter exposes three meta-tools, so the agent learns what the site can do at runtime instead of guessing ability names.</p>
-        </div>
-        <ol class="loop">
-          <li>
-            <span class="step">Step 1</span>
-            <code>mcp-adapter-discover-abilities</code>
-            <p>List the abilities this site exposes.</p>
-          </li>
-          <li>
-            <span class="step">Step 2</span>
-            <code>mcp-adapter-get-ability-info</code>
-            <p>Fetch one ability's input schema before calling it.</p>
-          </li>
-          <li>
-            <span class="step">Step 3</span>
-            <code>mcp-adapter-execute-ability</code>
-            <p>Run the ability with parameters that match the schema.</p>
-          </li>
-        </ol>
-        <p class="loop-note"><code>miriamschwab/rest-get</code> and <code>miriamschwab/rest-write</code> bridge to any registered REST route, so most of WordPress is reachable from the same loop.</p>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="repo-title">
-      <div class="shell">
-        <div class="section-head">
-          <p class="kicker"><b>04</b> What you get</p>
-          <h2 id="repo-title">The wiring is here, the server is upstream</h2>
-          <p>A disposable harness, not a hosted WordPress. The repository connects official pieces and tests that they keep working together.</p>
-        </div>
-        <div class="split">
-          <section aria-labelledby="in-repo-title">
-            <h3 id="in-repo-title">In this repository</h3>
-            <ul>
-              <li><strong>Docker Compose and <code>./bin/*</code></strong><span>Setup, status, reset, WP-CLI, logs and tests, with pinned images.</span></li>
-              <li><strong>Five test layers</strong><span>Repository, infrastructure, WordPress and abilities, MCP, then Claude Code.</span></li>
-              <li><strong>Curated agent skills</strong><span>WordPress blocks, themes, plugins, REST and WP-CLI patterns for Claude Code and Cursor.</span></li>
-              <li><strong>Docs and worked prompts</strong><span>Architecture, security model, troubleshooting, and examples to start from.</span></li>
-            </ul>
-          </section>
-          <section aria-labelledby="upstream-title">
-            <h3 id="upstream-title">From upstream</h3>
-            <ul>
-              <li><strong><a href="https://github.com/WordPress/mcp-adapter">WordPress MCP Adapter</a></strong><span>The MCP server and its three meta-tools.</span></li>
-              <li><strong><a href="https://developer.wordpress.org/apis/abilities-api/">Abilities API</a></strong><span>How WordPress registers what an agent may do.</span></li>
-              <li><strong><a href="https://github.com/miriamschwab/ms-wp-abilities">MS WordPress Abilities</a></strong><span>The content, media, theme and plugin abilities the agent calls.</span></li>
-              <li><strong>WordPress, MariaDB, WP-CLI</strong><span>Official images and releases, installed at the pinned versions.</span></li>
-            </ul>
-          </section>
+        <div>
+          <h3>Abilities</h3>
+          <p>MS WordPress Abilities plus core site info on a real local install agents can edit.</p>
         </div>
       </div>
     </section>
 
-    <section class="section section-band" id="quick-start" aria-labelledby="setup-title">
-      <div class="shell">
-        <div class="section-head">
-          <p class="kicker"><b>05</b> Quick start</p>
-          <h2 id="setup-title">From clone to connected agent</h2>
-          <p>Needs Docker Compose v2, Git, and Bash.</p>
-        </div>
-        <ol class="steps">
-          <li>
-            <div class="step-copy">
-              <p class="kicker"><b>A</b> Provision</p>
-              <h3>Clone and set up</h3>
-              <p>Builds the image, starts WordPress and MariaDB on loopback, and installs the MCP Adapter and abilities. Running it again is safe.</p>
-            </div>
-            <div class="code-stack">
-              <div class="code" data-label="setup commands">
-                <div class="code-bar"><span class="code-title">bash</span></div>
-                <pre class="language-bash" tabindex="0"><code class="language-bash">git clone https://github.com/marcop135/wp-agent-harness.git
+    <section class="section shell" id="setup" aria-labelledby="setup-title">
+      <h2 id="setup-title" class="section-title">Quick start</h2>
+      <p class="section-lede">Needs Docker Compose v2, Git, and Bash.</p>
+      <div class="setup">
+        <pre class="language-bash"><code class="language-bash">git clone https://github.com/marcop135/wp-agent-harness.git
 cd wp-agent-harness
-./bin/setup</code></pre>
-              </div>
-            </div>
-          </li>
-          <li>
-            <div class="step-copy">
-              <p class="kicker"><b>B</b> Connect</p>
-              <h3>Point your agent at the site</h3>
-              <p>Claude Code registers itself. Codex and Cursor take the MCP URL and Authorization header that <code>--print</code> shows. Trust the project when Codex asks.</p>
-            </div>
-            <div class="code-stack">
-              <div class="code" data-label="Claude Code commands">
-                <div class="code-bar"><span class="code-title">Claude Code</span></div>
-                <pre class="language-bash" tabindex="0"><code class="language-bash">./bin/connect &amp;&amp; claude</code></pre>
-              </div>
-              <div class="code" data-label="Codex commands">
-                <div class="code-bar"><span class="code-title">Codex</span></div>
-                <pre class="language-bash" tabindex="0"><code class="language-bash">eval "$(./bin/connect --print | grep '^export ')"
-codex</code></pre>
-              </div>
-              <div class="code" data-label="Cursor command">
-                <div class="code-bar"><span class="code-title">Cursor: add an HTTP MCP server with the printed values</span></div>
-                <pre class="language-bash" tabindex="0"><code class="language-bash">./bin/connect --print</code></pre>
-              </div>
-            </div>
-          </li>
-          <li>
-            <div class="step-copy">
-              <p class="kicker"><b>C</b> Check</p>
-              <h3>Confirm every layer answers</h3>
-              <p>Health for containers, WordPress, abilities and MCP, then the test layers that need no model turns.</p>
-            </div>
-            <div class="code-stack">
-              <div class="code" data-label="check commands">
-                <div class="code-bar"><span class="code-title">bash</span></div>
-                <pre class="language-bash" tabindex="0"><code class="language-bash">./bin/status
-./bin/test --skip-claude
-./bin/wp ability list</code></pre>
-              </div>
-            </div>
-          </li>
-        </ol>
-        <p class="after-note">Then ask the agent to inspect the local site: version, theme, plugins.</p>
-        <nav aria-label="Documentation">
-          <ul class="links">
-            <li><a href="https://github.com/marcop135/wp-agent-harness#readme">README</a></li>
-            <li><a href="https://github.com/marcop135/wp-agent-harness/blob/develop/docs/AGENTS.md">Agent docs</a></li>
-            <li><a href="https://github.com/marcop135/wp-agent-harness/blob/develop/docs/architecture.md">Architecture doc</a></li>
-            <li><a href="https://github.com/marcop135/wp-agent-harness/tree/develop/examples">Worked examples</a></li>
-          </ul>
-        </nav>
+./bin/setup
+./bin/connect</code></pre>
       </div>
+      <nav aria-label="Documentation">
+        <ul class="links">
+          <li><a href="https://github.com/marcop135/wp-agent-harness#readme">README</a></li>
+          <li><a href="https://github.com/marcop135/wp-agent-harness/blob/develop/docs/AGENTS.md">Agent docs</a></li>
+          <li><a href="https://github.com/marcop135/wp-agent-harness/blob/develop/docs/architecture.md">Architecture</a></li>
+          <li><a href="https://github.com/marcop135/wp-agent-harness/tree/develop/examples">Examples</a></li>
+        </ul>
+      </nav>
     </section>
 
-    <section class="section" id="faq" aria-labelledby="faq-title">
-      <div class="shell">
-        <div class="section-head">
-          <p class="kicker"><b>06</b> FAQ</p>
-          <h2 id="faq-title">Questions before you clone</h2>
-        </div>
-        <div class="faq">
-          <details open>
-            <summary>Which AI coding agents work with it?</summary>
-            <p>Claude Code, Cursor, and Codex connect over HTTP MCP. Use <code>./bin/connect</code> for Claude Code, or <code>./bin/connect --print</code> for the MCP URL and Authorization header other clients need.</p>
-          </details>
-          <details>
-            <summary>Is the WordPress site public?</summary>
-            <p>No. The harness binds WordPress and MariaDB to <code>127.0.0.1</code> only. This website is the project page and does not expose the MCP endpoint.</p>
-          </details>
-          <details>
-            <summary>How do you reset the local site?</summary>
-            <p>Run <code>./bin/reset</code>. It destroys the Docker volumes and rebuilds a clean WordPress install. <code>./bin/setup</code> alone is idempotent and does not wipe content.</p>
-          </details>
-          <details>
-            <summary>Does this repo ship an MCP server or plugin?</summary>
-            <p>No. The MCP Adapter and MS WordPress Abilities come from upstream. This repository provides Docker Compose, provisioning, tests, docs, and curated WordPress agent skills.</p>
-          </details>
-        </div>
+    <section class="section shell" id="faq" aria-labelledby="faq-title">
+      <h2 id="faq-title" class="section-title">FAQ</h2>
+      <div class="faq">
+        <details open>
+          <summary>Which AI coding agents work with it?</summary>
+          <p>Claude Code, Cursor, and Codex connect over HTTP MCP. Use <code>./bin/connect</code> for Claude Code, or <code>./bin/connect --print</code> for the MCP URL and Authorization header other clients need.</p>
+        </details>
+        <details>
+          <summary>Is the WordPress site public?</summary>
+          <p>No. The harness binds WordPress and MariaDB to <code>127.0.0.1</code> only. This page is marketing only and does not expose the MCP endpoint.</p>
+        </details>
+        <details>
+          <summary>How do you reset the local site?</summary>
+          <p>Run <code>./bin/reset</code>. It destroys the Docker volumes and rebuilds a clean WordPress install. <code>./bin/setup</code> alone is idempotent and does not wipe content.</p>
+        </details>
+        <details>
+          <summary>Does this repo ship an MCP server or plugin?</summary>
+          <p>No. The MCP Adapter and MS WordPress Abilities come from upstream. This repository provides Docker Compose, provisioning, tests, docs, and curated WordPress agent skills.</p>
+        </details>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="shell site-footer-inner">
-      <p>Development only. The WordPress harness binds to localhost; this website is the project page. MIT licensed.</p>
-      <nav aria-label="Footer">
-        <ul>
-          <li><a href="https://github.com/marcop135/wp-agent-harness">GitHub</a></li>
-          <li><a href="/privacy.html">Privacy</a></li>
-          <li><a href="/llms.txt">llms.txt</a></li>
-          <li><a href="/index.md">Markdown</a></li>
-        </ul>
-      </nav>
-    </div>
+  <footer class="site-footer shell">
+    <p>Development only. The WordPress harness binds to localhost; this website only describes it.</p>
+    <nav aria-label="Footer">
+      <p>MIT · <a href="https://github.com/marcop135/wp-agent-harness">marcop135/wp-agent-harness</a> · <a href="/privacy.html">Privacy</a> · <a href="/llms.txt">llms.txt</a> · <a href="/index.md">Markdown</a></p>
+    </nav>
   </footer>
-  <p id="copy-status" class="visually-hidden" role="status" aria-live="polite"></p>
   <script src="/prism/prism-core.min.js" defer></script>
   <script src="/prism/prism-clike.min.js" defer></script>
   <script src="/prism/prism-bash.min.js" defer></script>
-  <script src="/js/copy.js" defer></script>
 </body>
 </html>
