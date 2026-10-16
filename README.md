@@ -25,6 +25,8 @@ come from upstream: the
 
 **Development only.** Localhost only, no production data.
 
+Website: [wpagent.marcopontili.com](https://wpagent.marcopontili.com).
+
 ## Quick start
 
 Needs Docker Compose v2, Git, and Bash.
@@ -103,7 +105,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 ## License
 
 **MIT** ([LICENSE](LICENSE)) covers this harness: Docker Compose, `bin/`, docs,
-tests, and the Netlify marketing site.
+tests, and the website in `site/`.
 
 Separately licensed:
 
