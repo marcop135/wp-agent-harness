@@ -1,0 +1,158 @@
+name: Deploy site to production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+# Deploys authenticate with the FTP/SFTP and Cloudflare secrets, never GITHUB_TOKEN.
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy site/ to wpagent.marcopontili.com
+    runs-on: ubuntu-latest
+    # Refuse manual dispatches from any branch other than main.
+    if: github.ref == 'refs/heads/main'
+    env:
+      SFTP_KNOWN_HOSTS: ${{ secrets.SFTP_KNOWN_HOSTS }}
+    steps:
+      - name: Check deploy secrets
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTPS_HOST: ${{ secrets.FTPS_HOST }}
+          FTP_USERNAME_PRODUCTION: ${{ secrets.FTP_USERNAME_PRODUCTION }}
+          FTP_PASSWORD_PRODUCTION: ${{ secrets.FTP_PASSWORD_PRODUCTION }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+        run: |
+          missing=""
+          [ -n "$FTP_HOST" ] || missing="$missing FTP_HOST"
+          [ -n "$FTPS_HOST" ] || missing="$missing FTPS_HOST"
+          [ -n "$FTP_USERNAME_PRODUCTION" ] || missing="$missing FTP_USERNAME_PRODUCTION"
+          [ -n "$FTP_PASSWORD_PRODUCTION" ] || missing="$missing FTP_PASSWORD_PRODUCTION"
+          [ -n "$CLOUDFLARE_API_TOKEN" ] || missing="$missing CLOUDFLARE_API_TOKEN"
+          [ -n "$CLOUDFLARE_ZONE_ID" ] || missing="$missing CLOUDFLARE_ZONE_ID"
+          if [ -n "$missing" ]; then
+            echo "::error::Set repository secrets:$missing"
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Only ./site/ is ever uploaded. Fail before any transfer if something
+      # outside the public page (Docker, sandbox, env or secret files) is there.
+      - name: Guard the upload root
+        run: |
+          set -eu
+          test -f site/index.html
+          test -f site/.htaccess
+          bad="$(find site \( -name '.env*' -o -name '.secrets' -o -name 'docker-compose*' -o -name '*.sql' -o -name '*.pem' -o -name '*.key' \) -print)"
+          if [ -n "$bad" ]; then
+            echo "::error::Refusing to deploy, sensitive files under site/:"
+            echo "$bad"
+            exit 1
+          fi
+
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      # SFTP runs only with a pinned host key (SFTP_KNOWN_HOSTS, from
+      # `ssh-keyscan -p <port> <host>`), so an unknown key aborts instead of
+      # being trusted on first use. Without the secret the job goes straight
+      # to FTPS. `mirror -R --delete` reproduces the FTPS action's sync-and-prune.
+      - name: Deploy via SFTP
+        id: sftp
+        if: env.SFTP_KNOWN_HOSTS != ''
+        continue-on-error: true
+        env:
+          SFTP_HOST: ${{ secrets.FTP_HOST }}
+          SFTP_PORT: ${{ secrets.SFTP_PORT || '22' }}
+          SFTP_USER: ${{ secrets.FTP_USERNAME_PRODUCTION }}
+          LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD_PRODUCTION }}
+        run: |
+          install -d -m 700 "$HOME/.ssh"
+          printf '%s\n' "$SFTP_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/known_hosts"
+          lftp -u "$SFTP_USER" --env-password \
+            -e "set cmd:fail-exit yes; set sftp:connect-program 'ssh -a -x -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts'; set net:max-retries 5; set net:timeout 60; mirror -R --delete --verbose --exclude '^\.well-known/acme-challenge/' --exclude '^\.well-known/cpanel-dcv/' --exclude '^\.well-known/pki-validation/' --exclude '\.ftp-deploy-sync-state\.json\$' --exclude '^\.ftpquota\$' site/ /; bye" \
+            "sftp://$SFTP_HOST:$SFTP_PORT"
+
+      # FTPS when SFTP did not run or failed. FTPS_HOST is the Netsons server
+      # hostname that its certificate covers, so `strict` verifies the
+      # certificate and a man-in-the-middle cannot capture the password.
+      - name: Sync site via FTPS
+        id: ftps
+        if: steps.sftp.outcome != 'success'
+        continue-on-error: true
+        uses: SamKirkland/FTP-Deploy-Action@110f9186c050f71550953127052e77650219c287 # v4.4.0
+        with:
+          server: ${{ secrets.FTPS_HOST }}
+          username: ${{ secrets.FTP_USERNAME_PRODUCTION }}
+          password: ${{ secrets.FTP_PASSWORD_PRODUCTION }}
+          server-dir: ./
+          local-dir: ./site/
+          protocol: ftps
+          security: strict
+          port: 21
+          dangerous-clean-slate: false
+          timeout: 60000
+
+      - name: Sync site via FTPS (retry)
+        id: ftps-retry
+        if: steps.sftp.outcome != 'success' && steps.ftps.outcome == 'failure'
+        continue-on-error: true
+        uses: SamKirkland/FTP-Deploy-Action@110f9186c050f71550953127052e77650219c287 # v4.4.0
+        with:
+          server: ${{ secrets.FTPS_HOST }}
+          username: ${{ secrets.FTP_USERNAME_PRODUCTION }}
+          password: ${{ secrets.FTP_PASSWORD_PRODUCTION }}
+          server-dir: ./
+          local-dir: ./site/
+          protocol: ftps
+          security: strict
+          port: 21
+          dangerous-clean-slate: false
+          timeout: 60000
+
+      # Every transport step is continue-on-error, so the job result comes from
+      # here: green only when one of them actually uploaded.
+      - name: Verify deploy succeeded
+        if: always()
+        run: |
+          if [ "${{ steps.sftp.outcome }}" = "success" ]; then
+            echo "Deploy succeeded via SFTP."
+            exit 0
+          fi
+          if [ "${{ steps.ftps.outcome }}" = "success" ]; then
+            echo "Deploy succeeded via FTPS."
+            exit 0
+          fi
+          if [ "${{ steps.ftps-retry.outcome }}" = "success" ]; then
+            echo "Deploy succeeded via FTPS retry."
+            exit 0
+          fi
+          echo "All deploy methods failed."
+          exit 1
+
+      # Purge only this hostname after the origin sync succeeded, so the next
+      # edge fetch pulls the new site/ and the rest of the zone stays warm.
+      - name: Purge Cloudflare cache
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+        run: |
+          resp="$(curl -sS -X POST \
+            "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/purge_cache" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data '{"hosts":["wpagent.marcopontili.com"]}')"
+          echo "$resp" | jq .
+          echo "$resp" | jq -e '.success == true' >/dev/null

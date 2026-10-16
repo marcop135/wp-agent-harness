@@ -25,6 +25,6 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
-Sitemap: https://wp-agent-harness.netlify.app/sitemap.xml
+Sitemap: https://wpagent.marcopontili.com/sitemap.xml
 
 Content-Signal: ai-train=yes, search=yes, ai-input=yes

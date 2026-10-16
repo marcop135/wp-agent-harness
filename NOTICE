@@ -17,7 +17,7 @@ They are not MIT.
 ### Vendored in this repository (MIT)
 
 [PrismJS](https://github.com/PrismJS/prism) 1.30.0 under `site/prism/` (core,
-clike, bash, okaidia theme) for the marketing landing page code sample.
+clike, bash) for the website code samples.
 
 ### Installed at setup or image build (not in git)
 

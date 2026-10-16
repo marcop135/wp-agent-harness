@@ -1,6 +1,6 @@
 ---
 title: "Agent Harness for WordPress: Docker for AI agents"
-canonical: https://wp-agent-harness.netlify.app/
+canonical: https://wpagent.marcopontili.com/
 description: Agent Harness for WordPress: local Docker WordPress for Claude Code, Cursor, and Codex. Loopback-only; one-command reset.
 dateModified: 2026-10-13
 ---
@@ -57,4 +57,4 @@ No. The MCP Adapter and MS WordPress Abilities come from upstream. This reposito
 
 ## License
 
-MIT · [marcop135/wp-agent-harness](https://github.com/marcop135/wp-agent-harness) · [Privacy](https://wp-agent-harness.netlify.app/privacy.html)
+MIT · [marcop135/wp-agent-harness](https://github.com/marcop135/wp-agent-harness) · [Privacy](https://wpagent.marcopontili.com/privacy.html)

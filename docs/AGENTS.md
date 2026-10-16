@@ -47,7 +47,7 @@ Paths are repo-relative from project root unless noted.
 |.claude/skills:{wordpress-router,wp-abilities-api,wp-abilities-audit,wp-abilities-verify,wp-block-development,wp-block-themes,wp-patterns,wp-plugin-development,wp-project-triage,wp-rest-api,wp-wpcli-and-ops}
 |.cursor:{AGENTS.md,skills/ (mirror of .claude/skills)}
 |.codex:{config.toml}
-|.github:{workflows/test.yml,dependabot.yml,CODEOWNERS,PULL_REQUEST_TEMPLATE.md,ISSUE_TEMPLATE/*}
+|.github:{workflows/test.yml,workflows/deploy.yml,dependabot.yml,CODEOWNERS,PULL_REQUEST_TEMPLATE.md,ISSUE_TEMPLATE/*}
 
 ---
 
