@@ -3,7 +3,8 @@
 > Local, disposable WordPress harness for coding agents. Clone it, run one
 > command, and agents talk to a real site over the official WordPress MCP
 > Adapter. The WordPress harness is development only (loopback ports, no
-> production WordPress deploy); [`site/`](site/) is the public marketing page.
+> production WordPress deploy); [`site/`](site/) is the public marketing page at
+> https://wpagent.marcopontili.com.
 > This repository does not ship an MCP server, abilities framework, or
 > WordPress plugin of its own; it wires Docker Compose, Application Password
 > auth, tests, docs, examples, and curated WordPress agent skills.
