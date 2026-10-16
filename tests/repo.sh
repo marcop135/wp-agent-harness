@@ -132,7 +132,7 @@ suite 'Repository — documented files exist'
 for f in README.md CLAUDE.md AGENTS.md llms.txt CHANGELOG.md LICENSE NOTICE Makefile docker-compose.yml \
          .env.example .gitignore .gitattributes netlify.toml \
          CONTRIBUTING.md SECURITY.md CODE_OF_CONDUCT.md \
-         .github/workflows/test.yml .github/dependabot.yml \
+         .github/workflows/test.yml .github/workflows/deploy.yml .github/dependabot.yml \
          .github/CODEOWNERS .github/PULL_REQUEST_TEMPLATE.md \
          .github/ISSUE_TEMPLATE/config.yml .github/ISSUE_TEMPLATE/1-bug.yml \
          .github/ISSUE_TEMPLATE/2-feature.yml .github/ISSUE_TEMPLATE/3-question.yml \
@@ -146,7 +146,7 @@ for f in README.md CLAUDE.md AGENTS.md llms.txt CHANGELOG.md LICENSE NOTICE Make
          .github/brand/social.svg .github/brand/social.png \
          .github/brand/og.svg .github/brand/og.png \
          site/index.html site/privacy.html site/404.html site/500.html \
-         site/.well-known/security.txt site/.well-known/api-catalog \
+         site/.well-known/security.txt site/.well-known/api-catalog          site/.htaccess site/js/matomo.js \
          examples/README.md examples/inspect-site.md examples/create-content.md \
          examples/modify-content.md examples/media.md examples/theme.md \
          examples/plugins.md examples/site-development.md \
@@ -178,6 +178,47 @@ elif (( ${#site_styles[@]} > 1 )); then
 else
     _record_fail 'site/styles.*.css is tracked' "$(git check-ignore -v "${site_styles[0]}" 2>/dev/null || echo 'not in the index')"
 fi
+
+# ===========================================================================
+suite 'Repository: website host and analytics'
+# ===========================================================================
+
+SITE_URL='https://wpagent.marcopontili.com'
+MATOMO_URL='https://mt.marcopontili.com'
+
+if grep -rqF 'netlify.app' site; then
+    _record_fail 'no Netlify URL under site/' "$(grep -rnF 'netlify.app' site | head -5)"
+else
+    _record_pass 'no Netlify URL under site/'
+fi
+
+for f in site/index.html site/privacy.html; do
+    page="${f#site/}"
+    [[ "$page" == 'index.html' ]] && page=''
+    assert_ok "$f canonical is $SITE_URL/$page"         grep -qF "<link rel=\"canonical\" href=\"$SITE_URL/$page\">" "$f"
+done
+
+for f in site/robots.txt site/sitemap.xml site/llms.txt site/index.md          site/.well-known/security.txt site/.well-known/api-catalog; do
+    assert_ok "$f names $SITE_URL" grep -qF "$SITE_URL" "$f"
+done
+
+for f in site/*.html; do
+    assert_ok "$f loads the self-hosted Matomo script"         grep -qF '<script src="/js/matomo.js" defer></script>' "$f"
+    assert_fails "$f has no inline executable script"         grep -qE '<script>|<script (defer|async)?>' "$f"
+done
+
+assert_ok 'matomo.js is cookieless and honours Do Not Track'     bash -c "grep -qF \"disableCookies\" site/js/matomo.js && grep -qF \"setDoNotTrack\" site/js/matomo.js && grep -qF \"$MATOMO_URL/\" site/js/matomo.js"
+
+for f in site/.htaccess netlify.toml; do
+    csp="$(grep -m1 'Content-Security-Policy' "$f")"
+    for directive in script-src connect-src img-src; do
+        assert_ok "$f CSP $directive allows $MATOMO_URL"             grep -qE "$directive [^;]*$MATOMO_URL" <<<"$csp"
+    done
+    assert_fails "$f CSP has no unsafe-inline" grep -qF 'unsafe-inline' <<<"$csp"
+done
+
+assert_ok 'deploy.yml uploads only ./site/'     bash -c "! grep -E 'local-dir:' .github/workflows/deploy.yml | grep -vqF './site/'"
+assert_ok 'deploy.yml purges the wpagent host'     grep -qF '"hosts":["wpagent.marcopontili.com"]' .github/workflows/deploy.yml
 
 # ===========================================================================
 suite 'Repository — versions agree between .env.example and docs/development.md'
