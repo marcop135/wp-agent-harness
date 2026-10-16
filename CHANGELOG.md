@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.7.1] - 2026-10-16
+
 ### Changed
 
 - Redirect every Netlify path to [wpagent.marcopontili.com](https://wpagent.marcopontili.com) with a forced 301.
