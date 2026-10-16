@@ -7,6 +7,12 @@
 
 ## [Unreleased]
 
+## [0.7.2] - 2026-10-16
+
+### Security
+
+- Update [MCP Adapter to 0.7.1](https://github.com/WordPress/mcp-adapter/releases/tag/v0.7.1) to limit stored session data.
+
 ## [0.7.1] - 2026-10-16
 
 ### Changed
