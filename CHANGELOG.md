@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-10-16
+
 ### Added
 
 - Add `site/.htaccess` (security headers, CSP, caching, compression) and a `deploy.yml` that mirrors only `site/`.
