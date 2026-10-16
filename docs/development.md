@@ -233,7 +233,7 @@ in the same debug log.
 | MariaDB | 11.8.9 | `mariadb:11.8.9` |
 | WP-CLI | 2.12.0 | GitHub release phar, SHA-512 verified |
 | `wp-cli/ability-command` | 1.0.2 | GitHub release tarball, SHA-256 verified (`WP_CLI_ABILITY_COMMAND_SHA256`) |
-| MCP Adapter | 0.7.0 | GitHub release ZIP, SHA-256 verified (`MCP_ADAPTER_SHA256`) |
+| MCP Adapter | 0.7.1 | GitHub release ZIP, SHA-256 verified (`MCP_ADAPTER_SHA256`) |
 | MS WordPress Abilities | 1.12.0 | GitHub release ZIP, SHA-256 verified (`MS_WP_ABILITIES_SHA256`) |
 | Twenty Twenty-Five | 1.5 | wordpress.org |
 | MCP protocol | 2025-11-25 | negotiated default; the adapter also serves 2026-07-28, and 2025-06-18 / 2024-11-05 clients still connect via the 2025-11-25 schema |
