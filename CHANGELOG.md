@@ -7,6 +7,18 @@
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-10-16
+
+### Added
+
+- Add `site/.htaccess` (security headers, CSP, caching, compression) and a `deploy.yml` that mirrors only `site/`.
+- Add cookieless self-hosted Matomo with a matching CSP and a rewritten privacy notice.
+
+### Changed
+
+- Move the website to [wpagent.marcopontili.com](https://wpagent.marcopontili.com) on Netsons; Netlify stays for previews.
+- Redesign the website: editorial layout, architecture diagram, copyable quick-start blocks, light and dark.
+
 ## [0.6.0] - 2026-10-13
 
 ### Changed

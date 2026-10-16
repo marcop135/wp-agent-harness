@@ -1,0 +1,105 @@
+# Apache config for wpagent.marcopontili.com (Netsons). Mirrors the headers in
+# netlify.toml, which stays for Netlify previews. Keep the two in sync.
+
+Options -Indexes
+DirectoryIndex index.html
+AddDefaultCharset utf-8
+
+ErrorDocument 404 /404.html
+ErrorDocument 500 /500.html
+
+# ---------------------------------------------------------------------------
+# HTTPS and hidden files
+# ---------------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Force HTTPS. Behind the Cloudflare proxy the origin may see plain HTTP, so
+  # trust the forwarded scheme as well.
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+  # Refuse dotfiles (this file, .git leftovers) but keep /.well-known/ public.
+  RewriteRule (^|/)\.(?!well-known(/|$)) - [F]
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Content types
+# ---------------------------------------------------------------------------
+<IfModule mod_mime.c>
+  AddType text/markdown .md
+  AddType application/manifest+json .webmanifest
+  AddType image/svg+xml .svg
+  AddType font/woff2 .woff2
+  AddCharset utf-8 .html .css .js .json .md .txt .xml .webmanifest .svg
+</IfModule>
+
+<Files "api-catalog">
+  ForceType application/linkset+json
+  <IfModule mod_headers.c>
+    Header set Content-Type "application/linkset+json; charset=utf-8"
+  </IfModule>
+</Files>
+
+<Files "security.txt">
+  ForceType text/plain
+  <IfModule mod_headers.c>
+    Header set Content-Type "text/plain; charset=utf-8"
+  </IfModule>
+</Files>
+
+# ---------------------------------------------------------------------------
+# Security headers (every response)
+# ---------------------------------------------------------------------------
+<IfModule mod_headers.c>
+  Header always set X-Frame-Options "DENY"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+  Header always set Cross-Origin-Resource-Policy "same-origin"
+  Header always set Content-Language "en"
+  Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://mt.marcopontili.com; style-src 'self'; font-src 'self'; img-src 'self' https://mt.marcopontili.com; connect-src 'self' https://mt.marcopontili.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+  Header unset X-Powered-By
+
+  # Discovery links on the home page.
+  <If "%{REQUEST_URI} == '/' || %{REQUEST_URI} == '/index.html'">
+    Header set Link "</index.md>; rel=\"alternate\"; type=\"text/markdown\", </llms.txt>; rel=\"alternate\"; type=\"text/plain\"; title=\"llms.txt\", </sitemap.xml>; rel=\"sitemap\"; type=\"application/xml\", </.well-known/security.txt>; rel=\"securitytxt\", </.well-known/api-catalog>; rel=\"api-catalog\""
+  </If>
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Caching
+# ---------------------------------------------------------------------------
+<IfModule mod_headers.c>
+  # Default: HTML, markdown, text, scripts that are not fingerprinted.
+  Header set Cache-Control "public, max-age=0, must-revalidate"
+
+  # Fingerprinted stylesheet, vendored Prism, fonts, images: one year.
+  <FilesMatch "^styles\.[0-9a-f]{8}\.css$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "^prism-[a-z-]+\.min\.(js|css)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(woff2|png|svg|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Manifest and /.well-known/: one day.
+  <Files "site.webmanifest">
+    Header set Cache-Control "public, max-age=86400"
+  </Files>
+  <If "%{REQUEST_URI} =~ m#^/\.well-known/#">
+    Header set Cache-Control "public, max-age=86400"
+  </If>
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Compression
+# ---------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/markdown text/xml application/xml application/javascript text/javascript application/json application/ld+json application/linkset+json application/manifest+json image/svg+xml
+</IfModule>
