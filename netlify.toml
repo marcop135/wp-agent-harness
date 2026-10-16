@@ -75,3 +75,11 @@
   for = "/site.webmanifest"
   [headers.values]
     Cache-Control = "public, max-age=86400"
+
+# The marketing site moved to wpagent.marcopontili.com (Netsons). Every path
+# on the Netlify host answers with a permanent redirect to the same path there.
+[[redirects]]
+  from = "/*"
+  to = "https://wpagent.marcopontili.com/:splat"
+  status = 301
+  force = true
