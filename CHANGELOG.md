@@ -7,6 +7,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Report self-hosted Matomo page views to this site's own property instead of the shared one.
+
 ## [0.7.2] - 2026-10-16
 
 ### Security
