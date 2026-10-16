@@ -119,8 +119,10 @@ assert_eq 'get-ability-info returns an input schema with a required title' 'true
 # The adapter's own meta-abilities are excluded from the public set.
 mcp_tool_call 'mcp-adapter-get-ability-info' '{"ability_name":"mcp-adapter/execute-ability"}'
 assert_eq 'abilities outside the public set are not exposed' 'true' "$(mcp_is_error)"
-assert_contains 'the refusal names the MCP exposure rule' \
-    "$MCP_LAST_BODY" 'not exposed via MCP'
+assert_contains 'hidden abilities receive a not-found response' \
+    "$MCP_LAST_BODY" 'not found on this WordPress site'
+assert_contains 'the refusal directs clients to discovery' \
+    "$MCP_LAST_BODY" 'mcp-adapter-discover-abilities'
 
 # ===========================================================================
 suite 'Layer 3 — ability execution (read)'
