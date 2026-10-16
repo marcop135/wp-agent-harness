@@ -168,14 +168,14 @@ VPN that geo-blocks the host. Test the URL from inside the container:
 ```bash
 ./bin/logs wordpress
 docker compose exec wordpress curl -sI \
-  https://github.com/WordPress/mcp-adapter/releases/download/v0.7.0/mcp-adapter.zip
+  https://github.com/WordPress/mcp-adapter/releases/download/v0.7.1/mcp-adapter.zip
 ```
 
 Retry by hand:
 
 ```bash
 ./bin/wp plugin install \
-  https://github.com/WordPress/mcp-adapter/releases/download/v0.7.0/mcp-adapter.zip --force
+  https://github.com/WordPress/mcp-adapter/releases/download/v0.7.1/mcp-adapter.zip --force
 ```
 
 A 404 means a wrong `MCP_ADAPTER_VERSION` or `MS_WP_ABILITIES_VERSION` in `.env`.
