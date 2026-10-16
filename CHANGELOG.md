@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.7.3] - 2026-10-16
+
 ### Fixed
 
 - Report self-hosted Matomo page views to this site's own property instead of the shared one.
