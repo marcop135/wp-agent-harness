@@ -7,6 +7,19 @@
 
 ## [Unreleased]
 
+### Added
+
+- Add a copy button to the website's quick-start snippet and to each example prompt.
+- Add a "How a request travels" section tracing agent, MCP Adapter, Abilities API, and WordPress.
+- Add six copy-ready prompts from [examples/](https://github.com/marcop135/wp-agent-harness/tree/develop/examples) to the website.
+- Add website FAQ answers on agent writes and on pointing an agent at a live site.
+
+### Changed
+
+- Animate website FAQ answers as they open and close, honouring reduced motion.
+- Show a "Development only" note and the maintainer above the website footer links on every page.
+- Expand the website's feature grid to six items and show the pinned versions in the hero.
+
 ## [0.7.3] - 2026-10-16
 
 ### Fixed
