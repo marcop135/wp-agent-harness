@@ -104,6 +104,11 @@ a:hover {
   text-decoration-thickness: 0.12em;
 }
 
+:not(pre) > code {
+  font-family: var(--font-code);
+  font-size: 0.88em;
+}
+
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
@@ -302,8 +307,18 @@ a:hover {
   color: var(--muted);
 }
 
-.setup {
+.setup-grid {
+  display: grid;
+  gap: var(--space-5);
   margin-top: var(--space-6);
+  max-width: 48rem;
+}
+
+.setup {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin: 0;
   padding: 0;
   background: light-dark(#1e293b, #000);
   border: 1px solid var(--border);
@@ -311,7 +326,76 @@ a:hover {
   overflow: clip;
 }
 
+.setup-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3) var(--space-2) var(--space-5);
+  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+}
+
+.setup-bar h3 {
+  margin: 0;
+  font-family: var(--font-code);
+  font-weight: 400;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  color: #94a3b8;
+}
+
+.copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 2.25rem;
+  min-width: 5.5rem;
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid rgb(255 255 255 / 0.2);
+  border-radius: 0.35rem;
+  background: transparent;
+  color: #e2e8f0;
+  font-family: var(--font-code);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition:
+    border-color 0.2s var(--ease),
+    color 0.2s var(--ease);
+}
+
+.copy:hover {
+  border-color: #38bdf8;
+}
+
+.copy:focus-visible {
+  outline-color: #38bdf8;
+}
+
+.copy[data-state="done"] {
+  border-color: #4ade80;
+  color: #4ade80;
+}
+
+.copy svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .setup pre[class*="language-"] {
+  flex: 1;
   margin: 0;
   padding: var(--space-5);
   overflow-x: auto;
@@ -327,6 +411,161 @@ a:hover {
   font-family: inherit;
   background: transparent;
   text-shadow: none;
+}
+
+.pins {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  margin: var(--space-6) 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-code);
+  font-size: 0.8rem;
+  color: var(--muted);
+  animation: rise 0.9s var(--ease) 0.32s both;
+}
+
+.pins li {
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+}
+
+.flow {
+  display: grid;
+  gap: var(--space-4);
+  margin: var(--space-6) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: flow;
+}
+
+@media (min-width: 48rem) {
+  .flow {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.flow li {
+  position: relative;
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  background: var(--surface);
+  counter-increment: flow;
+}
+
+.flow li::before {
+  content: counter(flow, decimal-leading-zero);
+  display: block;
+  margin-bottom: var(--space-2);
+  font-family: var(--font-code);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+@media (min-width: 48rem) {
+  .flow li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: calc(-1 * var(--space-4) - 1px);
+    width: var(--space-4);
+    border-top: 1px dashed var(--accent);
+  }
+}
+
+.flow h3 {
+  margin: 0;
+  font-family: var(--font-code);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.flow p {
+  margin: var(--space-2) 0 0;
+  color: var(--muted);
+}
+
+.flow-note {
+  margin: var(--space-5) 0 0;
+  max-width: 62ch;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.prompts {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+@media (min-width: 48rem) {
+  .prompts {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.prompts figure {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin: 0;
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 0.45rem;
+  background: var(--surface);
+}
+
+.prompts blockquote {
+  margin: 0;
+}
+
+.prompts blockquote p {
+  margin: 0;
+  font-size: 1.05rem;
+  text-wrap: pretty;
+}
+
+.prompts figcaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.prompts .copy {
+  flex: none;
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.prompts .copy:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.prompts .copy:focus-visible {
+  outline-color: var(--accent);
+}
+
+.prompts .copy[data-state="done"] {
+  border-color: light-dark(#15803d, #4ade80);
+  color: light-dark(#15803d, #4ade80);
+}
+
+.prompts figcaption a {
+  font-weight: 600;
 }
 
 .answer-block {
@@ -398,26 +637,62 @@ a:hover {
 }
 
 .faq details {
-  padding: var(--space-4) var(--space-5);
   border: 1px solid var(--border);
   border-radius: 0.45rem;
   background: var(--surface);
+  overflow: hidden;
 }
 
 .faq summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 2.75rem;
+  padding: var(--space-4) var(--space-5);
   cursor: pointer;
   font-weight: 600;
-  list-style-position: outside;
+  list-style: none;
+  transition: color 0.2s var(--ease);
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary::after {
+  content: "+";
+  flex: none;
+  font-family: var(--font-code);
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--accent);
+  transition: transform 0.28s var(--ease);
 }
 
 .faq details[open] summary {
-  margin-bottom: var(--space-3);
   color: var(--accent);
+}
+
+.faq details[open] summary::after {
+  transform: rotate(45deg);
 }
 
 .faq details p {
   margin: 0;
+  padding: 0 var(--space-5) var(--space-5);
   color: var(--muted);
+}
+
+.faq details[open] p {
+  animation: faq-in 0.32s var(--ease);
+}
+
+@keyframes faq-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.375rem);
+  }
 }
 
 .links {
@@ -437,9 +712,8 @@ a:hover {
 .links a:hover {
   text-decoration: underline;
 }
-
 .site-footer {
-  padding-block: var(--space-6) var(--space-8);
+  padding-block: var(--space-6) calc(var(--space-7) + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid var(--border);
   color: var(--muted);
   font-size: 0.95rem;
@@ -449,8 +723,48 @@ a:hover {
   margin: 0;
 }
 
-.site-footer p + p {
-  margin-top: var(--space-2);
+.footer-note {
+  padding-bottom: var(--space-5);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px dashed var(--border);
+  text-wrap: pretty;
+}
+
+.footer-note strong {
+  color: var(--text);
+}
+
+.site-footer-inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+@media (min-width: 48rem) {
+  .site-footer-inner {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-6);
+  }
+}
+
+.site-footer ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-code);
+  font-size: 0.85rem;
+}
+
+.site-footer li a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
 }
 
 @keyframes rise {
@@ -472,8 +786,14 @@ a:hover {
   .brand,
   .headline,
   .lede,
-  .cta {
+  .cta,
+  .pins,
+  .faq details[open] p {
     animation: none;
+  }
+
+  .faq summary::after {
+    transition: none;
   }
 
   .btn:hover {
@@ -489,6 +809,9 @@ a:hover {
   .btn-primary,
   .btn-ghost,
   .faq details,
+  .flow li,
+  .prompts figure,
+  .copy,
   .setup {
     border: 2px solid CanvasText;
   }
@@ -515,13 +838,4 @@ a:hover {
 
 .brand-link:hover {
   text-decoration: none;
-}
-
-.site-footer nav p {
-  margin: 0;
-}
-
-.site-footer nav p + p,
-.site-footer > p + nav {
-  margin-top: var(--space-2);
 }
