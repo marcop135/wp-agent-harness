@@ -146,7 +146,7 @@ for f in README.md CLAUDE.md AGENTS.md llms.txt CHANGELOG.md LICENSE NOTICE Make
          .github/brand/social.svg .github/brand/social.png \
          .github/brand/og.svg .github/brand/og.png \
          site/index.html site/privacy.html site/404.html site/500.html \
-         site/.well-known/security.txt site/.well-known/api-catalog          site/.htaccess site/js/matomo.js \
+         site/.well-known/security.txt site/.well-known/api-catalog          site/.htaccess site/js/matomo.js site/js/site.js \
          examples/README.md examples/inspect-site.md examples/create-content.md \
          examples/modify-content.md examples/media.md examples/theme.md \
          examples/plugins.md examples/site-development.md \
