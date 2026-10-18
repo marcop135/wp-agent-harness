@@ -9,7 +9,7 @@
 [![MariaDB 11.8.9](https://img.shields.io/badge/MariaDB-11.8.9-C3363F.svg?style=flat-square)](https://mariadb.org/)
 [![Docker Compose v2](https://img.shields.io/badge/Docker_Compose-v2-2496ED.svg?style=flat-square)](https://docs.docker.com/compose/)
 [![MCP Adapter 0.7.1](https://img.shields.io/badge/MCP_Adapter-0.7.1-555.svg?style=flat-square)](https://github.com/WordPress/mcp-adapter)
-[![MS Abilities 1.12.0](https://img.shields.io/badge/MS_Abilities-1.12.0-555.svg?style=flat-square)](https://github.com/miriamschwab/ms-wp-abilities)
+[![MS Abilities 1.13.0](https://img.shields.io/badge/MS_Abilities-1.13.0-555.svg?style=flat-square)](https://github.com/miriamschwab/ms-wp-abilities)
 
 A local WordPress site for coding agents (Claude Code, Codex, Cursor) to build
 and edit through the official
@@ -79,7 +79,7 @@ Worked prompts: [examples/](examples/README.md). Stack diagram:
 
 ## Versions
 
-WordPress 7.1.2 · PHP 8.3 · MariaDB 11.8.9 · MCP Adapter 0.7.1 · MS Abilities 1.12.0.
+WordPress 7.1.2 · PHP 8.3 · MariaDB 11.8.9 · MCP Adapter 0.7.1 · MS Abilities 1.13.0.
 
 Full list: [docs/development.md](docs/development.md#versions).
 How to update them: [Updating dependencies](docs/development.md#updating-dependencies).

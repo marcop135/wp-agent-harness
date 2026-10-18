@@ -31,7 +31,7 @@
                                                          │
                                         ┌────────────────┴────────────────┐
                                         ▼                                 ▼
-                                  MS WP Abilities 1.12.0            core/* abilities
+                                  MS WP Abilities 1.13.0            core/* abilities
                                   26 abilities                      get-site-info
                                   miriamschwab/*                    get-user-info
                                         │                           get-environment-info

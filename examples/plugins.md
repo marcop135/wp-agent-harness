@@ -25,7 +25,7 @@ Exactly two plugins, both active:
 
 ```
 mcp-adapter/mcp-adapter.php        MCP Adapter               0.7.1   active
-ms-wp-abilities/ms-wp-abilities.php  MS WordPress Abilities  1.12.0  active
+ms-wp-abilities/ms-wp-abilities.php  MS WordPress Abilities  1.13.0  active
 ```
 
 Provisioning removes the Akismet and Hello Dolly that the base image ships, so
