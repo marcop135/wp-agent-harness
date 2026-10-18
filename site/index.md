@@ -13,7 +13,7 @@ dateModified: 2026-10-17
 
 A disposable harness, not a hosted WordPress. The MCP server and abilities come from upstream; this repo makes them reproducible.
 
-Pinned: WordPress 7.1.2 · PHP 8.3 · MariaDB 11.8.9 · MCP Adapter 0.7.1 · MS Abilities 1.12.0.
+Pinned: WordPress 7.1.2 · PHP 8.3 · MariaDB 11.8.9 · MCP Adapter 0.7.1 · MS Abilities 1.13.0.
 
 | Piece | Role |
 | --- | --- |
