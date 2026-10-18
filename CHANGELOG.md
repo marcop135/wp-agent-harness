@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.8.1] - 2026-10-18
+
 ### Changed
 
 - Update [MS WP Abilities to 1.13.0](https://github.com/miriamschwab/ms-wp-abilities/releases/tag/v1.13.0), letting `create-post` credit a named author.
