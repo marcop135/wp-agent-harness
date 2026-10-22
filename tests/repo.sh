@@ -103,7 +103,7 @@ suite 'Repository — shell scripts'
 # ===========================================================================
 
 for script in bin/setup bin/start bin/stop bin/reset bin/status bin/logs \
-              bin/test bin/connect bin/wp bin/lib.sh \
+              bin/test bin/connect bin/wp bin/audit bin/ability-gate bin/seed bin/lib.sh \
               tests/lib.sh tests/smoke.sh tests/integration.sh \
               tests/claude-code.sh tests/repo.sh \
               docker/wordpress/bin/wp docker/wordpress/bin/wp-provision \
@@ -116,7 +116,7 @@ for script in bin/setup bin/start bin/stop bin/reset bin/status bin/logs \
 done
 
 for script in bin/setup bin/start bin/stop bin/reset bin/status bin/logs \
-              bin/test bin/connect bin/wp; do
+              bin/test bin/connect bin/wp bin/audit bin/ability-gate bin/seed; do
     if [[ "$(git ls-files -s "$script" | cut -d' ' -f1)" == '100755' ]]; then
         _record_pass "$script is tracked as executable"
     else
@@ -124,6 +124,37 @@ for script in bin/setup bin/start bin/stop bin/reset bin/status bin/logs \
             "mode $(git ls-files -s "$script" | cut -d' ' -f1); fix with git update-index --chmod=+x $script"
     fi
 done
+
+# ===========================================================================
+suite 'Repository: write approval gate'
+# ===========================================================================
+
+gate() { printf '%s' "$2" | bash bin/ability-gate "$1" 2>/dev/null; }
+execute() { printf '{"tool_name":"mcp__wordpress__mcp-adapter-execute-ability","tool_input":{"ability_name":"%s","parameters":{}}}' "$1"; }
+execute_cursor() { printf '{"tool_name":"mcp-adapter-execute-ability","tool_input":"{\\"ability_name\\":\\"%s\\"}"}' "$1"; }
+
+for ability in miriamschwab/get-posts miriamschwab/rest-get miriamschwab/preview-post-update core/get-site-info; do
+    assert_eq "gate lets the read $ability through (Claude Code)" '' "$(gate claude "$(execute "$ability")")"
+    assert_eq "gate lets the read $ability through (Cursor)" 'allow' \
+        "$(gate cursor "$(execute_cursor "$ability")" | jq -r '.permission')"
+done
+
+for ability in miriamschwab/create-post miriamschwab/apply-post-update miriamschwab/trash-post \
+               miriamschwab/rest-write miriamschwab/install-plugin other/get-anything ''; do
+    assert_eq "gate asks before ${ability:-an unnamed ability} (Claude Code)" 'ask' \
+        "$(gate claude "$(execute "$ability")" | jq -r '.hookSpecificOutput.permissionDecision')"
+    assert_eq "gate asks before ${ability:-an unnamed ability} (Cursor)" 'ask' \
+        "$(gate cursor "$(execute_cursor "$ability")" | jq -r '.permission')"
+done
+
+assert_eq 'gate asks on an unreadable payload' 'ask' \
+    "$(gate claude '{"tool_name":"mcp__wordpress__mcp-adapter-execute-ability"}' | jq -r '.hookSpecificOutput.permissionDecision')"
+assert_eq 'gate ignores the discovery meta-tools' '' \
+    "$(gate claude '{"tool_name":"mcp__wordpress__mcp-adapter-discover-abilities","tool_input":{}}')"
+assert_eq 'Claude Code settings wire the gate to execute-ability' 'mcp__.*__mcp-adapter-execute-ability' \
+    "$(jq -r '.hooks.PreToolUse[0].matcher' .claude/settings.json)"
+assert_eq 'Cursor hooks run the gate fail-closed' 'true' \
+    "$(jq -r '.hooks.beforeMCPExecution[0].failClosed' .cursor/hooks.json)"
 
 # ===========================================================================
 suite 'Repository — documented files exist'
@@ -136,7 +167,7 @@ for f in README.md CLAUDE.md AGENTS.md llms.txt CHANGELOG.md LICENSE NOTICE Make
          .github/CODEOWNERS .github/PULL_REQUEST_TEMPLATE.md \
          .github/ISSUE_TEMPLATE/config.yml .github/ISSUE_TEMPLATE/1-bug.yml \
          .github/ISSUE_TEMPLATE/2-feature.yml .github/ISSUE_TEMPLATE/3-question.yml \
-         .cursor/AGENTS.md .codex/config.toml \
+         .cursor/AGENTS.md .cursor/hooks.json .claude/settings.json .codex/config.toml \
          docs/AGENTS.md docs/ai-skills.md docs/architecture.md docs/claude-code.md docs/codex.md docs/development.md \
          docs/remote-site.md docs/security.md docs/troubleshooting.md \
          docs/agents/README.md docs/agents/agent-contract.md docs/agents/runtime-policy.md \

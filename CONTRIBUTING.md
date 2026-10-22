@@ -6,13 +6,10 @@ WordPress plugin of its own, so a change here is almost always to a Bash script,
 the Docker image, the tests or the documentation.
 
 **A bug in an ability, in the MCP protocol handling, or in the adapter itself
-belongs upstream**, not here:
-
-- [WordPress/mcp-adapter](https://github.com/WordPress/mcp-adapter/issues)
-- [miriamschwab/ms-wp-abilities](https://github.com/miriamschwab/ms-wp-abilities/issues)
-
-`./bin/wp ability run <name> --user=admin` is how you tell the two apart: if it
-fails there, MCP is not involved.
+belongs upstream:** [WordPress/mcp-adapter](https://github.com/WordPress/mcp-adapter/issues)
+or [miriamschwab/ms-wp-abilities](https://github.com/miriamschwab/ms-wp-abilities/issues).
+`./bin/wp ability run <name> --user=admin` tells the two apart: if it fails
+there, MCP is not involved.
 
 ## Setting up
 
@@ -23,21 +20,37 @@ cd wp-agent-harness
 ./bin/status         # every layer, in order
 ```
 
-Requirements are in [Development](docs/development.md#requirements). `shellcheck` is not
-required locally, but CI runs it, so install it if you touch `bin/` or `tests/`.
+Requirements: [Development](docs/development.md#requirements). `shellcheck` is
+not required locally, but CI runs it, so install it if you touch `bin/` or
+`tests/`.
 
-## The loop
+## Checklist
 
-```bash
-./bin/start
-# change something
-./bin/test --skip-claude                       # layers 0-3, no model turns
-./bin/reset --yes && ./bin/test --skip-claude  # prove a clean build still works
-```
+- [ ] Branch from `develop`; open the PR into `develop`. Release cuts merge
+      `develop` into `main`.
+- [ ] Run the checks:
 
-`./bin/test claude-code` runs layer 4, a real headless Claude Code session. It
-costs model turns, so run it when you have touched the connection path, the
-Application Password, or the abilities the test drives.
+  ```bash
+  bash -n bin/* tests/*.sh
+  shellcheck bin/* tests/*.sh
+  docker compose config --quiet
+  ./bin/test --skip-claude                       # layers 0-3, no model turns
+  ./bin/reset --yes && ./bin/test --skip-claude  # a clean build still works
+  ```
+
+- [ ] `./bin/test claude-code` (layer 4, a real headless session; costs model
+      turns) if you touched the connection path, the Application Password, or
+      the abilities the test drives.
+- [ ] Add a line under `## [Unreleased]` in [CHANGELOG.md](CHANGELOG.md),
+      following the rules at its top: Keep a Changelog, imperative voice, one
+      line of at most 120 visible characters.
+- [ ] One subject per PR. The description says what you ran; for a version pin,
+      which upstream release and why; for docs, which file is now the single
+      home for that topic.
+- [ ] No agent attribution in commits, trailers, or the PR.
+
+CI runs the same checks plus a full stack build, a reset and a rebuild on
+Ubuntu, so a change that only works on your machine fails there.
 
 ## Conventions
 
@@ -46,15 +59,14 @@ Application Password, or the abilities the test drives.
   `MSYS_NO_PATHCONV` is set.
 - Never `curl -o /dev/null`; use `http_status` or `http_headers` from
   `bin/lib.sh`. Git Bash's native curl treats `/dev/null` as a filename.
-- Provisioning steps check current state before changing it. `./bin/setup` must
-  stay idempotent, and must never destroy content: that is `./bin/reset`'s job
-  alone.
+- Provisioning steps check current state before changing it. `./bin/setup` stays
+  idempotent and never destroys content: that is `./bin/reset`'s job alone.
 - Tests name their content uniquely and delete it in an `EXIT` trap.
 - Shell is Bash for `bin/`, `tests/`, and `docker/wordpress/bin/wp-provision`
   / `wp-app-password`; POSIX `sh` for `docker/wordpress/bin/wp`.
 - PHP, JS and CSS follow the WordPress coding standards.
-- Versions are pinned in `.env`, mirrored in `.env.example`. Nothing follows a
-  moving branch. Moving a pin is
+- Versions are pinned in `.env`, mirrored in `.env.example`; nothing follows a
+  moving branch. Moving a pin:
   [docs/development.md](docs/development.md#updating-dependencies).
 - Documentation grows by replacing, not appending. Each topic has one home:
   AGENTS (and `docs/agents/`), ai-skills, architecture, claude-code, codex,
@@ -62,31 +74,13 @@ Application Password, or the abilities the test drives.
   `docs/AGENTS.md`, root `AGENTS.md`, `CLAUDE.md`, `.cursor/AGENTS.md`, and
   `llms.txt`.
 
-## Before opening a pull request
-
-```bash
-bash -n bin/* tests/*.sh
-shellcheck bin/* tests/*.sh
-docker compose config --quiet
-./bin/test --skip-claude
-```
-
-CI runs the same checks plus a full stack build, a reset and a rebuild on
-Ubuntu, so a change that only works on your machine fails there.
-
-Day-to-day work branches from `develop` and opens a PR into `develop`. Release
-cuts merge `develop` into `main`. Keep the pull request to one subject, and say
-in the description what you ran. If you changed a version pin, say which
-upstream release and why. If you changed documentation, say which file is now
-the single home for that topic.
-
 ## Reporting
 
 - **Bug or feature request:** open an issue with the matching template.
-- **A question about using the site:** that is not a bug; open a
-  [discussion-style issue](https://github.com/marcop135/wp-agent-harness/issues/new/choose)
-  and pick "Question", or read [docs/troubleshooting.md](docs/troubleshooting.md)
-  first, which covers most of them.
+- **A question about using the site:** read
+  [docs/troubleshooting.md](docs/troubleshooting.md) first, or open an
+  [issue](https://github.com/marcop135/wp-agent-harness/issues/new/choose) and
+  pick "Question".
 - **A security problem:** do not open an issue. [SECURITY.md](SECURITY.md).
 
 ## Code of conduct

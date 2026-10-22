@@ -1,128 +1,67 @@
 # Architecture
 
+Every request follows one path: **Your Agent → MCP Adapter → Abilities API →
+WordPress**. The agent runs on the host; everything after it runs in Docker,
+bound to `127.0.0.1`.
+
 ## The whole picture
 
-```
- HOST MACHINE                                    DOCKER
- ─────────────────────────────────────────       ─────────────────────────────────────────
+```mermaid
+flowchart TB
+  subgraph Host["Host machine"]
+    Agent["Your agent<br/>Claude Code · Codex · Cursor"]
+    Gate{"Approval gate<br/>Claude Code, Cursor"}
+    CLI["./bin/wp<br/>WP-CLI"]
+  end
+  subgraph WPC["wordpress container: Apache 2.4 + mod_php 8.3"]
+    MCP["MCP Adapter 0.7.1<br/>HttpTransport · three meta-tools<br/>sessions in user meta"]
+    API["WordPress Abilities API<br/>core since 6.9"]
+    MS["MS WP Abilities 1.13.0<br/>26 miriamschwab/* abilities"]
+    Core["core/* abilities<br/>get-site-info · get-user-info · get-environment-info"]
+    WP["WordPress 7.1.2 core + REST API<br/>Twenty Twenty-Five · content · media<br/>plugins · themes · site configuration"]
+  end
+  DB[("db container<br/>MariaDB 11.8.9<br/>volume &lt;project&gt;_db_data")]
 
-  Claude Code
-      │
-      │  ./bin/connect registered an HTTP
-      │  MCP server in ~/.claude.json
-      │
-      │  POST /wp-json/mcp/mcp-adapter-default-server
-      │  Authorization: Basic <admin:application-password>
-      │  Mcp-Session-Id: <uuid>
-      ▼
-  127.0.0.1:8080 ──────────────────────────────▶ wordpress container
-                                                   Apache 2.4 + mod_php 8.3
-  ./bin/*  (bash)                                        │
-      │  docker compose exec                             ▼
-      └───────────────────────────────────────▶   WordPress 7.1 REST API
-                                                         │
-  ./bin/wp ability list ──────────────────────▶   MCP Adapter 0.7.1
-      (WP-CLI, bypasses MCP entirely)                    │  HttpTransport
-                                                         │  session store (user meta)
-                                                         │  three meta-tools
-                                                         ▼
-                                                   WordPress Abilities API
-                                                   (core, since 6.9)
-                                                         │
-                                        ┌────────────────┴────────────────┐
-                                        ▼                                 ▼
-                                  MS WP Abilities 1.13.0            core/* abilities
-                                  26 abilities                      get-site-info
-                                  miriamschwab/*                    get-user-info
-                                        │                           get-environment-info
-                                        ▼
-                                   WordPress core + REST API
-                                        │
-              ┌──────────┬──────────┬───┴──────┬──────────┬───────────────┐
-              ▼          ▼          ▼          ▼          ▼               ▼
-        Twenty        content    plugins    themes      media       site configuration
-        Twenty-Five   (posts,
-                       pages)
-                                        │
-                                        ▼
-                                   db container
-                                   MariaDB 11.8.9
-                                   volume: <project>_db_data
+  Agent --> Gate
+  Gate -->|"POST /wp-json/mcp/mcp-adapter-default-server<br/>127.0.0.1:8080, Basic auth, Mcp-Session-Id"| MCP
+  MCP --> API
+  API --> MS
+  API --> Core
+  MS --> WP
+  Core --> WP
+  WP --> DB
+  CLI -.->|"docker compose exec, bypasses MCP"| API
 ```
+
+Codex has no gate hook; its own approval policy applies. `./bin/wp ability list` reaches
+the Abilities API without MCP, which makes it the diagnostic path
+([development.md](development.md#speaking-mcp-by-hand)).
 
 ## Components
 
-### Docker
+In request order.
 
-Two services in `docker-compose.yml`, both published on `127.0.0.1` only, so no
-other machine can reach them:
+### Your agent
 
-| Service | Image | Data | Health check |
-|---------|-------|------|--------------|
-| `db` | `mariadb:11.8.9` (11.8 LTS) | volume `<project>_db_data` | `healthcheck.sh --connect --innodb_initialized`; WordPress waits for it |
-| `wordpress` | `docker/wordpress/Dockerfile` on `wordpress:7.1.2-php8.3-apache` | volume `<project>_wp_data` (whole install) | curl `/wp-json/` |
+Runs on the host, never in Docker.
 
-### The WordPress image
-
-The Dockerfile adds four things to the official image and changes nothing else:
-
-1. `less`, `unzip`, `curl` and `mariadb-client`, which WP-CLI needs.
-2. **WP-CLI 2.12.0** from its GitHub release, verified against the published
-   SHA-512.
-3. **`wp-cli/ability-command` 1.0.2**, which provides `wp ability`. It is loaded
-   through WP-CLI's `require` config key, not `wp package install`. Reason: the
-   package declares `wp-cli/wp-cli ^3.0` (it ships with the unreleased WP-CLI
-   3.0), but its code only uses `WP_CLI`, `WP_CLI\Formatter` and
-   `WP_CLI\Utils`, all present in 2.12. The tarball has no Composer autoloader;
-   `docker/wordpress/ability-command-autoload.php` is a PSR-4 shim that stands
-   in for it.
-4. An Apache conf that sets `AllowOverride All` for `/var/www/html` and copies
-   the `Authorization` header into the PHP environment, so `.htaccess` rewrites
-   and Application Password auth both work.
-
-`/usr/local/bin/wp` drops from root to `www-data` via `runuser`. WP-CLI
-therefore never leaves root-owned files in `wp-content` that Apache cannot
-write.
-
-### WordPress
-
-WordPress 7.1.2 on PHP 8.3, installed and configured by
-`docker/wordpress/bin/wp-provision` inside the container. It is idempotent: it
-checks every item before changing it, so re-running `./bin/setup` creates no
-duplicate users, plugins or settings and destroys no content.
-
-The official entrypoint generates `wp-config.php` once, with
-`WORDPRESS_CONFIG_EXTRA` adding:
-
-```php
-define( 'WP_ENVIRONMENT_TYPE', 'local' );   // makes Application Passwords available over HTTP
-define( 'WP_HOME', getenv( 'WORDPRESS_SITE_URL' ) ?: 'http://localhost:8080' );
-define( 'WP_SITEURL', WP_HOME );
-define( 'WP_DEBUG_LOG', true );
-define( 'WP_DEBUG_DISPLAY', false );
-define( 'FS_METHOD', 'direct' );            // plugin/theme installs without FTP credentials
-define( 'AUTOMATIC_UPDATER_DISABLED', true );
-```
-
-- `WP_HOME` reads the environment at runtime: after changing `WP_PORT` in
-  `.env`, recreating the container is enough. No reinstall.
-- Permalinks are `/%postname%/`, because `/wp-json/`, and with it the MCP
-  endpoint, depends on the rewrite rules.
-
-### Twenty Twenty-Five
-
-The default block theme, installed from wordpress.org and activated by
-provisioning. No custom theme: the point of this repository is the integration,
-and a stock block theme is the most useful thing for an agent to inspect and
-extend.
+- **Claude Code**: `./bin/connect` registers the endpoint as an HTTP MCP server
+  in the **local** scope: per project, stored in `~/.claude.json`, outside this
+  repository, so the credential never gets near Git. See
+  [claude-code.md](claude-code.md).
+- **Codex**: `.codex/config.toml`, auth from the environment. See
+  [codex.md](codex.md).
+- **Approval gate**: `bin/ability-gate`, wired by `.claude/settings.json`
+  (`PreToolUse`) and `.cursor/hooks.json` (`beforeMCPExecution`). Reads pass;
+  every write ability asks you first. See
+  [security.md](security.md#the-approval-gate).
 
 ### MCP Adapter
 
 Installed from the pinned GitHub release ZIP, which bundles its Composer
 dependencies (`automattic/jetpack-autoloader`, `wordpress/php-mcp-schema`). A
-Git checkout would need `composer install` first.
-
-On load it creates its **default server**:
+Git checkout would need `composer install` first. On load it creates its
+**default server**:
 
 | | |
 |---|---|
@@ -140,8 +79,9 @@ callback. **Abilities are private by default**: MCP only sees one whose
 
 ### MS WP Abilities
 
-Registers **26** abilities in the `miriamschwab/` namespace and opts **3**
-core abilities into MCP visibility: **29** in total. Current set:
+Registers **26** abilities in the `miriamschwab/` namespace and opts **3** core
+abilities into MCP visibility: **29** in total. It also records every write
+call in an audit log, which `./bin/audit` prints.
 
 ```
 posts/pages   get-posts get-pages get-post-meta get-post-types create-post
@@ -159,18 +99,70 @@ core          core/get-site-info core/get-user-info core/get-environment-info
 
 `./bin/wp ability list` prints the live list. Trust it over this table.
 
-### Claude Code
+### WordPress
 
-Runs on the host, never in Docker. `./bin/connect` registers the endpoint as an
-HTTP MCP server in Claude Code's **local** scope: per project, stored in
-`~/.claude.json`, outside this repository, so the credential never gets near
-Git. See [claude-code.md](claude-code.md).
+WordPress 7.1.2 on PHP 8.3, with **Twenty Twenty-Five** installed from
+wordpress.org and activated. No custom theme: the point is the integration, and
+a stock block theme is the most useful thing for an agent to inspect and
+extend.
+
+`docker/wordpress/bin/wp-provision` installs and configures it inside the
+container. It checks every item before changing it, so re-running
+`./bin/setup` creates no duplicate users, plugins or settings and destroys no
+content.
+
+The official entrypoint generates `wp-config.php` once, with
+`WORDPRESS_CONFIG_EXTRA` adding:
+
+```php
+define( 'WP_ENVIRONMENT_TYPE', 'local' );   // makes Application Passwords available over HTTP
+define( 'WP_HOME', getenv( 'WORDPRESS_SITE_URL' ) ?: 'http://localhost:8080' );
+define( 'WP_SITEURL', WP_HOME );
+define( 'WP_DEBUG_LOG', true );
+define( 'WP_DEBUG_DISPLAY', false );
+define( 'FS_METHOD', 'direct' );            // plugin/theme installs without FTP credentials
+define( 'AUTOMATIC_UPDATER_DISABLED', true );
+```
+
+- `WP_HOME` reads the environment at runtime: after changing `WP_PORT` in
+  `.env`, recreating the container is enough. No reinstall.
+- Permalinks are `/%postname%/`: `/wp-json/`, and with it the MCP endpoint,
+  depends on the rewrite rules.
+
+### The WordPress image
+
+`docker/wordpress/Dockerfile` adds four things to the official image and
+changes nothing else:
+
+1. `less`, `unzip`, `curl` and `mariadb-client`, which WP-CLI needs.
+2. **WP-CLI 2.12.0** from its GitHub release, verified against the published
+   SHA-512.
+3. **`wp-cli/ability-command` 1.0.2**, which provides `wp ability`, loaded
+   through WP-CLI's `require` config key rather than `wp package install`. The
+   package declares `wp-cli/wp-cli ^3.0` (the unreleased WP-CLI 3.0), but its
+   code only uses `WP_CLI`, `WP_CLI\Formatter` and `WP_CLI\Utils`, all present
+   in 2.12. The tarball has no Composer autoloader;
+   `docker/wordpress/ability-command-autoload.php` is a PSR-4 shim in its place.
+4. An Apache conf that sets `AllowOverride All` for `/var/www/html` and copies
+   the `Authorization` header into the PHP environment, so `.htaccess` rewrites
+   and Application Password auth both work.
+
+`/usr/local/bin/wp` drops from root to `www-data` via `runuser`, so WP-CLI never
+leaves root-owned files in `wp-content` that Apache cannot write.
+
+### Docker
+
+Two services in `docker-compose.yml`, both published on `127.0.0.1` only:
+
+| Service | Image | Data | Health check |
+|---------|-------|------|--------------|
+| `db` | `mariadb:11.8.9` (11.8 LTS) | volume `<project>_db_data` | `healthcheck.sh --connect --innodb_initialized`; WordPress waits for it |
+| `wordpress` | `docker/wordpress/Dockerfile` on `wordpress:7.1.2-php8.3-apache` | volume `<project>_wp_data` (whole install) | curl `/wp-json/` |
 
 ## MCP transport
 
 HTTP is the primary transport: Claude Code speaks it natively and the adapter's
-default server provides it. Nothing sits between them, no proxy and no custom
-server.
+default server provides it. No proxy and no custom server sit between them.
 
 The handshake, exercised in full by `tests/integration.sh`:
 
@@ -190,11 +182,11 @@ yet, which a request/response client does not need.
 
 `tools/list` returns exactly three:
 
-```
-mcp-adapter-discover-abilities   list the abilities this site exposes
-mcp-adapter-get-ability-info     fetch one ability's full schema
-mcp-adapter-execute-ability      run an ability with parameters
-```
+| Tool | Does |
+|------|------|
+| `mcp-adapter-discover-abilities` | list the abilities this site exposes |
+| `mcp-adapter-get-ability-info` | fetch one ability's full schema |
+| `mcp-adapter-execute-ability` | run an ability with parameters |
 
 This is the adapter's layered design, not a limitation:
 
@@ -205,48 +197,33 @@ This is the adapter's layered design, not a limitation:
   seen.
 
 The abilities are registered with `/` separators
-(`mcp-adapter/discover-abilities`). The adapter's `McpNameSanitizer` turns them
-into `-` for MCP tool names, hence `mcp-adapter-discover-abilities`.
+(`mcp-adapter/discover-abilities`); the adapter's `McpNameSanitizer` turns them
+into `-` for MCP tool names.
 
 ### STDIO
 
-The adapter also ships `wp mcp-adapter serve`, a STDIO transport for WP-CLI. It
-skips HTTP and authentication entirely, which makes it the way to tell an
-adapter fault from a transport fault (command in
+`wp mcp-adapter serve` is a STDIO transport for WP-CLI. It skips HTTP and
+authentication, so it tells an adapter fault from a transport fault (command in
 [development.md](development.md#speaking-mcp-by-hand)). It is not wired into
 Claude Code: that would take a stdio command shelling into Docker, a moving
 part that adds no capability.
 
 ## Authentication flow
 
-```
-Claude Code
-  │  Authorization: Basic base64(admin:<application password>)
-  ▼
-Apache
-  │  .htaccess copies Authorization into HTTP_AUTHORIZATION
-  ▼
-WordPress REST API
-  │  wp_authenticate_application_password()
-  │  allowed over plain HTTP because WP_ENVIRONMENT_TYPE is 'local'
-  ▼
-MCP Adapter HttpTransport
-  │  transport permission: is_user_logged_in()
-  ▼
-meta-tool ability
-  │  permission: current_user_can( 'read' )
-  ▼
-target ability
-     permission: its own callback, e.g. current_user_can( 'edit_posts' )
-```
+| Step | Check |
+|------|-------|
+| Agent | sends `Authorization: Basic base64(admin:<application password>)` |
+| Apache | `.htaccess` copies `Authorization` into `HTTP_AUTHORIZATION` |
+| WordPress REST API | `wp_authenticate_application_password()`, allowed over plain HTTP because `WP_ENVIRONMENT_TYPE` is `'local'` |
+| MCP Adapter HttpTransport | `is_user_logged_in()` |
+| meta-tool ability | `current_user_can( 'read' )` |
+| target ability | its own callback, e.g. `current_user_can( 'edit_posts' )` |
 
 Four checks, three of them upstream's. Nothing is relaxed to make the
-integration work. The one local concession is `WP_ENVIRONMENT_TYPE = 'local'`,
+integration work; the one local concession is `WP_ENVIRONMENT_TYPE = 'local'`,
 which is what that constant exists for.
 
 ## State
-
-### Persistent, outside Git
 
 | State | Where | Destroyed by |
 |-------|-------|--------------|
@@ -256,21 +233,14 @@ which is what that constant exists for.
 | Application Password | `.secrets/application-password`, ignored | `./bin/reset` |
 | Claude Code MCP registration | `~/.claude.json` | `./bin/connect --remove` |
 
-### Disposable
+Both volumes are disposable: everything in them is reproducible from the
+repository plus `.env`, and `./bin/reset --yes` destroys them and rebuilds the
+same site. Nothing that matters should live only there.
 
-Both volumes. Everything in them is reproducible from the repository plus
-`.env`: `./bin/reset --yes` destroys them and rebuilds the same site. Nothing
-that matters should live only there.
-
-### Tracked in Git
-
-Infrastructure and documentation only: `docker-compose.yml`, `docker/`, `bin/`,
-`tests/`, `docs/`, `examples/`, `.env.example`, `CLAUDE.md`, `Makefile`,
-`README.md`, `LICENSE`, `NOTICE`, `CHANGELOG.md`, `.github/`, plus the curated
-WordPress agent skills under `.claude/skills/` and `.cursor/skills/`
-(GPL-2.0-or-later upstream copies; see [claude-code.md](claude-code.md)).
-
-### Excluded from Git
+Git tracks infrastructure and documentation only (see
+[Project structure](#project-structure)), plus the curated WordPress agent
+skills under `.claude/skills/` and `.cursor/skills/` (GPL-2.0-or-later upstream
+copies; see [claude-code.md](claude-code.md)). Excluded:
 
 | Excluded | Why |
 |----------|-----|
@@ -292,17 +262,20 @@ credential pattern is tracked.
 | **No custom abilities** | MS WP Abilities is the capability layer. A parallel set would fragment what the agent sees and duplicate work maintained upstream. |
 | **No proxy** | Claude Code speaks HTTP MCP and the adapter serves it. A proxy would only be justified if the direct path failed; test layers 3 and 4 show it works. |
 | **Release ZIPs, not Git checkouts** | MCP Adapter needs Composer dependencies that a tag tarball lacks and the release ZIP carries. Pinning to a tag also means a clone today and a clone next month build the same site. |
-| **One volume for the whole install, not a bind mount** | Bind-mounting `wp-content` brings file-ownership and line-ending problems on Windows and macOS, and puts generated files inside the repository. `./bin/wp` and `docker compose cp` reach the volume; [development.md](development.md) shows how to bind-mount a directory for plugin or theme source anyway. |
+| **One volume for the whole install, not a bind mount** | Bind-mounting `wp-content` brings file-ownership and line-ending problems on Windows and macOS, and puts generated files inside the repository. `./bin/wp` and `docker compose cp` reach the volume; [development.md](development.md#working-on-plugin-or-theme-source) shows how to bind-mount a directory for plugin or theme source anyway. |
 | **Local scope for the Claude Code registration** | Project scope means a tracked `.mcp.json` with a credential in it, or an env-var indirection set up separately. Local scope is also per project and keeps the credential out of the repository. |
 
 ## Project structure
 
 ```
 wp-agent-harness/
-├── .claude/skills/              curated WordPress agent skills (Claude Code)
+├── .claude/
+│   ├── settings.json            approval gate hook (PreToolUse)
+│   └── skills/                  curated WordPress agent skills (Claude Code)
 ├── .codex/config.toml           Codex project MCP (env auth; see docs/codex.md)
 ├── .cursor/
 │   ├── AGENTS.md                Cursor precedence shim
+│   ├── hooks.json               approval gate hook (beforeMCPExecution)
 │   └── skills/                  same pack for Cursor
 ├── .github/                     CI, issue and PR templates, Dependabot
 │   └── brand/                   README, OG and social images (SVG source + PNG)
@@ -310,6 +283,9 @@ wp-agent-harness/
 │   ├── lib.sh                   shared helpers, sourced by the rest
 │   ├── setup  start  stop  reset
 │   ├── status  logs  test  connect  wp
+│   ├── seed                     demo content (--remove deletes it)
+│   ├── audit                    MS WP Abilities' write audit log
+│   └── ability-gate             approval gate run by the agent hooks
 ├── docker/wordpress/            the WordPress image
 │   ├── Dockerfile               base image + WP-CLI + wp ability
 │   ├── apache-wordpress.conf    AllowOverride and the Authorization header
@@ -341,10 +317,10 @@ wp-agent-harness/
 └── Makefile
 ```
 
-The WordPress install stays on localhost. `site/` is a separate static page,
-deployed to [wpagent.marcopontili.com](https://wpagent.marcopontili.com) by
-`.github/workflows/deploy.yml` (only `site/` is uploaded; `site/.htaccess`
-carries the headers). It does not expose the harness MCP endpoint.
+Also tracked at the root: `README.md`, `LICENSE`, `NOTICE`, `CHANGELOG.md`.
 
-Not tracked, by design: `.env`, `.secrets/`, the database, the WordPress
-install, uploads, logs, and Claude Code's MCP registration.
+`site/` is a separate static page, deployed to
+[wpagent.marcopontili.com](https://wpagent.marcopontili.com) by
+`.github/workflows/deploy.yml` (only `site/` is uploaded; `site/.htaccess`
+carries the headers). It does not expose the harness MCP endpoint; the
+WordPress install stays on localhost.

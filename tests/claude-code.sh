@@ -39,10 +39,13 @@ cleanup() {
 trap cleanup EXIT
 
 # Run one headless Claude Code turn with only the WordPress MCP tools allowed.
+# Project settings are not loaded: this layer tests the MCP path, and a
+# headless turn has nobody to answer the approval gate (layers 0 and 3 test it).
 ask_claude() {
     local prompt="$1" out
     out="$(
         cd "$REPO_ROOT" && claude -p "$prompt" \
+            --setting-sources user,local \
             --output-format json \
             --allowedTools "mcp__${SERVER_NAME}" \
             --disallowedTools Bash Edit Write WebFetch WebSearch \

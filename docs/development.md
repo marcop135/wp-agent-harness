@@ -37,6 +37,9 @@ with `.env` and never destroys content.
 | `./bin/test` | The test suite. `--skip-claude` skips layer 4 (model turns); `repo`, `smoke`, `integration` or `claude-code` runs one file. |
 | `./bin/connect` | Register MCP with Claude Code. `--remove` unregisters. `--print` shows the URL, header and `WORDPRESS_MCP_BASIC_AUTH` export for Codex and Cursor (no Claude needed). |
 | `./bin/wp` | WP-CLI inside the container, e.g. `./bin/wp ability list`. |
+| `./bin/seed` | Add demo content for the example prompts: pages, posts, a draft to restructure, and images with missing alt text. `--remove` deletes exactly what it added. |
+| `./bin/audit` | Write abilities agents have called, newest first, from MS WP Abilities' audit log. A count shows more entries; `--json` prints the raw log. |
+| `./bin/ability-gate` | The write approval gate, run by the Claude Code and Cursor hooks ([security.md](security.md#the-approval-gate)). `classify <ability>` prints `read` or `write`. |
 
 `make help` lists the same commands as Make targets.
 
@@ -83,18 +86,19 @@ inline in [`.env.example`](../.env.example). Current pins: [Versions](#versions)
 
 | Layer | File | Checks |
 |-------|------|--------|
-| 0 Repository | `tests/repo.sh` | `.gitignore`, no secrets tracked, scripts parse, documented files tracked, pins in this file match `.env.example`, loopback bindings |
+| 0 Repository | `tests/repo.sh` | `.gitignore`, no secrets tracked, scripts parse, documented files tracked, pins in this file match `.env.example`, loopback bindings, approval gate decisions |
 | 1 Infrastructure | `tests/smoke.sh` | Compose config, services, health, loopback ports, `.env` |
 | 2 WordPress / Abilities | `tests/smoke.sh` | WordPress ≥ 6.9, plugins at pinned versions, abilities registered, `wp ability run` |
-| 3 MCP protocol | `tests/integration.sh` | Auth, session lifecycle, tool discovery and execution, content cycle |
+| 3 MCP protocol | `tests/integration.sh` | Auth, session lifecycle, tool discovery and execution, content cycle, gate against the plugin's policy table, audit log |
 | 4 Claude Code | `tests/claude-code.sh` | Headless `claude -p`, checked against the database with WP-CLI |
 
 Tests create only uniquely named content and delete it again.
 
-## Reaching WordPress directly
+## WP-CLI, without MCP
 
-`./bin/wp` is WP-CLI inside the container, running as `www-data`. Anything
-WP-CLI can do works:
+`./bin/wp` is WP-CLI inside the container, running as `www-data`. It skips MCP
+entirely: if something works here but not through the agent, the problem is the
+transport or the credential.
 
 ```bash
 ./bin/wp plugin list
@@ -103,19 +107,7 @@ WP-CLI can do works:
 ./bin/wp db query 'SELECT COUNT(*) FROM wp_posts;'
 ```
 
-A throwaway database snapshot:
-
-```bash
-./bin/wp db export - > tmp/snapshot.sql       # tmp/ is git-ignored
-docker compose exec -T wordpress wp db import - < tmp/snapshot.sql
-```
-
-A shell in the container: `docker compose exec wordpress bash`.
-
-## The abilities, without MCP
-
-The diagnostic path that skips MCP entirely. If something works here but not
-through Claude Code, the problem is the transport or the credential.
+The abilities:
 
 ```bash
 ./bin/wp ability list
@@ -128,15 +120,22 @@ through Claude Code, the problem is the transport or the credential.
 ```
 
 `wp ability run` takes `--input=<json>`, `--input=-` for stdin, or
-`--<field>=<value>` flags for simple inputs.
+`--<field>=<value>` flags for simple inputs. In wp-admin, **Tools → WP
+Abilities** shows the same list with the MCP-public flag and input schema per
+ability, and flags what a plugin update added or removed since your last visit.
 
-In wp-admin, **Tools → WP Abilities** shows the same list with the MCP-public
-flag and input schema per ability, and flags what a plugin update added or
-removed since your last visit.
+A throwaway database snapshot:
+
+```bash
+./bin/wp db export - > tmp/snapshot.sql       # tmp/ is git-ignored
+docker compose exec -T wordpress wp db import - < tmp/snapshot.sql
+```
+
+A shell in the container: `docker compose exec wordpress bash`.
 
 ## Speaking MCP by hand
 
-To see exactly what Claude Code sees:
+What the agent sees, step by step:
 
 ```bash
 ENDPOINT=http://localhost:8080/wp-json/mcp/mcp-adapter-default-server
@@ -167,10 +166,9 @@ curl -sS -X POST "$ENDPOINT" --user "$CREDS" \
 curl -sS -X DELETE "$ENDPOINT" --user "$CREDS" -H "Mcp-Session-Id: $SESSION"
 ```
 
-`tests/lib.sh` wraps the same sequence in about twenty lines.
-
-The STDIO transport skips HTTP and authentication. Use it to tell an adapter
-failure from a request failure:
+`tests/lib.sh` wraps the same sequence in about twenty lines. The STDIO
+transport skips HTTP and authentication, which tells an adapter failure from a
+request failure:
 
 ```bash
 echo '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' \
@@ -180,10 +178,9 @@ echo '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' \
 
 ## Working on plugin or theme source
 
-The WordPress install lives in the `wp_data` volume. That keeps generated files
-out of the repository and avoids ownership and line-ending problems on Windows
-and macOS. To edit your own plugin or theme from the host, bind-mount just that
-directory with a Compose override:
+The install lives in the `wp_data` volume ([why](architecture.md#design-decisions)).
+To edit your own plugin or theme from the host, bind-mount just that directory
+with a Compose override, which Compose merges automatically:
 
 ```yaml
 # docker-compose.override.yml   (git-ignored)
@@ -199,10 +196,8 @@ mkdir -p src/my-plugin
 ./bin/wp plugin activate my-plugin
 ```
 
-Compose merges the override automatically. `./bin/reset` still works: the
-bind-mounted directory is yours, not the volume's.
-
-For one-off file copies:
+`./bin/reset` still works: the bind-mounted directory is yours, not the
+volume's. For one-off file copies:
 
 ```bash
 docker compose cp wordpress:/var/www/html/wp-content/themes/twentytwentyfive ./tmp/
@@ -244,7 +239,7 @@ Pins live in [`.env.example`](../.env.example). To bump them, see
 ## Dependencies
 
 Nothing tracks a moving upstream branch; every pin is a variable in `.env` and
-`.env.example`.
+`.env.example`. Only **two** WordPress plugins run on the site.
 
 | Component | Role | How it gets here | Licence | Pin |
 |-----------|------|------------------|---------|-----|
@@ -257,9 +252,8 @@ Nothing tracks a moving upstream branch; every pin is a variable in `.env` and
 | **Twenty Twenty-Five** | Default theme | wordpress.org via setup | GPL-2.0-or-later | `WP_THEME` |
 | **WordPress agent skills** | Agent procedures (blocks, themes, Abilities, …) | **Vendored** under `.claude/skills/` and `.cursor/skills/` | GPL-2.0-or-later | manual refresh (below) |
 
-Only **two** WordPress plugins run on the site. `ability-command` is a WP-CLI
-package in the image, not a plugin. The agent skills are the only upstream
-source tree committed to this repository.
+`ability-command` is a WP-CLI package in the image, not a plugin. The agent
+skills are the only upstream source tree committed to this repository.
 
 ## Updating dependencies
 
@@ -287,8 +281,6 @@ $EDITOR .env .env.example
 ./bin/test claude-code
 ```
 
-What each kind of bump needs:
-
 | Change | Needs |
 |--------|-------|
 | Plugin version | `./bin/setup` only: `wp-provision` reinstalls in place when the installed version differs from the pin |
@@ -296,17 +288,16 @@ What each kind of bump needs:
 | `WORDPRESS_IMAGE` | also `./bin/wp core update --version=<x.y.z>` (or `./bin/reset`), because core lives in the `wp_data` volume |
 | MariaDB major version | `./bin/reset`: the data directory format changes |
 
-Before pinning a new upstream version, check its requirements. Both plugins
-currently need WordPress 6.9+ and PHP 7.4+. The ability names asserted in
-`tests/smoke.sh` come from the pinned MS WP Abilities release; if upstream
-renames one, that test fails, which is the point.
+Both plugins currently need WordPress 6.9+ and PHP 7.4+; check a new upstream
+version's requirements before pinning it. `tests/smoke.sh` asserts ability names
+from the pinned MS WP Abilities release, so an upstream rename fails it on
+purpose.
 
 ### Agent skills (vendored)
 
-Skills are not `.env` variables. They are committed trees under
-`.claude/skills/` and `.cursor/skills/`. Refresh them deliberately, keep the
-curated list, and do not add Playground or `@wordpress/env` skills (this stack
-is Docker Compose + MCP). See
+Not `.env` variables: committed trees under `.claude/skills/` and
+`.cursor/skills/`. Refresh them deliberately, keep the curated list, and add no
+Playground or `@wordpress/env` skills (this stack is Docker Compose + MCP). See
 [claude-code.md](claude-code.md#wordpress-agent-skills).
 
 ```bash
@@ -324,8 +315,7 @@ npx skills add WordPress/agent-skills \
   --skill wp-abilities-verify
 ```
 
-Commit both `.claude/skills/` and `.cursor/skills/` so the two agents stay in
-sync.
+Commit both directories so the two agents stay in sync.
 
 ## Reuse as a template
 
