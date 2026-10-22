@@ -9,19 +9,20 @@ Agents use four separate surfaces here. Keep them apart.
 | `.claude/skills/`, `.cursor/skills/` | WordPress coding | Curated [WordPress/agent-skills](https://github.com/WordPress/agent-skills): blocks, themes, plugins, REST, Abilities API, WP-CLI |
 | `.codex/config.toml` | OpenAI Codex | Project MCP URL + `WORDPRESS_MCP_BASIC_AUTH` header ([codex.md](codex.md)) |
 
-There is no skill installer to run: the skills are already in the clone. Site
-work stays on MCP and `./bin/wp`; the coding skills do not replace them.
+- No skill installer to run: the skills are already in the clone.
+- Site work stays on MCP and `./bin/wp`; the coding skills do not replace them.
+- Start at [llms.txt](../llms.txt) or [docs/AGENTS.md](AGENTS.md). Task shape and
+  risk tiers: [agents/](agents/).
 
-## Agent entry
+## Per client
 
-Start at [llms.txt](../llms.txt) or [docs/AGENTS.md](AGENTS.md). Task shape and
-risk tiers: [agents/](agents/).
+| Client | MCP wiring | Approval gate |
+| --- | --- | --- |
+| Claude Code | `./bin/connect`, then `claude` ([claude-code.md](claude-code.md)) | `.claude/settings.json` hook |
+| Codex | trust the project, `eval "$(./bin/connect --print \| grep '^export ')"`, then `codex` ([codex.md](codex.md#codex)) | none; Codex's own approval policy |
+| Cursor | HTTP MCP from `./bin/connect --print` in Cursor settings ([codex.md](codex.md#cursor)) | `.cursor/hooks.json` hook |
 
-| Client | MCP wiring |
-| --- | --- |
-| Claude Code | `./bin/connect`, then `claude` ([claude-code.md](claude-code.md)) |
-| Codex | trust the project, `eval "$(./bin/connect --print \| grep '^export ')"`, then `codex` ([codex.md](codex.md)) |
-| Cursor | skills under `.cursor/skills/`; HTTP MCP from `./bin/connect --print` in Cursor settings |
+Gate details: [security.md](security.md#the-approval-gate).
 
 ## Coding skills
 

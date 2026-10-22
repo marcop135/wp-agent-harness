@@ -42,8 +42,9 @@ REST route, so reach for them before concluding something is not possible.
 - For content edits, `patch-post-content` is the surgical option;
   `preview-post-update` then `apply-post-update` is the staged one. State the
   proposed change in plain language and wait for a real answer before applying
-  it: that two-step model is a working convention, not something the code
-  enforces.
+  it. The approval gate (`bin/ability-gate`, wired in `.claude/settings.json`)
+  also makes Claude Code ask before every write ability; do not route a write
+  around it through `./bin/wp` or `rest-write`.
 - Destructive operations (trashing, deactivating plugins, changing site
   settings) need an explicit instruction first.
 
@@ -65,6 +66,8 @@ them as durable, and do not store anything there that is not reproducible.
     ./bin/wp <wp-cli args>    WP-CLI inside the container
     ./bin/wp ability list     the abilities this site registers, without MCP
     ./bin/logs --debug        WordPress's own PHP debug log
+    ./bin/seed                demo content for the examples (--remove deletes it)
+    ./bin/audit               write abilities agents have called
     ./bin/test --skip-claude  layers 0–3 of the test suite
 
 `./bin/wp ability list` and `./bin/wp ability run` are the independent

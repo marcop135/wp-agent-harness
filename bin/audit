@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+#
+# audit: the write abilities agents have called, newest first.
+#
+# MS WP Abilities records every write-ability invocation (refused ones too) in
+# the mswpa_write_log option: ability, user, time, and identifiers such as
+# post_id or slug. Content is never stored. The log keeps the last 100 entries.
+#
+#   ./bin/audit             last 20 entries
+#   ./bin/audit 50          last 50
+#   ./bin/audit --json      the raw log
+
+source "$(dirname -- "${BASH_SOURCE[0]}")/lib.sh"
+
+require_docker
+require_env
+
+container_running wordpress || die 'The wordpress container is not running. Run ./bin/start.'
+
+log="$(wp_cli option get mswpa_write_log --format=json 2>/dev/null || printf '[]')"
+
+if [[ "${1:-}" == '--json' ]]; then
+    jq . <<<"$log"
+    exit 0
+fi
+
+limit="${1:-20}"
+[[ "$limit" =~ ^[0-9]+$ ]] || die "usage: ./bin/audit [count | --json]"
+
+if [[ "$(jq 'length' <<<"$log")" == '0' ]]; then
+    info 'No writes recorded yet.'
+    exit 0
+fi
+
+jq -r --argjson n "$limit" '
+    .[:$n][]
+    | [ (.time | todate),
+        "user \(.user)",
+        .ability,
+        ((.values // {}) | to_entries | map("\(.key)=\(.value)") | join(" ")) ]
+    | @tsv' <<<"$log" | column -t -s $'\t'

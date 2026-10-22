@@ -1,0 +1,198 @@
+#!/usr/bin/env bash
+#
+# seed: demo content for the example prompts.
+#
+#   ./bin/seed            add the demo content (skipped if it is already there)
+#   ./bin/seed --remove   delete exactly what ./bin/seed added
+#
+# A small coffee-roaster site: published pages and posts in two categories, an
+# unstructured draft page to restructure, and three images, two of them with no
+# alt text. Every item carries the _wpah_seed meta key, so --remove touches
+# nothing else. ./bin/reset removes it too.
+
+source "$(dirname -- "${BASH_SOURCE[0]}")/lib.sh"
+
+require_docker
+require_env
+
+mode='add'
+case "${1:-}" in
+    '')        ;;
+    --remove)  mode='remove' ;;
+    -h|--help) sed -n '2,11p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    *)         die "Unknown option: $1" ;;
+esac
+
+container_running wordpress || die 'The wordpress container is not running. Run ./bin/start.'
+
+step "Demo content ($mode)"
+
+wpx wp eval-file - "$mode" <<'PHP'
+<?php
+const WPAH_SEED = '_wpah_seed';
+
+require_once ABSPATH . 'wp-admin/includes/image.php';
+require_once ABSPATH . 'wp-admin/includes/file.php';
+require_once ABSPATH . 'wp-admin/includes/media.php';
+
+$mode = $args[0] ?? 'add';
+
+$seeded = get_posts( array(
+	'post_type'   => array( 'post', 'page', 'attachment' ),
+	'post_status' => 'any',
+	'meta_key'    => WPAH_SEED,
+	'numberposts' => -1,
+	'fields'      => 'ids',
+) );
+
+if ( 'remove' === $mode ) {
+	foreach ( $seeded as $id ) {
+		wp_delete_post( $id, true );
+	}
+	$terms = get_terms( array( 'taxonomy' => array( 'category', 'post_tag' ), 'hide_empty' => false, 'meta_key' => WPAH_SEED ) );
+	foreach ( $terms as $term ) {
+		wp_delete_term( $term->term_id, $term->taxonomy );
+	}
+	WP_CLI::success( sprintf( 'Removed %d items and %d terms.', count( $seeded ), count( $terms ) ) );
+	return;
+}
+
+if ( $seeded ) {
+	WP_CLI::success( sprintf( 'Already seeded (%d items). Run ./bin/seed --remove first to start over.', count( $seeded ) ) );
+	return;
+}
+
+if ( ! function_exists( 'imagecreatetruecolor' ) ) {
+	WP_CLI::error( 'PHP GD is not available in the container.' );
+}
+
+function wpah_heading( $text ) {
+	return "<!-- wp:heading -->\n<h2 class=\"wp-block-heading\">$text</h2>\n<!-- /wp:heading -->";
+}
+
+function wpah_paragraph( $text ) {
+	return "<!-- wp:paragraph -->\n<p>$text</p>\n<!-- /wp:paragraph -->";
+}
+
+function wpah_list( array $items ) {
+	$lis = '';
+	foreach ( $items as $item ) {
+		$lis .= "<!-- wp:list-item -->\n<li>$item</li>\n<!-- /wp:list-item -->";
+	}
+	return "<!-- wp:list -->\n<ul class=\"wp-block-list\">$lis</ul>\n<!-- /wp:list -->";
+}
+
+function wpah_term( $name, $taxonomy ) {
+	$found = term_exists( $name, $taxonomy );
+	if ( $found ) {
+		return (int) $found['term_id'];
+	}
+	$created = wp_insert_term( $name, $taxonomy );
+	if ( is_wp_error( $created ) ) {
+		WP_CLI::error( $created );
+	}
+	add_term_meta( $created['term_id'], WPAH_SEED, 1 );
+	return (int) $created['term_id'];
+}
+
+function wpah_post( array $post ) {
+	$id = wp_insert_post( $post + array( 'post_author' => 1 ), true );
+	if ( is_wp_error( $id ) ) {
+		WP_CLI::error( $id );
+	}
+	add_post_meta( $id, WPAH_SEED, 1 );
+	return $id;
+}
+
+function wpah_image( $slug, $title, array $rgb, $alt ) {
+	$img = imagecreatetruecolor( 1200, 800 );
+	imagefill( $img, 0, 0, imagecolorallocate( $img, $rgb[0], $rgb[1], $rgb[2] ) );
+	imagefilledrectangle( $img, 0, 600, 1200, 800, imagecolorallocate( $img, (int) ( $rgb[0] * 0.6 ), (int) ( $rgb[1] * 0.6 ), (int) ( $rgb[2] * 0.6 ) ) );
+	$tmp = wp_tempnam( $slug . '.png' );
+	imagepng( $img, $tmp );
+	imagedestroy( $img );
+
+	$id = media_handle_sideload( array( 'name' => $slug . '.png', 'tmp_name' => $tmp ), 0, $title );
+	if ( is_wp_error( $id ) ) {
+		WP_CLI::error( $id );
+	}
+	add_post_meta( $id, WPAH_SEED, 1 );
+	if ( '' !== $alt ) {
+		update_post_meta( $id, '_wp_attachment_image_alt', $alt );
+	}
+	return $id;
+}
+
+$storefront = wpah_image( 'storefront', 'Storefront', array( 74, 109, 124 ), 'The Harbor Coffee shopfront on a sunny morning' );
+$roastery   = wpah_image( 'roastery', 'Roastery', array( 120, 82, 58 ), '' );
+$pour_over  = wpah_image( 'pour-over', 'Pour-over', array( 176, 150, 110 ), '' );
+
+$news   = wpah_term( 'News', 'category' );
+$guides = wpah_term( 'Guides', 'category' );
+
+wpah_post( array(
+	'post_type'    => 'page',
+	'post_status'  => 'publish',
+	'post_title'   => 'About Us',
+	'post_content' => implode( "\n\n", array(
+		wpah_heading( 'Small batches, roasted weekly' ),
+		wpah_paragraph( 'Harbor Coffee started in 2019 with one roaster and a market stall. We now roast for two shops and a handful of local cafes.' ),
+		wpah_paragraph( 'Every bag carries the roast date, and we never sell coffee older than three weeks.' ),
+	) ),
+) );
+
+wpah_post( array(
+	'post_type'    => 'page',
+	'post_status'  => 'publish',
+	'post_title'   => 'Contact',
+	'post_content' => implode( "\n\n", array(
+		wpah_paragraph( 'Write to hello@example.com or visit either shop.' ),
+		wpah_list( array( 'Harbor Street 12, open daily 7:00 to 18:00', 'Market Hall, stall 4, Saturdays 8:00 to 14:00' ) ),
+	) ),
+) );
+
+wpah_post( array(
+	'post_type'    => 'page',
+	'post_status'  => 'draft',
+	'post_title'   => 'Wholesale',
+	'post_content' => wpah_paragraph( 'We supply cafes and offices with fresh coffee. Orders go out every Tuesday and Friday and the minimum order is 5 kg. We offer three blends for espresso and two for filter, and we can create a house blend once you order more than 20 kg a month. Delivery is free within the city and costs a flat fee elsewhere. We also train your staff on dialling in espresso and keeping grinders clean, and we lend equipment to partners who sign a twelve-month agreement. Get in touch for a tasting.' ),
+) );
+
+wpah_post( array(
+	'post_status'   => 'publish',
+	'post_title'    => 'Our second shop opens at the Market Hall',
+	'post_category' => array( $news ),
+	'tags_input'    => array( 'shops' ),
+	'post_content'  => implode( "\n\n", array(
+		wpah_paragraph( 'From next month you will find us at stall 4 of the Market Hall every Saturday morning.' ),
+		wpah_paragraph( 'Expect the full filter range, two espresso blends, and beans to take home.' ),
+	) ),
+) );
+
+$roast_post = wpah_post( array(
+	'post_status'   => 'publish',
+	'post_title'    => 'How we roast',
+	'post_category' => array( $guides ),
+	'tags_input'    => array( 'roasting' ),
+	'post_content'  => implode( "\n\n", array(
+		wpah_paragraph( 'We roast on a 12 kg drum roaster, in batches small enough to taste every one.' ),
+		wpah_heading( 'What we look for' ),
+		wpah_list( array( 'Sweetness before body', 'A clean finish', 'Roast dates under three weeks' ) ),
+	) ),
+) );
+set_post_thumbnail( $roast_post, $roastery );
+
+$brew_post = wpah_post( array(
+	'post_status'   => 'publish',
+	'post_title'    => 'Pour-over at home',
+	'post_category' => array( $guides ),
+	'tags_input'    => array( 'brewing' ),
+	'post_content'  => implode( "\n\n", array(
+		wpah_paragraph( 'A good pour-over needs three things: fresh beans, a scale, and patience.' ),
+		wpah_list( array( '15 g coffee, medium-fine', '250 g water just off the boil', 'Three minutes, start to finish' ) ),
+	) ),
+) );
+set_post_thumbnail( $brew_post, $pour_over );
+
+WP_CLI::success( 'Seeded 3 pages (1 draft), 3 posts, 3 images (2 without alt text).' );
+PHP

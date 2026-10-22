@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeMCPExecution": [
+      {
+        "command": "bash bin/ability-gate cursor",
+        "timeout": 10,
+        "failClosed": true
+      }
+    ]
+  }
+}

@@ -2,36 +2,25 @@
 title: "Agent Harness for WordPress: Docker for AI agents"
 canonical: https://wpagent.marcopontili.com/
 description: Agent Harness for WordPress: local Docker WordPress for Claude Code, Cursor, and Codex. Loopback-only; one-command reset.
-dateModified: 2026-10-17
+dateModified: 2026-10-22
 ---
 
 # Agent Harness for WordPress
 
-**Agent Harness for WordPress** is a local, disposable WordPress install for AI coding agents. It runs WordPress and MariaDB in Docker on loopback, exposes site abilities through the official [WordPress MCP Adapter](https://github.com/WordPress/mcp-adapter), and resets with one command. The repo wires the stack; it does not ship an MCP server or plugin of its own.
+**Agent Harness for WordPress** is a free, open-source WordPress site for AI coding agents like Claude Code, Codex, and Cursor, running in Docker on your computer. Agents work through the official WordPress [MCP Adapter](https://github.com/WordPress/mcp-adapter) and [Abilities API](https://developer.wordpress.org/apis/abilities-api/).
 
 ## What you get
 
 A disposable harness, not a hosted WordPress. The MCP server and abilities come from upstream; this repo makes them reproducible.
 
-Pinned: WordPress 7.1.2 · PHP 8.3 · MariaDB 11.8.9 · MCP Adapter 0.7.1 · MS Abilities 1.13.0.
-
 | Piece | Role |
 | --- | --- |
-| Docker | WordPress and MariaDB published on `127.0.0.1` only |
+| Docker | WordPress and MariaDB on `127.0.0.1` only; `./bin/reset` rebuilds a clean site, `./bin/setup` again never wipes content |
 | MCP Adapter | Three meta-tools: discover abilities, inspect a schema, execute |
 | 29 abilities | 26 MS WordPress Abilities and 3 core ones, including a bridge to any REST route |
 | Five test layers | From repo checks to a real headless Claude Code session, whose every step is checked against the database with WP-CLI |
 | Agent skills | Curated WordPress skills for blocks, block themes, plugins, REST, the Abilities API, and WP-CLI |
-| One-command reset | `./bin/reset` rebuilds a clean site; `./bin/setup` again never wipes content |
-
-## How a request travels
-
-1. **Agent:** Claude Code, Cursor, or Codex sends an HTTP MCP request, authenticated with a revocable Application Password.
-2. **MCP Adapter:** listens on `127.0.0.1:8080` and answers with three meta-tools instead of thirty tools.
-3. **Abilities API:** runs the ability with WordPress capability checks, the same rules wp-admin follows.
-4. **WordPress:** a real install on Twenty Twenty-Five and MariaDB, with all data in disposable Docker volumes.
-
-`./bin/wp ability list` skips MCP entirely: if an ability works there but not in your agent, the problem is in the MCP layer, not in WordPress.
+| Approval gate | Your agent looks around freely but asks you before it changes anything, and every change is logged |
 
 ## Quick start
 
@@ -44,11 +33,7 @@ cd wp-agent-harness
 ./bin/connect
 ```
 
-- [README](https://github.com/marcop135/wp-agent-harness#readme)
-- [Agent docs](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/AGENTS.md)
-- [Architecture](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/architecture.md)
-- [Security model](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/security.md)
-- [Examples](https://github.com/marcop135/wp-agent-harness/tree/develop/examples)
+Cursor or Codex: [docs/codex.md](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/codex.md).
 
 ## What to ask your agent
 
@@ -61,11 +46,28 @@ Worked examples from the repo, each with the abilities it uses and what you shou
 - [Plugins and updates](https://github.com/marcop135/wp-agent-harness/blob/develop/examples/plugins.md) (read-only): "Inspect the installed plugins and report their active/inactive state and available updates. Do not change anything."
 - [Site development](https://github.com/marcop135/wp-agent-harness/blob/develop/examples/site-development.md) (inspect, propose, build): "Build a Services section: a top-level "Services" page and three child pages. Keep everything as drafts and show me the structure before you start."
 
+## How a request travels
+
+1. **Agent:** Claude Code, Cursor, or Codex sends an HTTP MCP request, authenticated with a revocable Application Password.
+2. **Approval gate:** the agent reads on its own and asks you before any change, saying exactly what it wants to do.
+3. **MCP Adapter:** three meta-tools on `127.0.0.1:8080` run abilities through the Abilities API, with the capability checks wp-admin uses.
+4. **WordPress:** a real install on Twenty Twenty-Five and MariaDB in disposable Docker volumes. Every change is logged.
+
+`./bin/wp ability list` skips MCP entirely: if an ability works there but not in your agent, the problem is in the MCP layer, not in WordPress.
+
+## Docs
+
+- [README](https://github.com/marcop135/wp-agent-harness#readme)
+- [Agent docs](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/AGENTS.md)
+- [Architecture](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/architecture.md)
+- [Security model](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/security.md)
+- [Examples](https://github.com/marcop135/wp-agent-harness/tree/develop/examples)
+
 ## Questions answered
 
 ### What is Agent Harness for WordPress?
 
-Agent Harness for WordPress is a local Docker WordPress environment for coding agents. Agents talk to a real site through the official WordPress MCP Adapter and Abilities API. It is not a hosted WordPress product and does not ship its own MCP server or plugin.
+Agent Harness for WordPress is a free, open-source WordPress site for AI coding agents like Claude Code, Codex, and Cursor, running in Docker on your computer. Agents work through the official WordPress MCP Adapter and Abilities API.
 
 ### Which AI coding agents work with it?
 
@@ -77,7 +79,7 @@ No. WordPress is published on `127.0.0.1:8080` and MariaDB on `127.0.0.1:3307`, 
 
 ### Will the agent publish or delete things on its own?
 
-The harness rules tell agents to work in drafts and to state a change before applying it, but that is a working convention, not a control. An MCP connection is admin access; MS WordPress Abilities hard-blocks only a few routes, such as permanent deletes and writes to users and settings. That is why the endpoint never leaves your machine.
+No. In Claude Code and Cursor, the agent asks you before every change, works in drafts, and every change it makes is logged. Codex uses its own approval settings. The site runs only on your computer, so no one else can reach it.
 
 ### How do you reset the local site?
 
@@ -93,6 +95,6 @@ No. The MCP Adapter and MS WordPress Abilities come from upstream, pinned to tes
 
 ## License
 
-**Development only.** The WordPress harness binds to localhost; this website only describes it.
+Development only. The WordPress harness binds to localhost. This website only describes it.
 
 Built and maintained by [Marco Pontili](https://marcopontili.com) · MIT · [marcop135/wp-agent-harness](https://github.com/marcop135/wp-agent-harness) · [Privacy](https://wpagent.marcopontili.com/privacy.html)

@@ -62,6 +62,8 @@ Paths are repo-relative from project root unless noted.
 | WP-CLI inside the container | `./bin/wp <args>` |
 | List abilities without MCP | `./bin/wp ability list` |
 | PHP debug log | `./bin/logs --debug` |
+| Demo content (add / remove) | `./bin/seed` / `./bin/seed --remove` |
+| Write abilities agents have called | `./bin/audit` |
 | Test layers 0–3 | `./bin/test --skip-claude` |
 | Test layer 4 (costs model turns) | `./bin/test claude-code` |
 | Destroy and rebuild volumes | `./bin/reset` (needs explicit ask) |
@@ -74,7 +76,7 @@ Paths are repo-relative from project root unless noted.
 
 **MCP loop:** The adapter's default server exposes three meta-tools, not one tool per capability: `mcp-adapter-discover-abilities`, `mcp-adapter-get-ability-info`, `mcp-adapter-execute-ability`. Discover, inspect the schema, execute. Call `get-ability-info` when unsure. Abilities come from MS WP Abilities (`miriamschwab/*`) and WordPress core (`core/*`). `miriamschwab/rest-get` and `miriamschwab/rest-write` bridge to any registered REST route.
 
-**Site work:** Inspect before change. Prefer WordPress-native APIs and conventions. Write Gutenberg-compatible block markup; `create-post` accepts markdown and converts server-side. Default to drafts. Do not publish, delete, or bulk-change unless asked. Content edits: `patch-post-content` (surgical) or `preview-post-update` then `apply-post-update` (staged; state the change and wait for a real answer before applying). Destructive ops (trash, deactivate plugins, change site settings) need an explicit instruction first.
+**Site work:** Inspect before change. Prefer WordPress-native APIs and conventions. Write Gutenberg-compatible block markup; `create-post` accepts markdown and converts server-side. Default to drafts. Do not publish, delete, or bulk-change unless asked. Content edits: `patch-post-content` (surgical) or `preview-post-update` then `apply-post-update` (staged; state the change and wait for a real answer before applying). The approval gate (`bin/ability-gate`, wired in `.claude/settings.json` and `.cursor/hooks.json`) makes the client ask before every write ability; do not route a write around it through `./bin/wp` or `rest-write`. Destructive ops (trash, deactivate plugins, change site settings) need an explicit instruction first.
 
 **Infrastructure vs site:** `docker-compose.yml`, `docker/`, `bin/`, and `.env` are the environment, not the site. Do not change them for a content or site-building task; say so first if a task needs an infra change. Volumes are disposable: `./bin/reset` destroys and rebuilds them. Never store non-reproducible data there.
 

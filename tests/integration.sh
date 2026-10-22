@@ -223,6 +223,30 @@ assert_eq 'the trashed page no longer appears in get-pages' '' \
         '(.data // [])[] | select(.ID == $id) | .ID | tostring' | head -1)"
 
 # ===========================================================================
+suite 'Layer 3: write approval gate and audit log'
+# ===========================================================================
+
+# The gate keeps its own read pattern; MS WP Abilities' policy table is the
+# authority on what writes. Every ability in the table must agree.
+policy="$(wp_cli eval 'echo wp_json_encode( mswpa_ability_policy() );' 2>/dev/null | tr -d '\r' || true)"
+policy_size="$(jq 'length' <<<"$policy" 2>/dev/null || echo 0)"
+assert_ok 'MS WP Abilities exposes its policy table' test "$policy_size" -gt 0
+while IFS=$'\t' read -r ability write; do
+    [[ -n "$ability" ]] || continue
+    expected='read'
+    [[ "$write" == 'true' ]] && expected='write'
+    assert_eq "gate classifies $ability as $expected" "$expected" \
+        "$("$REPO_ROOT/bin/ability-gate" classify "$ability")"
+done < <(jq -r 'to_entries[] | [.key, (.value.write | tostring)] | @tsv' <<<"$policy" 2>/dev/null || true)
+
+write_log="$(wp_cli option get mswpa_write_log --format=json 2>/dev/null | tr -d '\r' || printf '[]')"
+for ability in patch-post-content trash-post; do
+    assert_eq "the audit log recorded $ability on post $TEST_POST_ID" "miriamschwab/$ability" \
+        "$(jq -r --arg a "miriamschwab/$ability" --arg id "$TEST_POST_ID" \
+            '[.[] | select(.ability == $a and (.values.post_id // "") == $id)][0].ability // empty' <<<"$write_log")"
+done
+
+# ===========================================================================
 suite 'Layer 3 — session termination'
 # ===========================================================================
 
