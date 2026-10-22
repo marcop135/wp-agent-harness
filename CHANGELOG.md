@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-10-22
+
 ### Added
 
 - Add a write approval gate: Claude Code and Cursor ask before every write ability ([security](docs/security.md#the-approval-gate)).
