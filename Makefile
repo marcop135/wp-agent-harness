@@ -1,7 +1,7 @@
 # Thin wrapper over ./bin. Every target is one script; nothing is duplicated.
 
 .DEFAULT_GOAL := help
-.PHONY: help setup start stop restart reset status logs test test-fast connect disconnect wp shell
+.PHONY: help setup start stop restart reset status logs test test-fast connect disconnect seed audit wp shell
 
 help: ## Show this help
 	@grep -hE '^[a-z-]+:.*?## ' $(MAKEFILE_LIST) \
@@ -38,6 +38,12 @@ connect: ## Register the MCP server with Claude Code
 
 disconnect: ## Remove the MCP server from Claude Code
 	@./bin/connect --remove
+
+seed: ## Add demo content for the example prompts
+	@./bin/seed
+
+audit: ## Show the write abilities agents have called
+	@./bin/audit
 
 wp: ## Run WP-CLI in the container: make wp ARGS="plugin list"
 	@./bin/wp $(ARGS)
