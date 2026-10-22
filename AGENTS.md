@@ -39,6 +39,8 @@ Common mistakes:
 | Print MCP URL + auth export | `./bin/connect --print` (Codex / Cursor / any client) |
 | Health | `./bin/status` |
 | WP-CLI / abilities without MCP | `./bin/wp …` / `./bin/wp ability list` |
+| Demo content | `./bin/seed` (`--remove` to delete it) |
+| Write abilities agents have called | `./bin/audit` |
 | Tests layers 0–3 | `./bin/test --skip-claude` |
 | Destroy volumes | `./bin/reset` (explicit ask only) |
 

@@ -33,6 +33,9 @@ do not invent names or parameters from memory.
 - **Inspect before change.** State what you found.
 - **Destructive ops need an explicit ask:** trash, deactivate plugins, change
   site settings, `./bin/reset`.
+- **Writes pass the approval gate.** `bin/ability-gate` makes Claude Code and
+  Cursor ask before every write ability; do not route a write around it through
+  `./bin/wp` or `rest-write`. `./bin/audit` lists recorded writes.
 - **Never expose** this harness's MCP endpoint or WordPress beyond localhost.
   A separate live site is outside the harness: [docs/remote-site.md](docs/remote-site.md).
 - **Never put credentials** in a tracked file (`.env`, `.secrets/` stay
