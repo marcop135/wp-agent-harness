@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+#
+# ability-gate: approval gate for WordPress writes over MCP.
+#
+# A pre-tool hook for Claude Code and Cursor. It reads the hook payload on
+# stdin, and when the tool is mcp-adapter-execute-ability it classifies the
+# ability: reads pass, everything else makes the client ask you first. Unknown
+# abilities and unreadable payloads count as writes.
+#
+#   .claude/settings.json   PreToolUse         -> ./bin/ability-gate claude
+#   .cursor/hooks.json      beforeMCPExecution -> ./bin/ability-gate cursor
+#
+#   ./bin/ability-gate classify miriamschwab/trash-post    prints read | write
+#
+# The read set mirrors MS WP Abilities' own policy table (write: false), which
+# tests/integration.sh checks against the live plugin.
+
+set -euo pipefail
+
+readonly READ_ABILITIES='^(miriamschwab/(get-[a-z-]+|rest-get|preview-post-update)|core/get-[a-z-]+)$'
+
+classify() {
+    if [[ "$1" =~ $READ_ABILITIES ]]; then
+        printf 'read'
+    else
+        printf 'write'
+    fi
+}
+
+reason() {
+    printf 'WordPress write: %s. Approve only if this matches what you asked for.' "${1:-unknown ability}"
+}
+
+mode="${1:-}"
+
+case "$mode" in
+    classify)
+        classify "${2:-}"
+        printf '\n'
+        ;;
+
+    claude)
+        payload="$(cat)"
+        tool="$(jq -r '.tool_name // empty' <<<"$payload" 2>/dev/null || true)"
+        [[ "$tool" == *mcp-adapter-execute-ability ]] || exit 0
+        ability="$(jq -r '.tool_input.ability_name // empty' <<<"$payload" 2>/dev/null || true)"
+        [[ "$(classify "$ability")" == 'read' ]] && exit 0
+        jq -n --arg reason "$(reason "$ability")" '{
+            hookSpecificOutput: {
+                hookEventName: "PreToolUse",
+                permissionDecision: "ask",
+                permissionDecisionReason: $reason
+            }
+        }'
+        ;;
+
+    cursor)
+        payload="$(cat)"
+        tool="$(jq -r '.tool_name // empty' <<<"$payload" 2>/dev/null || true)"
+        if [[ "$tool" != *mcp-adapter-execute-ability ]]; then
+            printf '{"permission":"allow"}\n'
+            exit 0
+        fi
+        # Cursor passes tool_input as a JSON string.
+        ability="$(jq -r '.tool_input | (fromjson? // .) | .ability_name? // empty' <<<"$payload" 2>/dev/null || true)"
+        if [[ "$(classify "$ability")" == 'read' ]]; then
+            printf '{"permission":"allow"}\n'
+        else
+            jq -n --arg reason "$(reason "$ability")" \
+                '{permission: "ask", user_message: $reason, agent_message: $reason}'
+        fi
+        ;;
+
+    *)
+        printf 'usage: ability-gate claude | cursor | classify <ability>\n' >&2
+        exit 64
+        ;;
+esac

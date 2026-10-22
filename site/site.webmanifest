@@ -4,8 +4,8 @@
   "description": "Agent Harness for WordPress: local disposable WordPress for coding agents.",
   "start_url": "/",
   "display": "browser",
-  "background_color": "#F6F5F0",
-  "theme_color": "#3858E9",
+  "background_color": "#EAF6FE",
+  "theme_color": "#0369A1",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",

@@ -50,6 +50,8 @@ Common mistakes:
 | MCP URL + auth export | `./bin/connect --print` |
 | Health | `./bin/status` |
 | WP-CLI / abilities | `./bin/wp …` |
+| Demo content | `./bin/seed` |
+| Write audit log | `./bin/audit` |
 | Tests 0–3 | `./bin/test --skip-claude` |
 | Reset volumes | `./bin/reset` (explicit ask only) |
 
