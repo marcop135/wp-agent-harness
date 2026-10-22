@@ -7,6 +7,18 @@
 
 ## [Unreleased]
 
+### Added
+
+- Add a write approval gate: Claude Code and Cursor ask before every write ability ([security](docs/security.md#the-approval-gate)).
+- Add `./bin/audit` to list the writes agents made, and `./bin/seed` for demo content (`--remove` deletes it).
+- Test the gate in layer 0, and against the plugin's policy table and audit log in layer 3.
+
+### Changed
+
+- Rework the README and website around the request flow: example prompts, diagram, icon tiles, redrawn images.
+- Streamline the docs and examples into tables that follow the request path, and document the gate for live sites.
+- Run test layer 4 without project settings, since a headless turn cannot answer the approval gate.
+
 ## [0.8.1] - 2026-10-18
 
 ### Changed
