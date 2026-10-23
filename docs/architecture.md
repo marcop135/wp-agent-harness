@@ -16,7 +16,7 @@ flowchart TB
   subgraph WPC["wordpress container: Apache 2.4 + mod_php 8.3"]
     MCP["MCP Adapter 0.7.1<br/>HttpTransport · three meta-tools<br/>sessions in user meta"]
     API["WordPress Abilities API<br/>core since 6.9"]
-    MS["MS WP Abilities 1.13.0<br/>26 miriamschwab/* abilities"]
+    MS["MS WP Abilities 1.13.0<br/>26 abilities"]
     Core["core/* abilities<br/>get-site-info · get-user-info · get-environment-info"]
     WP["WordPress 7.1.2 core + REST API<br/>Twenty Twenty-Five · content · media<br/>plugins · themes · site configuration"]
   end
@@ -79,7 +79,7 @@ callback. **Abilities are private by default**: MCP only sees one whose
 
 ### MS WP Abilities
 
-Registers **26** abilities in the `miriamschwab/` namespace and opts **3** core
+Registers **26** abilities in its own namespace and opts **3** core
 abilities into MCP visibility: **29** in total. It also records every write
 call in an audit log, which `./bin/audit` prints.
 

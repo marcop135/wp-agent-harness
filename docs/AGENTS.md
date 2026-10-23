@@ -74,7 +74,7 @@ Paths are repo-relative from project root unless noted.
 
 ## Condensed domain knowledge (read full files when editing)
 
-**MCP loop:** The adapter's default server exposes three meta-tools, not one tool per capability: `mcp-adapter-discover-abilities`, `mcp-adapter-get-ability-info`, `mcp-adapter-execute-ability`. Discover, inspect the schema, execute. Call `get-ability-info` when unsure. Abilities come from MS WP Abilities (`miriamschwab/*`) and WordPress core (`core/*`). `miriamschwab/rest-get` and `miriamschwab/rest-write` bridge to any registered REST route.
+**MCP loop:** The adapter's default server exposes three meta-tools, not one tool per capability: `mcp-adapter-discover-abilities`, `mcp-adapter-get-ability-info`, `mcp-adapter-execute-ability`. Discover, inspect the schema, execute. Call `get-ability-info` when unsure. Abilities come from MS WP Abilities and WordPress core (`core/*`). Its `rest-get` and `rest-write` abilities bridge to any registered REST route.
 
 **Site work:** Inspect before change. Prefer WordPress-native APIs and conventions. Write Gutenberg-compatible block markup; `create-post` accepts markdown and converts server-side. Default to drafts. Do not publish, delete, or bulk-change unless asked. Content edits: `patch-post-content` (surgical) or `preview-post-update` then `apply-post-update` (staged; state the change and wait for a real answer before applying). The approval gate (`bin/ability-gate`, wired in `.claude/settings.json` and `.cursor/hooks.json`) makes the client ask before every write ability; do not route a write around it through `./bin/wp` or `rest-write`. Destructive ops (trash, deactivate plugins, change site settings) need an explicit instruction first.
 
@@ -86,4 +86,4 @@ Paths are repo-relative from project root unless noted.
 
 **Git:** Branch from `develop`; releases merge to `main`. Conventional subjects. PRs use `.github/PULL_REQUEST_TEMPLATE.md`. Never add agent attribution (`Co-authored-by: Cursor`, `@cursoragent`, Made/Generated with Cursor). Detail: [CONTRIBUTING.md](../CONTRIBUTING.md), [agents/agent-contract.md](agents/agent-contract.md).
 
-**Upstream bugs:** Ability, MCP protocol, or adapter bugs belong upstream ([WordPress/mcp-adapter](https://github.com/WordPress/mcp-adapter/issues), [miriamschwab/ms-wp-abilities](https://github.com/miriamschwab/ms-wp-abilities/issues)), not here. Use `./bin/wp ability run <name> --user=admin` to tell the layers apart.
+**Upstream bugs:** Ability, MCP protocol, or adapter bugs belong upstream ([WordPress/mcp-adapter](https://github.com/WordPress/mcp-adapter/issues), MS WP Abilities, tracker in [NOTICE](../NOTICE)), not here. Use `./bin/wp ability run <name> --user=admin` to tell the layers apart.

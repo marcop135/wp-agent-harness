@@ -5,7 +5,7 @@ Portable rules for AI agents (Cursor agent, Claude Code, and similar). Canonical
 ## Product context
 
 - **This repo:** a local, disposable WordPress harness for coding agents. Docker Compose runs WordPress and MariaDB on loopback; agents reach the site through the WordPress MCP Adapter (`wordpress` MCP server) or `./bin/wp`.
-- **Not shipped here:** MCP server implementation, Abilities API framework, or a first-party WordPress plugin. Those live upstream ([WordPress/mcp-adapter](https://github.com/WordPress/mcp-adapter), [miriamschwab/ms-wp-abilities](https://github.com/miriamschwab/ms-wp-abilities), WordPress core).
+- **Not shipped here:** MCP server implementation, Abilities API framework, or a first-party WordPress plugin. Those live upstream ([WordPress/mcp-adapter](https://github.com/WordPress/mcp-adapter), MS WP Abilities (see [NOTICE](../../NOTICE)), WordPress core).
 - **Boundary:** nothing is public; nothing is production. Ports bind to `127.0.0.1`. Credentials stay out of tracked files.
 
 ## Task template (non-trivial work)

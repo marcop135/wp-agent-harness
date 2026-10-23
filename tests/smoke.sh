@@ -109,21 +109,21 @@ registered="$(wp_cli ability list --field=name 2>/dev/null | tr -d '\r' || true)
 # Names read from the pinned MS WP Abilities release, not from memory. A rename
 # upstream must fail here rather than silently change what Claude Code can do.
 for ability in \
-    miriamschwab/get-posts \
-    miriamschwab/get-pages \
-    miriamschwab/get-post-types \
-    miriamschwab/create-post \
-    miriamschwab/preview-post-update \
-    miriamschwab/apply-post-update \
-    miriamschwab/patch-post-content \
-    miriamschwab/trash-post \
-    miriamschwab/get-media \
-    miriamschwab/update-media-meta \
-    miriamschwab/get-plugins \
-    miriamschwab/get-themes \
-    miriamschwab/get-site-settings \
-    miriamschwab/rest-get \
-    miriamschwab/rest-write \
+    "$ABILITY_NS/get-posts" \
+    "$ABILITY_NS/get-pages" \
+    "$ABILITY_NS/get-post-types" \
+    "$ABILITY_NS/create-post" \
+    "$ABILITY_NS/preview-post-update" \
+    "$ABILITY_NS/apply-post-update" \
+    "$ABILITY_NS/patch-post-content" \
+    "$ABILITY_NS/trash-post" \
+    "$ABILITY_NS/get-media" \
+    "$ABILITY_NS/update-media-meta" \
+    "$ABILITY_NS/get-plugins" \
+    "$ABILITY_NS/get-themes" \
+    "$ABILITY_NS/get-site-settings" \
+    "$ABILITY_NS/rest-get" \
+    "$ABILITY_NS/rest-write" \
     core/get-site-info \
     core/get-user-info \
     core/get-environment-info; do

@@ -9,7 +9,7 @@ body:
         This repository is local infrastructure: Docker, Bash commands, tests
         and documentation. New abilities and new MCP capabilities belong
         upstream, in
-        [ms-wp-abilities](https://github.com/miriamschwab/ms-wp-abilities/issues)
+        MS WP Abilities (tracker linked in [NOTICE](https://github.com/marcop135/wp-agent-harness/blob/main/NOTICE))
         or [mcp-adapter](https://github.com/WordPress/mcp-adapter/issues).
 
   - type: textarea

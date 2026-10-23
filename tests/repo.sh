@@ -133,35 +133,27 @@ gate() { printf '%s' "$2" | bash bin/ability-gate "$1" 2>/dev/null; }
 execute() { printf '{"tool_name":"mcp__wordpress__mcp-adapter-execute-ability","tool_input":{"ability_name":"%s","parameters":{}}}' "$1"; }
 execute_cursor() { printf '{"tool_name":"mcp-adapter-execute-ability","tool_input":"{\\"ability_name\\":\\"%s\\"}"}' "$1"; }
 
-for ability in miriamschwab/get-posts miriamschwab/rest-get miriamschwab/preview-post-update core/get-site-info; do
+for ability in "$ABILITY_NS/get-posts" "$ABILITY_NS/rest-get" "$ABILITY_NS/preview-post-update" core/get-site-info; do
     assert_eq "gate lets the read $ability through (Claude Code)" '' "$(gate claude "$(execute "$ability")")"
     assert_eq "gate lets the read $ability through (Cursor)" 'allow' \
         "$(gate cursor "$(execute_cursor "$ability")" | jq -r '.permission')"
 done
 
-for ability in miriamschwab/create-post miriamschwab/apply-post-update miriamschwab/trash-post \
-               miriamschwab/rest-write miriamschwab/install-plugin other/get-anything ''; do
+for ability in "$ABILITY_NS/create-post" "$ABILITY_NS/apply-post-update" "$ABILITY_NS/trash-post" \
+               "$ABILITY_NS/rest-write" "$ABILITY_NS/install-plugin" other/get-anything ''; do
     assert_eq "gate asks before ${ability:-an unnamed ability} (Claude Code)" 'ask' \
         "$(gate claude "$(execute "$ability")" | jq -r '.hookSpecificOutput.permissionDecision')"
     assert_eq "gate asks before ${ability:-an unnamed ability} (Cursor)" 'ask' \
         "$(gate cursor "$(execute_cursor "$ability")" | jq -r '.permission')"
 done
 
-gate_user_file="$(mktemp)"
-printf 'editor\n' > "$gate_user_file"
-assert_eq 'gate names the action and the connected login (Claude Code)' \
-    'WordPress write: create-post, as editor. Approve only if this matches what you asked for.' \
-    "$(execute miriamschwab/create-post | ABILITY_GATE_USER_FILE="$gate_user_file" bash bin/ability-gate claude \
-        | jq -r '.hookSpecificOutput.permissionDecisionReason')"
-assert_eq 'gate names the action and the connected login (Cursor)' \
-    'WordPress write: create-post, as editor. Approve only if this matches what you asked for.' \
-    "$(execute_cursor miriamschwab/create-post | ABILITY_GATE_USER_FILE="$gate_user_file" bash bin/ability-gate cursor \
-        | jq -r '.user_message')"
-assert_eq 'gate falls back to a generic user before ./bin/connect' \
-    'WordPress write: create-post, as your connected WordPress user. Approve only if this matches what you asked for.' \
-    "$(execute miriamschwab/create-post | ABILITY_GATE_USER_FILE=/nonexistent bash bin/ability-gate claude \
-        | jq -r '.hookSpecificOutput.permissionDecisionReason')"
-rm -f "$gate_user_file"
+gate_env_file="$(mktemp)"
+printf 'WP_ADMIN_USER=editor
+' > "$gate_env_file"
+assert_eq 'gate names the action and the WP_ADMIN_USER login (Claude Code)'     'WordPress write: create-post, as editor. Approve only if this matches what you asked for.'     "$(execute "$ABILITY_NS/create-post" | ABILITY_GATE_ENV_FILE="$gate_env_file" bash bin/ability-gate claude         | jq -r '.hookSpecificOutput.permissionDecisionReason')"
+assert_eq 'gate names the action and the WP_ADMIN_USER login (Cursor)'     'WordPress write: create-post, as editor. Approve only if this matches what you asked for.'     "$(execute_cursor "$ABILITY_NS/create-post" | ABILITY_GATE_ENV_FILE="$gate_env_file" bash bin/ability-gate cursor         | jq -r '.user_message')"
+assert_eq 'gate falls back to admin without a .env'     'WordPress write: create-post, as admin. Approve only if this matches what you asked for.'     "$(execute "$ABILITY_NS/create-post" | ABILITY_GATE_ENV_FILE=/nonexistent bash bin/ability-gate claude         | jq -r '.hookSpecificOutput.permissionDecisionReason')"
+rm -f "$gate_env_file"
 
 assert_eq 'gate asks on an unreadable payload' 'ask' \
     "$(gate claude '{"tool_name":"mcp__wordpress__mcp-adapter-execute-ability"}' | jq -r '.hookSpecificOutput.permissionDecision')"
