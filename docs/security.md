@@ -49,8 +49,8 @@ it. It runs before every `mcp-adapter-execute-ability` call:
 
 | Client | Wiring | Write call |
 |--------|--------|------------|
-| Claude Code | `PreToolUse` hook in `.claude/settings.json` | asks you, naming the ability |
-| Cursor | `beforeMCPExecution` hook in `.cursor/hooks.json`, fail-closed | asks you, naming the ability |
+| Claude Code | `PreToolUse` hook in `.claude/settings.json` | asks you, naming the ability and that it runs as your connected user |
+| Cursor | `beforeMCPExecution` hook in `.cursor/hooks.json`, fail-closed | asks you, naming the ability and that it runs as your connected user |
 | Codex | none | Codex's own approval policy applies |
 
 - Reads pass: `miriamschwab/get-*`, `rest-get`, `preview-post-update`, and
