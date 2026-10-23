@@ -48,12 +48,12 @@ Worked examples from the repo, each with the abilities it uses and what you shou
 
 ## How a request travels
 
-1. **Agent:** Claude Code, Cursor, or Codex sends an HTTP MCP request, authenticated with a revocable Application Password.
-2. **Approval gate:** the agent reads on its own and asks you before any change, saying exactly what it wants to do.
-3. **MCP Adapter:** three meta-tools on `127.0.0.1:8080` run abilities through the Abilities API, with the capability checks wp-admin uses.
-4. **WordPress:** a real install on Twenty Twenty-Five and MariaDB in disposable Docker volumes. Every change is logged.
+In wp-admin you click Save. Here you type one sentence to your agent, and it makes four stops before anything changes on the site. You approve every change, and you can see where each request is.
 
-`./bin/wp ability list` skips MCP entirely: if an ability works there but not in your agent, the problem is in the MCP layer, not in WordPress.
+1. **Your agent:** you describe the change in plain words. Claude Code, Cursor, or Codex turns it into an MCP request, signed with a revocable Application Password.
+2. **Approval gate:** reads go straight through. Before any change, the agent stops and shows you exactly what it will do. Nothing happens until you say yes.
+3. **MCP Adapter:** three meta-tools on `127.0.0.1:8080` find the right ability and run it through the Abilities API, with the same permission checks as wp-admin.
+4. **WordPress:** a real install on Twenty Twenty-Five and MariaDB in disposable Docker volumes. The change is saved, logged, and reported back to your agent.
 
 ## Docs
 
@@ -92,6 +92,10 @@ The same MCP path works against any WordPress 6.9+ site running the MCP Adapter 
 ### Does this repo ship an MCP server or plugin?
 
 No. The MCP Adapter and MS WordPress Abilities come from upstream, pinned to tested releases. This repository provides Docker Compose, provisioning, tests, docs, and curated WordPress agent skills.
+
+## Run it on your machine
+
+Clone the repo, run `./bin/setup` and `./bin/connect`, and give your agent its first prompt. The code, the docs, and the issue tracker are on [GitHub](https://github.com/marcop135/wp-agent-harness).
 
 ## License
 
