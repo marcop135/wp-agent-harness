@@ -147,6 +147,12 @@ for ability in miriamschwab/create-post miriamschwab/apply-post-update miriamsch
         "$(gate cursor "$(execute_cursor "$ability")" | jq -r '.permission')"
 done
 
+gate_reason='WordPress write: create-post from the miriamschwab abilities, run as your connected WordPress user. Approve only if this matches what you asked for.'
+assert_eq 'gate names the action, the namespace and the acting user (Claude Code)' "$gate_reason" \
+    "$(gate claude "$(execute miriamschwab/create-post)" | jq -r '.hookSpecificOutput.permissionDecisionReason')"
+assert_eq 'gate names the action, the namespace and the acting user (Cursor)' "$gate_reason" \
+    "$(gate cursor "$(execute_cursor miriamschwab/create-post)" | jq -r '.user_message')"
+
 assert_eq 'gate asks on an unreadable payload' 'ask' \
     "$(gate claude '{"tool_name":"mcp__wordpress__mcp-adapter-execute-ability"}' | jq -r '.hookSpecificOutput.permissionDecision')"
 assert_eq 'gate ignores the discovery meta-tools' '' \
