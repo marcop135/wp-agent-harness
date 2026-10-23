@@ -15,7 +15,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="preload" href="/fonts/catamaran-v28-latin-800.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/styles.e7ee7fbc.css">
+  <link rel="stylesheet" href="/styles.745f8750.css">
   <link rel="stylesheet" href="/prism/prism-okaidia.min.css">
   <title>Agent Harness for WordPress: Docker for AI agents</title>
   <meta name="description" content="Agent Harness for WordPress: local Docker WordPress for Claude Code, Cursor, and Codex. Loopback-only; one-command reset.">
@@ -224,7 +224,7 @@
 
   <header class="hero">
     <div class="shell hero-inner">
-      <p class="brand">Agent Harness <span class="brand-prefix">for WordPress</span></p>
+      <p class="brand brand-anim"><span class="brand-word">Agent</span> <span class="brand-word">Harness</span> <span class="brand-word brand-prefix">for WordPress</span></p>
       <h1 class="headline">Local Docker WordPress for Claude Code, Cursor, and Codex.</h1>
       <ul class="pins" aria-label="Components">
         <li>Docker</li>
@@ -292,23 +292,49 @@
     <section class="section shell" id="setup" aria-labelledby="setup-title">
       <h2 id="setup-title" class="section-title">Quick start</h2>
       <p class="section-lede">Needs Docker Compose v2, Git, and Bash. About ten minutes from clone to first prompt.</p>
-      <div class="setup-grid">
-        <figure class="setup" aria-labelledby="snip-install-title">
-          <div class="setup-bar">
-            <div class="setup-head">
-              <h3 id="snip-install-title">Install and connect Claude Code</h3>
-              <a class="setup-alt" href="https://github.com/marcop135/wp-agent-harness/blob/develop/docs/codex.md">Cursor or Codex</a>
+      <div class="journey journey-setup">
+        <ol class="steps journey-stops">
+          <li><span class="step-node" aria-hidden="true">1</span><span class="step-label">Clone</span><code class="step-cmd">git clone</code><span class="flow-link" aria-hidden="true"></span></li>
+          <li><span class="step-node" aria-hidden="true">2</span><span class="step-label">Set up</span><code class="step-cmd">./bin/setup</code><span class="flow-link" aria-hidden="true"></span></li>
+          <li><span class="step-node" aria-hidden="true">3</span><span class="step-label">Connect</span><code class="step-cmd">./bin/connect</code><span class="flow-link" aria-hidden="true"></span></li>
+          <li><span class="step-node" aria-hidden="true">4</span><span class="step-label">Prompt</span><code class="step-cmd">claude</code></li>
+        </ol>
+        <div class="setup-grid">
+          <figure class="setup" aria-labelledby="snip-install-title">
+            <div class="setup-bar">
+              <div class="setup-head">
+                <h3 id="snip-install-title">Install and connect Claude Code</h3>
+                <a class="setup-alt" href="https://github.com/marcop135/wp-agent-harness/blob/develop/docs/codex.md">Cursor or Codex</a>
+              </div>
+              <button class="copy" type="button" data-copy="snip-install" aria-label="Copy the install commands" hidden>
+                <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M5 1.5A1.5 1.5 0 0 1 6.5 0h7A1.5 1.5 0 0 1 15 1.5v9a1.5 1.5 0 0 1-1.5 1.5H12v-1.5h1.5v-9h-7V3H5ZM1 5.5A1.5 1.5 0 0 1 2.5 4h7A1.5 1.5 0 0 1 11 5.5v9A1.5 1.5 0 0 1 9.5 16h-7A1.5 1.5 0 0 1 1 14.5Zm1.5 0v9h7v-9Z"/></svg>
+                <span class="copy-label">Copy</span>
+              </button>
             </div>
-            <button class="copy" type="button" data-copy="snip-install" aria-label="Copy the install commands" hidden>
-              <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M5 1.5A1.5 1.5 0 0 1 6.5 0h7A1.5 1.5 0 0 1 15 1.5v9a1.5 1.5 0 0 1-1.5 1.5H12v-1.5h1.5v-9h-7V3H5ZM1 5.5A1.5 1.5 0 0 1 2.5 4h7A1.5 1.5 0 0 1 11 5.5v9A1.5 1.5 0 0 1 9.5 16h-7A1.5 1.5 0 0 1 1 14.5Zm1.5 0v9h7v-9Z"/></svg>
-              <span class="copy-label">Copy</span>
-            </button>
-          </div>
-          <pre class="language-bash" tabindex="0"><code id="snip-install" class="language-bash">git clone https://github.com/marcop135/wp-agent-harness.git
+            <pre class="language-bash" tabindex="0"><code id="snip-install" class="language-bash">git clone https://github.com/marcop135/wp-agent-harness.git
 cd wp-agent-harness
 ./bin/setup
 ./bin/connect</code></pre>
-        </figure>
+          </figure>
+          <figure class="journey-console">
+            <div class="journey-bar">
+              <figcaption class="journey-title">What you will see</figcaption>
+              <button class="journey-toggle" type="button" aria-label="Pause the setup animation" hidden>Pause</button>
+            </div>
+            <ol class="journey-log">
+              <li class="log-cmd" data-stop="0"><span class="log-mark" aria-hidden="true">$</span><span>git clone https://github.com/marcop135/wp-agent-harness.git</span></li>
+              <li data-stop="0"><span class="log-mark" aria-hidden="true"></span><span>Cloning into 'wp-agent-harness'... done.</span></li>
+              <li class="log-cmd" data-stop="1"><span class="log-mark" aria-hidden="true">$</span><span>./bin/setup</span></li>
+              <li data-stop="1"><span class="log-mark log-ok">ok</span><span>db and wordpress are healthy</span></li>
+              <li data-stop="1"><span class="log-mark log-ok">ok</span><span>MCP endpoint authenticated an initialize request</span></li>
+              <li data-stop="1"><span class="log-mark" aria-hidden="true"></span><span><strong>Setup complete.</strong> WordPress at http://127.0.0.1:8080</span></li>
+              <li class="log-cmd" data-stop="2"><span class="log-mark" aria-hidden="true">$</span><span>./bin/connect</span></li>
+              <li data-stop="2"><span class="log-mark" aria-hidden="true"></span><span><strong>Claude Code is connected.</strong></span></li>
+              <li class="log-cmd" data-stop="3"><span class="log-mark" aria-hidden="true">$</span><span>claude</span></li>
+              <li class="log-cmd" data-stop="3"><span class="log-mark" aria-hidden="true">&gt;</span><span>Inspect the local WordPress site.</span></li>
+            </ol>
+          </figure>
+        </div>
       </div>
       <p id="copy-status" class="visually-hidden" role="status" aria-live="polite"></p>
     </section>
@@ -382,30 +408,48 @@ cd wp-agent-harness
 
     <section class="section shell" id="how" aria-labelledby="how-title">
       <h2 id="how-title" class="section-title">How a request travels</h2>
-      <p class="section-lede">Every prompt takes the same path, so you know where a write stops for your approval and which layer to look at when something fails.</p>
-      <ol class="flow">
-        <li>
-          <span class="tile-icon" aria-hidden="true"><svg viewBox="-50 -50 100 100" focusable="false"><g transform="scale(1.1)"><text class="hf-glyph" x="0" y="15" text-anchor="middle" font-size="46">&gt;_</text></g></svg></span>
-          <h3>Agent</h3>
-          <p>Claude Code, Cursor, or Codex sends an HTTP MCP request, authenticated with a revocable Application Password.</p>
-        </li>
-        <li>
-          <span class="tile-icon" aria-hidden="true"><svg viewBox="-50 -50 100 100" focusable="false"><g transform="scale(1.1)"><circle class="hf-stroke" r="27" stroke-width="4"/><path class="hf-stroke" d="M-12 1 L-3 10 L13 -8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></g></svg></span>
-          <h3>Approval gate</h3>
-          <p>The agent reads on its own and asks you before any change, saying exactly what it wants to do.</p>
-        </li>
-        <li>
-          <span class="tile-icon" aria-hidden="true"><svg viewBox="-50 -50 100 100" focusable="false"><g transform="scale(1.1)"><g class="hf-stroke" stroke-width="4" stroke-linecap="round"><path d="M0 0 L-22 -18 M0 0 L22 -18 M0 0 V26"/><circle class="hf-fill" r="9"/><circle cx="-26" cy="-21" r="6"/><circle cx="26" cy="-21" r="6"/><circle cy="30" r="6"/></g></g></svg></span>
-          <h3>MCP Adapter</h3>
-          <p>Three meta-tools on <code>127.0.0.1:8080</code> run abilities through the Abilities API, with the capability checks wp-admin uses.</p>
-        </li>
-        <li>
-          <span class="tile-icon" aria-hidden="true"><svg viewBox="-50 -50 100 100" focusable="false"><g transform="scale(1.1)"><rect class="hf-stroke" x="-30" y="-26" width="60" height="52" rx="7" stroke-width="4"/><path class="hf-stroke" d="M-30 -13 H30" stroke-width="4"/><g class="hf-fill"><circle cx="-22" cy="-19.5" r="2.5"/><circle cx="-14" cy="-19.5" r="2.5"/><rect x="-21" y="-5" width="42" height="10" rx="3"/><rect x="-21" y="9" width="18" height="10" rx="3" opacity="0.55"/><rect x="3" y="9" width="18" height="10" rx="3" opacity="0.55"/></g></g></svg></span>
-          <h3>WordPress</h3>
-          <p>A real install on Twenty Twenty-Five and MariaDB in disposable Docker volumes. Every change is logged.</p>
-        </li>
-      </ol>
-      <p class="flow-note"><code>./bin/wp ability list</code> skips MCP entirely: if an ability works there but not in your agent, the problem is in the MCP layer, not in WordPress.</p>
+      <p class="section-lede">In wp-admin you click Save. Here you type one sentence to your agent, and it makes four stops before anything changes on the site. You approve every change, and you can see where each request is.</p>
+      <div class="journey">
+        <figure class="journey-console">
+          <div class="journey-bar">
+            <figcaption class="journey-title">One prompt, start to finish</figcaption>
+            <button class="journey-toggle" type="button" aria-label="Pause the request animation" hidden>Pause</button>
+          </div>
+          <ol class="journey-log">
+            <li class="log-cmd" data-stop="0"><span class="log-mark" aria-hidden="true">&gt;</span><span><span class="visually-hidden">You type: </span>Create a draft page called "About This Site". Do not publish it.</span></li>
+            <li data-stop="1"><span class="log-mark" aria-hidden="true">?</span><span>WordPress write: miriamschwab/create-post. Approve only if this matches what you asked for. <span class="log-yes">Yes</span></span></li>
+            <li data-stop="2"><span class="log-mark" aria-hidden="true">&rarr;</span><span>POST 127.0.0.1:8080/wp-json/mcp/mcp-adapter-default-server</span></li>
+            <li data-stop="3"><span class="log-mark log-ok" aria-hidden="true">&check;</span><span>Draft page "About This Site" created as native blocks. Change logged.</span></li>
+            <li data-stop="back"><span class="log-mark" aria-hidden="true">&larr;</span><span>The draft is waiting in Pages for your review.</span></li>
+          </ol>
+        </figure>
+        <ol class="flow journey-stops">
+          <li>
+            <span class="tile-icon" aria-hidden="true"><svg viewBox="-50 -50 100 100" focusable="false"><g transform="scale(1.1)"><text class="hf-glyph" x="0" y="15" text-anchor="middle" font-size="46">&gt;_</text></g></svg></span>
+            <h3>Your agent</h3>
+            <p>You describe the change in plain words. Claude Code, Cursor, or Codex turns it into an MCP request, signed with a revocable Application Password.</p>
+            <span class="flow-link" aria-hidden="true"></span>
+          </li>
+          <li>
+            <span class="tile-icon" aria-hidden="true"><svg viewBox="-50 -50 100 100" focusable="false"><g transform="scale(1.1)"><circle class="hf-stroke" r="27" stroke-width="4"/><path class="hf-stroke" d="M-12 1 L-3 10 L13 -8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></g></svg></span>
+            <h3>Approval gate</h3>
+            <p>Reads go straight through. Before any change, the agent stops and shows you exactly what it will do. Nothing happens until you say yes.</p>
+            <span class="flow-link" aria-hidden="true"></span>
+          </li>
+          <li>
+            <span class="tile-icon" aria-hidden="true"><svg viewBox="-50 -50 100 100" focusable="false"><g transform="scale(1.1)"><g class="hf-stroke" stroke-width="4" stroke-linecap="round"><path d="M0 0 L-22 -18 M0 0 L22 -18 M0 0 V26"/><circle class="hf-fill" r="9"/><circle cx="-26" cy="-21" r="6"/><circle cx="26" cy="-21" r="6"/><circle cy="30" r="6"/></g></g></svg></span>
+            <h3>MCP Adapter</h3>
+            <p>Three meta-tools on <code>127.0.0.1:8080</code> find the right ability and run it through the Abilities API, with the same permission checks as wp-admin.</p>
+            <span class="flow-link" aria-hidden="true"></span>
+          </li>
+          <li>
+            <span class="tile-icon" aria-hidden="true"><svg viewBox="-50 -50 100 100" focusable="false"><g transform="scale(1.1)"><rect class="hf-stroke" x="-30" y="-26" width="60" height="52" rx="7" stroke-width="4"/><path class="hf-stroke" d="M-30 -13 H30" stroke-width="4"/><g class="hf-fill"><circle cx="-22" cy="-19.5" r="2.5"/><circle cx="-14" cy="-19.5" r="2.5"/><rect x="-21" y="-5" width="42" height="10" rx="3"/><rect x="-21" y="9" width="18" height="10" rx="3" opacity="0.55"/><rect x="3" y="9" width="18" height="10" rx="3" opacity="0.55"/></g></g></svg></span>
+            <h3>WordPress</h3>
+            <p>A real install on Twenty Twenty-Five and MariaDB in disposable Docker volumes. The change is saved, logged, and reported back to your agent.</p>
+          </li>
+        </ol>
+        <div class="flow-return" aria-hidden="true"><span class="flow-return-track"></span><span class="flow-return-label">&larr; The answer travels back to your agent</span></div>
+      </div>
     </section>
 
     <section class="section shell" id="docs" aria-labelledby="docs-title">
@@ -468,6 +512,16 @@ cd wp-agent-harness
           <summary>Does this repo ship an MCP server or plugin?</summary>
           <p>No. The MCP Adapter and MS WordPress Abilities come from upstream, pinned to tested releases. This repository provides Docker Compose, provisioning, tests, docs, and curated WordPress agent skills.</p>
         </details>
+      </div>
+    </section>
+
+    <section class="section shell" id="try" aria-labelledby="try-title">
+      <div class="answer-card closing-card">
+        <h2 id="try-title" class="section-title">Run it on your machine</h2>
+        <p class="answer-block">Clone the repo, run <code>./bin/setup</code> and <code>./bin/connect</code>, and give your agent its first prompt. The code, the docs, and the issue tracker are on GitHub.</p>
+        <nav class="cta closing-cta" aria-label="Project">
+          <a class="btn btn-primary" href="https://github.com/marcop135/wp-agent-harness">View on GitHub</a>
+        </nav>
       </div>
     </section>
   </main>
