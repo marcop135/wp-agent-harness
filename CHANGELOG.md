@@ -7,6 +7,14 @@
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-10-23
+
+### Changed
+
+- Animate the website title, Quick start, and request flow.
+- Add a closing "Run it on your machine" section to the website.
+- Show the animated request flow in the README, linked to the website.
+
 ## [0.9.0] - 2026-10-22
 
 ### Added
