@@ -97,3 +97,133 @@
     });
   });
 })();
+
+/**
+ * Plays an element on a loop while it is on screen and the tab is visible,
+ * with a Pause/Play button. Only used when motion is allowed.
+ */
+function playLoop(root, toggle, label, timeline) {
+  var index = 0;
+  var timer = null;
+  var paused = false;
+  var visible = false;
+
+  function schedule() {
+    if (timer || paused || !visible || document.hidden) return;
+    timer = window.setTimeout(function () {
+      timer = null;
+      timeline[index][1]();
+      index = (index + 1) % timeline.length;
+      schedule();
+    }, timeline[index][0]);
+  }
+
+  function stop() {
+    window.clearTimeout(timer);
+    timer = null;
+  }
+
+  if (toggle) {
+    toggle.hidden = false;
+    toggle.addEventListener('click', function () {
+      paused = !paused;
+      root.classList.toggle('is-paused', paused);
+      toggle.textContent = paused ? 'Play' : 'Pause';
+      toggle.setAttribute('aria-label', (paused ? 'Play' : 'Pause') + ' the ' + label + ' animation');
+      if (paused) stop();
+      else schedule();
+    });
+  }
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) stop();
+    else schedule();
+  });
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      visible = entries[0].isIntersecting;
+      if (visible) schedule();
+      else stop();
+    }, { threshold: 0.25 }).observe(root);
+  } else {
+    visible = true;
+    schedule();
+  }
+}
+
+/**
+ * Quick start and "How a request travels": each stop lights up in turn,
+ * its log lines appear, and a packet runs along the wire to the next stop.
+ * Without motion everything stays visible at once.
+ */
+(function () {
+  if (!window.matchMedia('(prefers-reduced-motion: no-preference)').matches) return;
+
+  Array.prototype.forEach.call(document.querySelectorAll('.journey'), function (journey) {
+    var stops = journey.querySelectorAll('.journey-stops > li');
+    var lines = journey.querySelectorAll('.journey-log li');
+    var label = journey.classList.contains('journey-setup') ? 'setup' : 'request';
+    var timeline = [[600, reset]];
+
+    function linesFor(stop) {
+      return Array.prototype.filter.call(lines, function (line) {
+        return line.getAttribute('data-stop') === String(stop);
+      });
+    }
+
+    function show(line) {
+      return function () {
+        line.classList.add('is-on');
+      };
+    }
+
+    function arrive(i) {
+      return function () {
+        Array.prototype.forEach.call(stops, function (stop, n) {
+          stop.classList.toggle('is-on', n <= i);
+          stop.classList.toggle('is-current', n === i);
+        });
+      };
+    }
+
+    function send(i) {
+      return function () {
+        stops[i].classList.add('is-sent');
+      };
+    }
+
+    function reset() {
+      journey.classList.remove('is-back');
+      Array.prototype.forEach.call(stops, function (stop) {
+        stop.classList.remove('is-on', 'is-current', 'is-sent');
+      });
+      Array.prototype.forEach.call(lines, function (line) {
+        line.classList.remove('is-on');
+      });
+    }
+
+    Array.prototype.forEach.call(stops, function (stop, i) {
+      if (i > 0) timeline.push([1800, send(i - 1)]);
+      timeline.push([i > 0 ? 700 : 500, arrive(i)]);
+      linesFor(i).forEach(function (line, n) {
+        timeline.push([n ? 650 : 200, show(line)]);
+      });
+    });
+
+    var back = linesFor('back');
+    if (back.length) {
+      timeline.push([1800, function () {
+        stops[stops.length - 1].classList.remove('is-current');
+        journey.classList.add('is-back');
+      }]);
+      back.forEach(function (line) {
+        timeline.push([900, show(line)]);
+      });
+    }
+    timeline.push([3600, function () {}]);
+
+    journey.classList.add('is-live');
+    playLoop(journey, journey.querySelector('.journey-toggle'), label, timeline);
+  });
+})();
