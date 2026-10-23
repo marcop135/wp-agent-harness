@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.10.1] - 2026-10-23
+
 ### Fixed
 
 - Name the connected WordPress user in the approval prompt, so `miriamschwab/` reads as the namespace, not the author.
