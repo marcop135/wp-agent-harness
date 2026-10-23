@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-10-23
+
 ### Changed
 
 - Animate the website title, the Quick start steps, and "How a request travels", with pause buttons and reduced-motion support.
