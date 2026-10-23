@@ -147,11 +147,21 @@ for ability in miriamschwab/create-post miriamschwab/apply-post-update miriamsch
         "$(gate cursor "$(execute_cursor "$ability")" | jq -r '.permission')"
 done
 
-gate_reason='WordPress write: create-post from the miriamschwab abilities, run as your connected WordPress user. Approve only if this matches what you asked for.'
-assert_eq 'gate names the action, the namespace and the acting user (Claude Code)' "$gate_reason" \
-    "$(gate claude "$(execute miriamschwab/create-post)" | jq -r '.hookSpecificOutput.permissionDecisionReason')"
-assert_eq 'gate names the action, the namespace and the acting user (Cursor)' "$gate_reason" \
-    "$(gate cursor "$(execute_cursor miriamschwab/create-post)" | jq -r '.user_message')"
+gate_user_file="$(mktemp)"
+printf 'editor\n' > "$gate_user_file"
+assert_eq 'gate names the action and the connected login (Claude Code)' \
+    'WordPress write: create-post, as editor. Approve only if this matches what you asked for.' \
+    "$(execute miriamschwab/create-post | ABILITY_GATE_USER_FILE="$gate_user_file" bash bin/ability-gate claude \
+        | jq -r '.hookSpecificOutput.permissionDecisionReason')"
+assert_eq 'gate names the action and the connected login (Cursor)' \
+    'WordPress write: create-post, as editor. Approve only if this matches what you asked for.' \
+    "$(execute_cursor miriamschwab/create-post | ABILITY_GATE_USER_FILE="$gate_user_file" bash bin/ability-gate cursor \
+        | jq -r '.user_message')"
+assert_eq 'gate falls back to a generic user before ./bin/connect' \
+    'WordPress write: create-post, as your connected WordPress user. Approve only if this matches what you asked for.' \
+    "$(execute miriamschwab/create-post | ABILITY_GATE_USER_FILE=/nonexistent bash bin/ability-gate claude \
+        | jq -r '.hookSpecificOutput.permissionDecisionReason')"
+rm -f "$gate_user_file"
 
 assert_eq 'gate asks on an unreadable payload' 'ask' \
     "$(gate claude '{"tool_name":"mcp__wordpress__mcp-adapter-execute-ability"}' | jq -r '.hookSpecificOutput.permissionDecision')"

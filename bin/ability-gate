@@ -27,16 +27,17 @@ classify() {
     fi
 }
 
-# The namespace is the plugin's vendor prefix, not the account the write runs
-# as, so name it apart from the action and say whose account it is.
+# ./bin/connect records the login the agent connects as. Without it (a remote
+# site, or before the first connect) the prompt stays generic.
+readonly USER_FILE="${ABILITY_GATE_USER_FILE:-$(dirname -- "${BASH_SOURCE[0]}")/../.secrets/mcp-user}"
+
+# Name the action and the account it runs as. The namespace is the plugin's
+# vendor prefix, not a person, so it stays out of the prompt.
 reason() {
-    local ability="${1:-unknown ability}" what
-    if [[ "$ability" == */* ]]; then
-        what="${ability#*/} from the ${ability%%/*} abilities"
-    else
-        what="$ability"
-    fi
-    printf 'WordPress write: %s, run as your connected WordPress user. Approve only if this matches what you asked for.' "$what"
+    local ability="${1:-unknown ability}" user=''
+    [[ -r "$USER_FILE" ]] && user="$(head -n 1 "$USER_FILE" | tr -d '\r')"
+    printf 'WordPress write: %s, as %s. Approve only if this matches what you asked for.' \
+        "${ability#*/}" "${user:-your connected WordPress user}"
 }
 
 mode="${1:-}"

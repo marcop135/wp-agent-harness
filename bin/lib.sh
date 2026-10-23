@@ -10,6 +10,8 @@ readonly ENV_FILE="$REPO_ROOT/.env"
 readonly ENV_EXAMPLE="$REPO_ROOT/.env.example"
 readonly SECRETS_DIR="$REPO_ROOT/.secrets"
 readonly APP_PASSWORD_FILE="$SECRETS_DIR/application-password"
+# The login the agent connects as, written by ./bin/connect for bin/ability-gate.
+readonly MCP_USER_FILE="$SECRETS_DIR/mcp-user"
 
 if [[ -t 1 ]]; then
     C_RESET=$'\033[0m'; C_BOLD=$'\033[1m'; C_DIM=$'\033[2m'

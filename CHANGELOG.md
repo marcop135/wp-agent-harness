@@ -7,6 +7,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Name the login a write runs as in the approval prompt, recorded by `./bin/connect`, and drop the plugin namespace.
+
 ## [0.10.1] - 2026-10-23
 
 ### Fixed

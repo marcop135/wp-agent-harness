@@ -49,15 +49,17 @@ it. It runs before every `mcp-adapter-execute-ability` call:
 
 | Client | Wiring | Write call |
 |--------|--------|------------|
-| Claude Code | `PreToolUse` hook in `.claude/settings.json` | asks you, naming the ability and that it runs as your connected user |
-| Cursor | `beforeMCPExecution` hook in `.cursor/hooks.json`, fail-closed | asks you, naming the ability and that it runs as your connected user |
+| Claude Code | `PreToolUse` hook in `.claude/settings.json` | asks you, naming the action and the WordPress user it runs as |
+| Cursor | `beforeMCPExecution` hook in `.cursor/hooks.json`, fail-closed | asks you, naming the action and the WordPress user it runs as |
 | Codex | none | Codex's own approval policy applies |
 
 - Reads pass: `miriamschwab/get-*`, `rest-get`, `preview-post-update`, and
   `core/get-*`. This mirrors the plugin's own policy table; `tests/integration.sh`
   fails if the two disagree.
 - Everything else asks: all write abilities, any ability from another plugin,
-  and any call the gate cannot parse.
+  and any call the gate cannot parse. The prompt names the login that
+  `./bin/connect` recorded in `.secrets/mcp-user`, or "your connected WordPress
+  user" before the first connect.
 - Project hooks run only in a trusted workspace. Check that the client loaded
   them (Claude Code: `/hooks`).
 

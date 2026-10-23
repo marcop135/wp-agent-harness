@@ -234,7 +234,7 @@ Codex and Cursor: [codex.md](codex.md).
 
 Claude Code or Cursor asks before every write ability. That is the approval
 gate (`bin/ability-gate`): reads pass, writes and unknown abilities ask, naming
-the ability and that it runs as your connected user. Codex uses its own approval policy. `./bin/audit` lists recorded
+the action and the WordPress user it runs as. Codex uses its own approval policy. `./bin/audit` lists recorded
 writes. Details: [security.md](security.md#the-approval-gate).
 
 ---

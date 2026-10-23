@@ -32,6 +32,7 @@ if [[ "$action" == 'remove' ]]; then
     step "Removing MCP server '$server_name'"
     ( cd "$REPO_ROOT" && claude mcp remove "$server_name" ) \
         || die "Claude Code has no MCP server called '$server_name' for this project."
+    rm -f "$MCP_USER_FILE"
     ok 'Removed'
     exit 0
 fi
@@ -42,6 +43,9 @@ creds="$(mcp_basic_auth 2>/dev/null)" \
 
 basic="$(printf '%s' "$creds" | base64 | tr -d '\r\n')"
 auth_header="Basic $basic"
+
+# bin/ability-gate names this login in every write prompt.
+printf '%s\n' "${creds%%:*}" > "$MCP_USER_FILE"
 
 if [[ "$action" == 'print' ]]; then
     printf '%sWarning:%s stdout includes a live Basic auth header. Do not paste it into\n' "$C_YELLOW" "$C_RESET" >&2
