@@ -50,7 +50,7 @@ Worked examples from the repo, each with the abilities it uses and what you shou
 
 In wp-admin you click Save. Here you type one sentence to your agent, and it makes four stops before anything changes on the site. You approve every change, and you can see where each request is.
 
-1. **Your agent:** you describe the change in plain words. Claude Code, Cursor, or Codex turns it into an MCP request, signed with a revocable Application Password.
+1. **Your agent:** you describe the change in plain words. Claude Code, Cursor, or Codex turns it into an MCP request, signed with a revocable Application Password, so every change is made as the WordPress user it belongs to.
 2. **Approval gate:** reads go straight through. Before any change, the agent stops and shows you exactly what it will do. Nothing happens until you say yes.
 3. **MCP Adapter:** three meta-tools on `127.0.0.1:8080` find the right ability and run it through the Abilities API, with the same permission checks as wp-admin.
 4. **WordPress:** a real install on Twenty Twenty-Five and MariaDB in disposable Docker volumes. The change is saved, logged, and reported back to your agent.
