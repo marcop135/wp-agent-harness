@@ -7,10 +7,13 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Refer to MS WP Abilities by name in docs, examples, and issue templates, with its upstream links in `NOTICE`.
+
 ### Fixed
 
-- Name the login a write runs as in the approval prompt (`WP_ADMIN_USER`, `admin` by default) and drop the plugin namespace.
-- Refer to MS WP Abilities by name in the docs, examples and issue templates instead of by its namespace; upstream links go through `NOTICE`.
+- Name the admin login a write runs as in the approval prompt (`WP_ADMIN_USER`) and drop the plugin namespace.
 
 ## [0.10.1] - 2026-10-23
 
