@@ -179,6 +179,76 @@ a:hover {
   color: var(--accent);
 }
 
+/* Hero title: the words rise in one by one, "for WordPress" catches a
+   light sweep, and a terminal caret blinks after it. */
+.brand-anim {
+  animation: none;
+}
+
+.brand-word {
+  display: inline-block;
+  animation: word-in 0.8s var(--ease) both;
+}
+
+.brand-word:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+
+.brand-anim .brand-prefix {
+  background: linear-gradient(100deg, var(--accent) 40%, light-dark(#38bdf8, #e0f2fe) 50%, var(--accent) 60%) 100% 0 / 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation:
+    word-in 0.8s var(--ease) 0.3s both,
+    sheen 8s var(--ease) 1.1s 3 both;
+}
+
+.brand-anim::after {
+  content: "";
+  display: inline-block;
+  width: 0.09em;
+  height: 0.8em;
+  margin-left: 0.08em;
+  vertical-align: -0.04em;
+  background: var(--accent);
+  opacity: 0;
+  animation: caret-blink 1.1s steps(1) 1.2s 4;
+}
+
+@keyframes word-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.45em);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes sheen {
+  0% {
+    background-position: 100% 0;
+  }
+  22%,
+  100% {
+    background-position: 0 0;
+  }
+}
+
+@keyframes caret-blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
 .headline {
   margin: var(--space-5) auto 0;
   max-width: none;
@@ -517,9 +587,109 @@ a:hover {
   color: light-dark(#334155, #e2e8f0);
 }
 
+.journey {
+  --flow-pad: var(--space-5);
+  --flow-gap: var(--space-5);
+  --flow-icon: 4rem;
+  margin-top: var(--space-6);
+}
+
+.journey-console {
+  margin: 0;
+  background: light-dark(#f8fafc, #000);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  overflow: clip;
+  box-shadow: 0 12px 28px light-dark(rgb(11 18 32 / 0.08), rgb(0 0 0 / 0.5));
+}
+
+.journey-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 3.25rem;
+  padding: var(--space-2) var(--space-3) var(--space-2) var(--space-5);
+  border-bottom: 1px solid light-dark(var(--border), rgb(255 255 255 / 0.1));
+}
+
+.journey-title {
+  font-family: var(--font-code);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  color: light-dark(#475569, #94a3b8);
+}
+
+.journey-toggle {
+  min-height: 2.25rem;
+  min-width: 5.5rem;
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid light-dark(var(--border), rgb(255 255 255 / 0.2));
+  border-radius: 0.35rem;
+  background: transparent;
+  color: light-dark(#334155, #e2e8f0);
+  font-family: var(--font-code);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.journey-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.journey-log {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-5);
+  list-style: none;
+  font-family: var(--font-code);
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: light-dark(#0b1220, #f8f8f2);
+}
+
+.journey-log li {
+  display: grid;
+  grid-template-columns: 1.25rem 1fr;
+  gap: var(--space-2);
+  color: light-dark(#475569, #b4c6dc);
+  overflow-wrap: anywhere;
+}
+
+.journey-log .log-cmd {
+  font-weight: 700;
+  color: light-dark(#0b1220, #f8f8f2);
+}
+
+.journey-log strong {
+  color: light-dark(#15803d, #4ade80);
+}
+
+.log-mark {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.log-ok {
+  color: light-dark(#15803d, #4ade80);
+}
+
+.log-yes {
+  display: inline-block;
+  margin-inline-start: var(--space-1);
+  padding: 0 var(--space-2);
+  border: 1px solid light-dark(#15803d, #4ade80);
+  border-radius: 0.25rem;
+  color: light-dark(#15803d, #4ade80);
+  font-weight: 700;
+}
+
 .flow {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--flow-gap);
   margin: var(--space-6) 0 0;
   padding: 0;
   list-style: none;
@@ -533,34 +703,44 @@ a:hover {
 
 .flow li {
   position: relative;
-  padding: var(--space-5);
+  display: grid;
+  grid-template-columns: var(--flow-icon) 1fr;
+  align-content: start;
+  column-gap: var(--space-4);
+  padding: var(--flow-pad);
   border: 1px solid var(--border);
   border-radius: 0.45rem;
   background:
     radial-gradient(ellipse 90% 70% at 0% 0%, var(--glow), transparent 70%),
     var(--surface);
+  transition:
+    opacity 0.4s var(--ease),
+    border-color 0.4s var(--ease),
+    box-shadow 0.4s var(--ease),
+    transform 0.4s var(--ease);
 }
 
 .flow .tile-icon {
-  width: 4rem;
-  height: 4rem;
+  grid-row: span 2;
+  width: var(--flow-icon);
+  height: var(--flow-icon);
+  margin: 0;
   border-radius: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .flow li {
+    display: block;
+  }
+
+  .flow .tile-icon {
+    margin-bottom: var(--space-4);
+  }
 }
 
 .flow .tile-icon svg {
   width: 2.75rem;
   height: 2.75rem;
-}
-
-@media (min-width: 48rem) {
-  .flow li:not(:last-child)::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    right: calc(-1 * var(--space-4) - 1px);
-    width: var(--space-4);
-    border-top: 1px dashed var(--accent);
-  }
 }
 
 .flow h3 {
@@ -578,11 +758,363 @@ a:hover {
   color: var(--muted);
 }
 
-.flow-note {
-  margin: var(--space-5) 0 0;
-  max-width: 62ch;
+/* The wire from one stop's icon to the next: down the icon column on
+   small screens, across the empty top row of the card from 48rem. */
+.flow-link {
+  position: absolute;
+  z-index: 1;
+  left: calc(var(--flow-pad) + var(--flow-icon) / 2 - 1px);
+  top: calc(var(--flow-pad) + var(--flow-icon) + var(--space-1));
+  bottom: calc(-1 * (var(--flow-gap) + var(--flow-pad) + var(--space-1)));
+  width: 2px;
+  background: repeating-linear-gradient(180deg, var(--accent) 0 4px, transparent 4px 8px);
+  pointer-events: none;
+}
+
+.flow-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.7s var(--ease);
+}
+
+.flow-link::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 0;
+  width: 0.75rem;
+  height: 0.75rem;
+  margin: -0.375rem 0 0 -0.375rem;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent), 0 0 14px var(--accent);
+  opacity: 0;
+}
+
+@media (min-width: 48rem) {
+  .flow-link {
+    left: calc(var(--flow-pad) + var(--flow-icon) + var(--space-1));
+    right: calc(-1 * (var(--flow-gap) + var(--flow-pad) + var(--space-1)));
+    top: calc(var(--flow-pad) + var(--flow-icon) / 2 - 1px);
+    bottom: auto;
+    width: auto;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, var(--accent) 0 4px, transparent 4px 8px);
+  }
+
+  .flow-link::after {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .flow-link::before {
+    left: 0;
+    top: 50%;
+  }
+}
+
+.flow-return {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  font-family: var(--font-code);
+  font-size: 0.8rem;
   color: var(--muted);
-  text-wrap: pretty;
+}
+
+.flow-return-track {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--border) 0 4px, transparent 4px 8px);
+}
+
+.flow-return-track::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-top: -0.375rem;
+  border-radius: 50%;
+  background: light-dark(#15803d, #4ade80);
+  box-shadow: 0 0 12px light-dark(#15803d, #4ade80);
+  opacity: 0;
+}
+
+.flow-return-label {
+  flex: none;
+  order: -1;
+}
+
+/* Animated playback, switched on by site.js only when motion is allowed.
+   Without it every stop and log line is shown at once. */
+.journey.is-live .journey-log li {
+  opacity: 0;
+  transform: translateY(0.375rem);
+  transition: opacity 0.45s var(--ease), transform 0.45s var(--ease);
+}
+
+.journey.is-live .journey-log li.is-on {
+  opacity: 1;
+  transform: none;
+}
+
+.journey.is-live .log-yes {
+  opacity: 0;
+  transition: opacity 0.3s var(--ease) 0.9s, background-color 0.3s var(--ease) 0.9s, color 0.3s var(--ease) 0.9s;
+}
+
+.journey.is-live .is-on .log-yes {
+  opacity: 1;
+  background: light-dark(#15803d, #4ade80);
+  color: light-dark(#fff, #000);
+}
+
+.journey.is-live .journey-stops > li {
+  opacity: 0.5;
+}
+
+.journey.is-live .journey-stops > li.is-on {
+  opacity: 1;
+}
+
+.journey.is-live .flow li.is-current {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 14px 32px light-dark(rgb(3 105 161 / 0.18), rgb(56 189 248 / 0.16));
+  transform: translateY(-2px);
+}
+
+.journey.is-live .flow li.is-current .tile-icon {
+  animation: stop-pulse 1.6s var(--ease) infinite;
+}
+
+.journey.is-live .flow-link {
+  background: repeating-linear-gradient(180deg, var(--border) 0 4px, transparent 4px 8px);
+}
+
+.journey.is-live .is-sent .flow-link::after {
+  transform: none;
+}
+
+.journey.is-live .is-sent .flow-link::before {
+  animation: packet-y 0.7s var(--ease) forwards;
+}
+
+.journey.is-live .flow-return-track::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: light-dark(#15803d, #4ade80);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.9s var(--ease);
+}
+
+.journey.is-live.is-back .flow-return-track::after {
+  transform: none;
+}
+
+.journey.is-live.is-back .flow-return-track::before {
+  animation: packet-back 0.9s var(--ease) forwards;
+}
+
+@media (min-width: 48rem) {
+  .journey.is-live .flow-link {
+    background: repeating-linear-gradient(90deg, var(--border) 0 4px, transparent 4px 8px);
+  }
+
+  .journey.is-live .is-sent .flow-link::before {
+    animation-name: packet-x;
+  }
+}
+
+.journey.is-paused *,
+.journey.is-paused *::before,
+.journey.is-paused *::after {
+  animation-play-state: paused !important;
+}
+
+@keyframes stop-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 45%, transparent);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 12px color-mix(in srgb, var(--accent) 0%, transparent);
+  }
+}
+
+@keyframes packet-y {
+  0% {
+    top: 0;
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes packet-x {
+  0% {
+    left: 0;
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes packet-back {
+  0% {
+    right: 0;
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    right: 100%;
+    opacity: 0;
+  }
+}
+
+/* Quick start: four numbered steps above the commands and their output. */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.steps li {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: var(--space-1);
+  min-width: 0;
+  text-align: center;
+  transition: opacity 0.4s var(--ease);
+}
+
+.step-node {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: var(--space-1);
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--accent);
+  font-family: var(--font-code);
+  font-weight: 700;
+  transition: background-color 0.4s var(--ease), color 0.4s var(--ease);
+}
+
+.step-label {
+  font-weight: 600;
+}
+
+.step-cmd {
+  max-width: 100%;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+@media (max-width: 29.99rem) {
+  .step-cmd {
+    display: none;
+  }
+}
+
+.steps .flow-link {
+  left: calc(50% + 1.5rem + var(--space-1));
+  right: calc(-50% + 1.5rem + var(--space-1));
+  top: calc(1.5rem - 1px);
+  bottom: auto;
+  width: auto;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--accent) 0 4px, transparent 4px 8px);
+}
+
+.steps .flow-link::after {
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.steps .flow-link::before {
+  left: 0;
+  top: 50%;
+}
+
+.journey.is-live .steps .flow-link {
+  background: repeating-linear-gradient(90deg, var(--border) 0 4px, transparent 4px 8px);
+}
+
+.journey.is-live .steps .is-sent .flow-link::before {
+  animation-name: packet-x;
+}
+
+.journey.is-live .steps li.is-current .step-node {
+  background: var(--fill);
+  color: #fff;
+  animation: stop-pulse 1.6s var(--ease) infinite;
+}
+
+.journey-setup .setup-grid {
+  max-width: none;
+  align-items: start;
+}
+
+@media (min-width: 64rem) {
+  .journey-setup .setup-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .journey-setup pre[class*="language-"] {
+    font-size: 0.8rem;
+  }
+}
+
+/* Closing call to action after the FAQ. */
+.closing-card {
+  justify-items: start;
+}
+
+@media (min-width: 48rem) {
+  .answer-card.closing-card {
+    grid-template-columns: none;
+  }
+}
+
+.closing-card .answer-block {
+  margin: 0;
+}
+
+.closing-cta {
+  justify-content: flex-start;
+  margin-top: 0;
+  animation: none;
 }
 
 .prompts {
@@ -932,6 +1464,9 @@ a:hover {
   .lede,
   .pins,
   .cta,
+  .brand-anim .brand-word,
+  .brand-anim .brand-prefix,
+  .brand-anim::after,
   .faq details[open] p {
     animation: none;
   }
@@ -956,6 +1491,7 @@ a:hover {
   .btn-ghost,
   .faq details,
   .flow li,
+  .journey-console,
   .prompts figure,
   .copy,
   .setup {
@@ -965,6 +1501,15 @@ a:hover {
   .btn-primary {
     background: Highlight;
     color: HighlightText;
+  }
+
+  .flow-link,
+  .flow-return-track {
+    background: CanvasText;
+  }
+
+  .brand-anim .brand-prefix {
+    color: LinkText;
   }
 }
 

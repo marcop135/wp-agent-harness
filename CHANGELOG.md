@@ -7,6 +7,12 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Animate the website title, the Quick start steps, and "How a request travels", with pause buttons and reduced-motion support.
+- Rewrite the request flow copy for people used to wp-admin, and add a closing "Run it on your machine" section.
+- Link the README to the website, add the animated request flow in light and dark, and match the site's section order.
+
 ## [0.9.0] - 2026-10-22
 
 ### Added

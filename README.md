@@ -1,5 +1,5 @@
-![Agent Harness for WordPress: local disposable WordPress for coding agents. Your agent, MCP, Abilities, WP.](.github/brand/readme-light.png#gh-light-mode-only)
-![Agent Harness for WordPress: local disposable WordPress for coding agents. Your agent, MCP, Abilities, WP.](.github/brand/readme-dark.png#gh-dark-mode-only)
+[![Agent Harness for WordPress: local disposable WordPress for coding agents. Your agent, MCP, Abilities, WP.](.github/brand/readme-light.png#gh-light-mode-only)](https://wpagent.marcopontili.com)
+[![Agent Harness for WordPress: local disposable WordPress for coding agents. Your agent, MCP, Abilities, WP.](.github/brand/readme-dark.png#gh-dark-mode-only)](https://wpagent.marcopontili.com)
 
 # Agent Harness for WordPress
 
@@ -15,14 +15,15 @@ Codex, or Cursor) can inspect and build on. One command sets it up in Docker;
 another rebuilds it from scratch.
 
 The agent talks to WordPress over MCP: the official
-[MCP Adapter](https://github.com/WordPress/mcp-adapter) exposes the site's
-[Abilities API](https://developer.wordpress.org/apis/abilities-api/), and
+[MCP Adapter](https://github.com/WordPress/mcp-adapter) exposes the
+[Abilities API](https://developer.wordpress.org/apis/abilities-api/), and the
 [MS WordPress Abilities](https://github.com/miriamschwab/ms-wp-abilities)
-plugin provides the abilities (posts, pages, media, plugins, themes, REST).
-All three come from upstream at pinned versions. This repo wires them together and adds
-setup, tests, and agent instructions.
+plugin provides the abilities. All three come from upstream at pinned versions;
+this repo wires them together and adds setup, tests, and agent instructions.
 
 **Development only.** Localhost only, no production data.
+
+Website: [wpagent.marcopontili.com](https://wpagent.marcopontili.com), with the setup and a request from prompt to WordPress played step by step.
 
 ## What you get
 
@@ -37,6 +38,27 @@ setup, tests, and agent instructions.
 | Tests | Checks the stack in five layers, up to a real Claude Code session verified against the database. | `./bin/test` |
 | Agent skills | Teaches the agent WordPress conventions for blocks, themes, plugins, REST, and WP-CLI. | `.claude/skills/`, `.cursor/skills/` |
 
+## Quick start
+
+Needs Docker Compose v2, Git, and Bash.
+
+```bash
+git clone https://github.com/marcop135/wp-agent-harness.git
+cd wp-agent-harness
+./bin/setup
+./bin/connect && claude
+```
+
+Using [Codex](docs/codex.md) or [Cursor](docs/codex.md#claude-code-and-cursor)? `./bin/connect --print` prints the URL and auth header instead.
+
+Check the stack:
+
+```bash
+./bin/status
+./bin/test --skip-claude    # layers 0–3, no model turns
+./bin/wp ability list       # abilities without MCP
+```
+
 ## What to ask your agent
 
 | Task | Prompt | Site changes |
@@ -50,6 +72,13 @@ setup, tests, and agent instructions.
 
 ## How a request travels
 
+<a href="https://wpagent.marcopontili.com/#how">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/brand/request-flow-dark.gif">
+    <img src=".github/brand/request-flow-light.gif" width="865" alt="One prompt from your agent through the approval gate and MCP Adapter to WordPress, and the answer back.">
+  </picture>
+</a>
+
 ```mermaid
 flowchart TB
   Agent[Agent] --> Gate{Approval gate}
@@ -61,28 +90,9 @@ flowchart TB
   WP --> Log[(Audit log)]
 ```
 
-## Quick start
-
-Needs Docker Compose v2, Git, and Bash.
-
-```bash
-git clone https://github.com/marcop135/wp-agent-harness.git
-cd wp-agent-harness
-./bin/setup
-./bin/connect && claude
-```
-
-```bash
-./bin/status
-./bin/test --skip-claude    # layers 0–3, no model turns
-./bin/wp ability list       # abilities without MCP
-```
-
-Quick start for [Codex](docs/codex.md) · [Cursor](docs/codex.md#claude-code-and-cursor).
-
 ## Docs
 
-Landing page: [wpagent.marcopontili.com](https://wpagent.marcopontili.com)
+The [website](https://wpagent.marcopontili.com) walks through setup, prompts, and how a request travels.
 
 | Doc | Covers |
 |-----|--------|
