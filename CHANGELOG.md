@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-10-23
+
 ### Changed
 
 - Animate the website title, Quick start, and request flow.
