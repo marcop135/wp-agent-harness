@@ -7,11 +7,21 @@
 
 ## [Unreleased]
 
+## [0.10.2] - 2026-10-24
+
+### Changed
+
+- Refer to MS WP Abilities by name in docs, examples, and issue templates, with its upstream links in `NOTICE`.
+
+### Fixed
+
+- Name the admin login a write runs as in the approval prompt (`WP_ADMIN_USER`) and drop the plugin namespace.
+
 ## [0.10.1] - 2026-10-23
 
 ### Fixed
 
-- Name the connected WordPress user in the approval prompt, so `miriamschwab/` reads as the namespace, not the author.
+- Name the connected WordPress user in the approval prompt, so the plugin namespace reads as a namespace, not the author.
 
 ## [0.10.0] - 2026-10-23
 
@@ -39,7 +49,7 @@
 
 ### Changed
 
-- Update [MS WP Abilities to 1.13.0](https://github.com/miriamschwab/ms-wp-abilities/releases/tag/v1.13.0), letting `create-post` credit a named author.
+- Update MS WP Abilities to 1.13.0, letting `create-post` credit a named author.
 
 ## [0.8.0] - 2026-10-17
 

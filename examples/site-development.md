@@ -15,10 +15,10 @@ A fuller version:
 
 | Ability | Used for | Type |
 |---------|----------|------|
-| `miriamschwab/get-site-settings`, `get-post-types`, `get-pages`, `get-themes` | what exists and which conventions the site follows | read |
-| `miriamschwab/create-post` | one draft per page, markdown converted to blocks | write, gate asks |
-| `miriamschwab/rest-write` | `post_parent` on `/wp/v2/pages/<id>`; hierarchy is not a `create-post` parameter | write, gate asks |
-| `miriamschwab/rest-get` | anything another plugin registers | read |
+| `get-site-settings`, `get-post-types`, `get-pages`, `get-themes` | what exists and which conventions the site follows | read |
+| `create-post` | one draft per page, markdown converted to blocks | write, gate asks |
+| `rest-write` | `post_parent` on `/wp/v2/pages/<id>`; hierarchy is not a `create-post` parameter | write, gate asks |
+| `rest-get` | anything another plugin registers | read |
 
 ## What you should see
 

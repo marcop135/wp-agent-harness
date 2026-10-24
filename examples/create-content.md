@@ -7,8 +7,8 @@ Writes a draft; the approval gate asks before `create-post`.
 
 | Ability | Used for | Type |
 |---------|----------|------|
-| `miriamschwab/create-post` | creating the page | write, gate asks |
-| `miriamschwab/get-pages` | reading it back | read |
+| `create-post` | creating the page | write, gate asks |
+| `get-pages` | reading it back | read |
 
 `create-post` converts `markdown` to native blocks server-side:
 
@@ -27,7 +27,7 @@ Input notes:
 - `content` takes raw HTML and is ignored when `markdown` is present. Prefer
   `markdown`: hand-written block comments are easy to get subtly wrong.
 - `categories` and `tags` take **names**, not IDs, and only attach existing
-  terms. Create missing ones first with `miriamschwab/create-term`.
+  terms. Create missing ones first with `create-term`.
 - `meta` sets post meta on creation, including Yoast fields
   (`_yoast_wpseo_title`, `_yoast_wpseo_metadesc`, `_yoast_wpseo_focuskw`).
 
@@ -55,7 +55,7 @@ Input notes:
 > and one placeholder paragraph. Make Pricing and Contact children of Services.
 
 Page hierarchy is not a `create-post` parameter: the agent sets `post_parent`
-through `miriamschwab/rest-write` on `/wp/v2/pages/<id>` and should say so first.
+through `rest-write` on `/wp/v2/pages/<id>` and should say so first.
 
 ## End-to-end demonstration
 

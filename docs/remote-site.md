@@ -16,7 +16,7 @@ applies in full.
 |-------------|-----|
 | WordPress 6.9 or later | Abilities API in core |
 | [MCP Adapter](https://github.com/WordPress/mcp-adapter) active | the MCP endpoint |
-| [MS WordPress Abilities](https://github.com/miriamschwab/ms-wp-abilities) active, or another abilities plugin | the abilities |
+| MS WordPress Abilities ([NOTICE](../NOTICE)) active, or another abilities plugin | the abilities |
 | Pretty permalinks (anything but Plain) | with Plain, `/wp-json/` does not resolve, REST answers only on `?rest_route=`, and MCP clients do not find the server |
 | HTTPS | core offers Application Passwords only over HTTPS, or on plain HTTP when `WP_ENVIRONMENT_TYPE` is `local`; do not set `local` on a live site to get around this |
 

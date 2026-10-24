@@ -3,7 +3,7 @@
 # wp — run WP-CLI inside the WordPress container, as www-data.
 #
 #   ./bin/wp plugin list
-#   ./bin/wp ability list --namespace=miriamschwab
+#   ./bin/wp ability list --fields=name,label
 #   ./bin/wp ability run core/get-site-info --user=admin
 
 source "$(dirname -- "${BASH_SOURCE[0]}")/lib.sh"
