@@ -17,8 +17,8 @@
   <link rel="preload" href="/fonts/catamaran-v28-latin-800.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/styles.745f8750.css">
   <link rel="stylesheet" href="/prism/prism-okaidia.min.css">
-  <title>Agent Harness for WordPress: Docker for AI agents</title>
-  <meta name="description" content="Agent Harness for WordPress: local Docker WordPress for Claude Code, Cursor, and Codex. Loopback-only; one-command reset.">
+  <title>Agent Harness for WordPress: local WordPress for AI agents</title>
+  <meta name="description" content="Local Docker WordPress for Claude Code, Cursor, and Codex, wired over MCP. Every change needs your approval and is logged; one command resets it.">
   <link rel="canonical" href="https://wpagent.marcopontili.com/">
   <link rel="alternate" type="text/markdown" href="https://wpagent.marcopontili.com/index.md" title="Markdown">
   <link rel="alternate" type="text/plain" href="https://wpagent.marcopontili.com/llms.txt" title="llms.txt">
@@ -26,15 +26,15 @@
   <meta property="og:site_name" content="Agent Harness for WordPress">
   <meta property="og:locale" content="en_US">
   <meta property="og:url" content="https://wpagent.marcopontili.com/">
-  <meta property="og:title" content="Agent Harness for WordPress: Docker for AI agents">
-  <meta property="og:description" content="Agent Harness for WordPress: local Docker WordPress for Claude Code, Cursor, and Codex. Loopback-only; one-command reset.">
+  <meta property="og:title" content="Agent Harness for WordPress: local WordPress for AI agents">
+  <meta property="og:description" content="Local Docker WordPress for Claude Code, Cursor, and Codex, wired over MCP. Every change needs your approval and is logged; one command resets it.">
   <meta property="og:image" content="https://wpagent.marcopontili.com/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Agent Harness for WordPress: Your Agent, MCP, Abilities, and WP tiles joined by arrows">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Agent Harness for WordPress: Docker for AI agents">
-  <meta name="twitter:description" content="Agent Harness for WordPress: local Docker WordPress for Claude Code, Cursor, and Codex. Loopback-only; one-command reset.">
+  <meta name="twitter:title" content="Agent Harness for WordPress: local WordPress for AI agents">
+  <meta name="twitter:description" content="Local Docker WordPress for Claude Code, Cursor, and Codex, wired over MCP. Every change needs your approval and is logged; one command resets it.">
   <meta name="twitter:image" content="https://wpagent.marcopontili.com/og.png">
   <meta name="twitter:image:alt" content="Agent Harness for WordPress: Your Agent, MCP, Abilities, and WP tiles joined by arrows">
   <script type="application/ld+json">
@@ -68,8 +68,8 @@
       "@type": "WebPage",
       "@id": "https://wpagent.marcopontili.com/#webpage",
       "url": "https://wpagent.marcopontili.com/",
-      "name": "Agent Harness for WordPress: Docker for AI agents",
-      "description": "Agent Harness for WordPress: local Docker WordPress for Claude Code, Cursor, and Codex. Loopback-only; one-command reset.",
+      "name": "Agent Harness for WordPress: local WordPress for AI agents",
+      "description": "Local Docker WordPress for Claude Code, Cursor, and Codex, wired over MCP. Every change needs your approval and is logged; one command resets it.",
       "isPartOf": {
         "@id": "https://wpagent.marcopontili.com/#website"
       },
@@ -79,7 +79,7 @@
       "primaryImageOfPage": {
         "@id": "https://wpagent.marcopontili.com/#primaryimage"
       },
-      "dateModified": "2026-10-22",
+      "dateModified": "2026-10-24",
       "inLanguage": "en-US"
     },
     {
@@ -129,6 +129,14 @@
         {
           "@type": "HowToTool",
           "name": "Bash"
+        },
+        {
+          "@type": "HowToTool",
+          "name": "curl"
+        },
+        {
+          "@type": "HowToTool",
+          "name": "jq"
         }
       ],
       "step": [
@@ -174,10 +182,26 @@
         },
         {
           "@type": "Question",
+          "name": "How is it different from wp-env or WordPress Playground?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "wp-env and WordPress Playground give you a WordPress site; this harness also connects your coding agent to it. ./bin/setup installs and authenticates the MCP Adapter and MS WordPress Abilities, Claude Code and Cursor ask before every write, and each change lands in an audit log."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "Is the WordPress site public?",
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "No. WordPress is published on 127.0.0.1:8080 and MariaDB on 127.0.0.1:3307, so no other machine can reach them. This website only describes the harness and has no MCP endpoint."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Where does the site run, and how do I log in?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "After ./bin/setup, WordPress runs at http://localhost:8080. Log in to wp-admin as admin with the WP_ADMIN_PASSWORD that setup generates in .env."
           }
         },
         {
@@ -291,7 +315,7 @@
 
     <section class="section shell" id="setup" aria-labelledby="setup-title">
       <h2 id="setup-title" class="section-title">Quick start</h2>
-      <p class="section-lede">Needs Docker Compose v2, Git, and Bash. About ten minutes from clone to first prompt.</p>
+      <p class="section-lede">Needs Docker Compose v2, Git, Bash, curl, and jq. About ten minutes from clone to first prompt.</p>
       <div class="journey journey-setup">
         <ol class="steps journey-stops">
           <li><span class="step-node" aria-hidden="true">1</span><span class="step-label">Clone</span><code class="step-cmd">git clone</code><span class="flow-link" aria-hidden="true"></span></li>
@@ -493,8 +517,16 @@ cd wp-agent-harness
           <p>Claude Code, Cursor, and Codex connect over HTTP MCP to the same endpoint. <code>./bin/connect</code> registers it with Claude Code; <code>./bin/connect --print</code> prints the URL and Authorization header for Cursor, and the variable the repo's <code>.codex/config.toml</code> reads for Codex.</p>
         </details>
         <details>
+          <summary>How is it different from wp-env or WordPress Playground?</summary>
+          <p><a href="https://developer.wordpress.org/block-editor/reference-guides/packages/packages-env/">wp-env</a> and <a href="https://wordpress.org/playground/">WordPress Playground</a> give you a WordPress site; this harness also connects your coding agent to it. <code>./bin/setup</code> installs and authenticates the MCP Adapter and MS WordPress Abilities, Claude Code and Cursor ask before every write, and each change lands in an audit log.</p>
+        </details>
+        <details>
           <summary>Is the WordPress site public?</summary>
           <p>No. WordPress is published on <code>127.0.0.1:8080</code> and MariaDB on <code>127.0.0.1:3307</code>, so no other machine can reach them. This website only describes the harness and has no MCP endpoint.</p>
+        </details>
+        <details>
+          <summary>Where does the site run, and how do I log in?</summary>
+          <p>After <code>./bin/setup</code>, WordPress runs at <code>http://localhost:8080</code>. Log in to wp-admin as <code>admin</code> with the <code>WP_ADMIN_PASSWORD</code> that setup generates in <code>.env</code>.</p>
         </details>
         <details>
           <summary>Will the agent publish or delete things on its own?</summary>
@@ -517,10 +549,10 @@ cd wp-agent-harness
 
     <section class="section shell" id="try" aria-labelledby="try-title">
       <div class="answer-card closing-card">
-        <h2 id="try-title" class="section-title">Run it on your machine</h2>
-        <p class="answer-block">Clone the repo, run <code>./bin/setup</code> and <code>./bin/connect</code>, and give your agent its first prompt. The code, the docs, and the issue tracker are on GitHub.</p>
+        <h2 id="try-title" class="section-title">Try it with your agent</h2>
+        <p class="answer-block">Free and open source. Setup takes about ten minutes, everything stays on your computer, and Claude Code and Cursor ask before they change anything. If an experiment goes wrong, <code>./bin/reset</code> gives you a fresh WordPress.</p>
         <nav class="cta closing-cta" aria-label="Project">
-          <a class="btn btn-primary" href="https://github.com/marcop135/wp-agent-harness">View on GitHub</a>
+          <a class="btn btn-primary" href="https://github.com/marcop135/wp-agent-harness">Get it on GitHub</a>
         </nav>
       </div>
     </section>

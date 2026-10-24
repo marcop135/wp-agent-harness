@@ -1,6 +1,6 @@
 # Agent Harness for WordPress
 
-> Agent Harness for WordPress: local disposable WordPress for Claude Code, Cursor, and Codex via the official MCP Adapter.
+> Agent Harness for WordPress: local disposable WordPress for Claude Code, Cursor, and Codex via the official MCP Adapter. Unlike wp-env or WordPress Playground, the agent connection is set up for you, writes need approval, and changes are logged.
 
 This site (https://wpagent.marcopontili.com) is the public project page; source at https://github.com/marcop135/wp-agent-harness. The WordPress harness itself runs on localhost only and is not hosted here.
 

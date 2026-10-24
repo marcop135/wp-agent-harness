@@ -7,6 +7,17 @@
 
 ## [Unreleased]
 
+### Added
+
+- Add [abilities reference](docs/abilities.md).
+- Add website FAQ on wp-env, Playground, and login.
+
+### Changed
+
+- Bump WordPress to 7.1.3.
+- Skip Netlify builds; the host only redirects.
+- Report MS WordPress Abilities vulnerabilities here: upstream has no private channel ([SECURITY.md](SECURITY.md)).
+
 ## [0.10.2] - 2026-10-24
 
 ### Changed

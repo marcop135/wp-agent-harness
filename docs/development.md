@@ -222,7 +222,7 @@ in the same debug log.
 
 | Component | Version | Source |
 |-----------|---------|--------|
-| WordPress | 7.1.2 | `wordpress:7.1.2-php8.3-apache` |
+| WordPress | 7.1.3 | `wordpress:7.1.3-php8.3-apache` |
 | PHP | 8.3 | same image |
 | Apache | 2.4 | same image |
 | MariaDB | 11.8.9 | `mariadb:11.8.9` |
