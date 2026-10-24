@@ -9,10 +9,10 @@ unstructured paragraph, ready to restructure.
 
 | Ability | Used for | Type |
 |---------|----------|------|
-| `miriamschwab/get-pages` | finding the page | read |
-| `miriamschwab/preview-post-update` | staging the change, returning a before/after diff | read, no write yet |
-| `miriamschwab/apply-post-update` | committing the staged change | write, gate asks |
-| `miriamschwab/patch-post-content` | a targeted find-and-replace, no staging | write, gate asks |
+| `get-pages` | finding the page | read |
+| `preview-post-update` | staging the change, returning a before/after diff | read, no write yet |
+| `apply-post-update` | committing the staged change | write, gate asks |
+| `patch-post-content` | a targeted find-and-replace, no staging | write, gate asks |
 
 Two write paths:
 

@@ -11,11 +11,11 @@ report includes the Harbor Coffee pages, posts and categories.
 |---------|----------|------|
 | `core/get-site-info` | site title, URL, WordPress version | read |
 | `core/get-environment-info` | environment type, PHP and database versions | read |
-| `miriamschwab/get-site-settings` | title, tagline, timezone, date format, posts per page, language, active theme | read |
-| `miriamschwab/get-themes` | installed themes, versions, which is active | read |
-| `miriamschwab/get-plugins` | installed plugins, active state, pending updates | read |
-| `miriamschwab/get-post-types` | registered public post types | read |
-| `miriamschwab/get-posts`, `get-pages` | what content exists | read |
+| `get-site-settings` | title, tagline, timezone, date format, posts per page, language, active theme | read |
+| `get-themes` | installed themes, versions, which is active | read |
+| `get-plugins` | installed plugins, active state, pending updates | read |
+| `get-post-types` | registered public post types | read |
+| `get-posts`, `get-pages` | what content exists | read |
 
 ## What you should see
 
@@ -48,5 +48,5 @@ If WP-CLI and the agent disagree, trust WP-CLI and read
 
 > Show me the navigation menus and their items.
 
-The last uses `miriamschwab/get-menus`. Twenty Twenty-Five keeps navigation in a
+The last uses `get-menus`. Twenty Twenty-Five keeps navigation in a
 `wp_navigation` post, not a classic menu, so an empty result is correct.

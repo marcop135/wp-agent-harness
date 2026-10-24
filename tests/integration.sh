@@ -99,8 +99,8 @@ ability_names="$(mcp_payload | jq -r '(.abilities // [])[].name' 2>/dev/null || 
 assert_ge 'discover-abilities returns the public abilities' \
     "$(grep -c . <<<"$ability_names" || echo 0)" 20
 
-for ability in miriamschwab/create-post miriamschwab/get-pages \
-               miriamschwab/patch-post-content miriamschwab/trash-post \
+for ability in "$ABILITY_NS/create-post" "$ABILITY_NS/get-pages" \
+               "$ABILITY_NS/patch-post-content" "$ABILITY_NS/trash-post" \
                core/get-site-info; do
     if grep -qx "$ability" <<<"$ability_names"; then
         _record_pass "discover-abilities lists $ability"
@@ -109,10 +109,10 @@ for ability in miriamschwab/create-post miriamschwab/get-pages \
     fi
 done
 
-mcp_tool_call 'mcp-adapter-get-ability-info' '{"ability_name":"miriamschwab/create-post"}'
+mcp_tool_call 'mcp-adapter-get-ability-info' "{\"ability_name\":\"$ABILITY_NS/create-post\"}"
 info_payload="$(mcp_payload)"
 assert_eq 'get-ability-info returns the requested ability' \
-    'miriamschwab/create-post' "$(jq -r '.name // empty' <<<"$info_payload")"
+    "$ABILITY_NS/create-post" "$(jq -r '.name // empty' <<<"$info_payload")"
 assert_eq 'get-ability-info returns an input schema with a required title' 'true' \
     "$(jq -r '[(.input_schema.required // [])[]] | index("title") != null' <<<"$info_payload")"
 
@@ -135,15 +135,15 @@ assert_eq 'execute-ability reports success for core/get-site-info' 'true' \
 assert_contains 'core/get-site-info returns this site' \
     "$site_info" "localhost:$(env_get WP_PORT 8080)"
 
-mcp_execute_ability 'miriamschwab/get-post-types' '{}'
+mcp_execute_ability "$ABILITY_NS/get-post-types" '{}'
 assert_contains 'get-post-types returns the built-in page type' "$(mcp_payload)" 'page'
 
-mcp_execute_ability 'miriamschwab/get-plugins' '{}'
+mcp_execute_ability "$ABILITY_NS/get-plugins" '{}'
 plugins="$(mcp_payload)"
 assert_contains 'get-plugins reports the MCP Adapter' "$plugins" 'mcp-adapter'
 assert_contains 'get-plugins reports MS WP Abilities' "$plugins" 'ms-wp-abilities'
 
-mcp_execute_ability 'miriamschwab/get-themes' '{}'
+mcp_execute_ability "$ABILITY_NS/get-themes" '{}'
 assert_contains 'get-themes reports the active theme' \
     "$(mcp_payload)" "$(env_get WP_THEME twentytwentyfive)"
 
@@ -151,7 +151,7 @@ assert_contains 'get-themes reports the active theme' \
 suite 'Layer 3 — ability execution (create, modify, verify, trash)'
 # ===========================================================================
 
-mcp_execute_ability 'miriamschwab/create-post' "$(jq -cn --arg t "$TEST_TITLE" '{
+mcp_execute_ability "$ABILITY_NS/create-post" "$(jq -cn --arg t "$TEST_TITLE" '{
     title: $t,
     post_type: "page",
     status: "draft",
@@ -174,7 +174,7 @@ assert_eq 'the new page is a draft, not published' 'draft' \
     "$(jq -r '.data.status // empty' <<<"$created")"
 
 # Read it back over MCP.
-mcp_execute_ability 'miriamschwab/get-pages' \
+mcp_execute_ability "$ABILITY_NS/get-pages" \
     "$(jq -cn --arg s "$TEST_TITLE" '{search:$s,status:"draft"}')"
 assert_eq 'get-pages finds the page just created' "$TEST_POST_ID" \
     "$(mcp_payload | jq -r --argjson id "$TEST_POST_ID" \
@@ -186,7 +186,7 @@ assert_contains 'markdown was converted to Gutenberg blocks' "$stored_content" '
 assert_contains 'the block content contains the list' "$stored_content" '<!-- wp:list'
 
 # Modify it.
-mcp_execute_ability 'miriamschwab/patch-post-content' "$(jq -cn --argjson id "$TEST_POST_ID" '{
+mcp_execute_ability "$ABILITY_NS/patch-post-content" "$(jq -cn --argjson id "$TEST_POST_ID" '{
     post_id: $id, find: "Created over MCP", replace: "Modified over MCP"
 }')"
 patched="$(mcp_payload)"
@@ -200,14 +200,14 @@ assert_contains 'the modification is present in the database' "$modified_content
 assert_not_contains 'the original text is gone' "$modified_content" 'Created over MCP'
 
 # A patch whose find string is absent must fail rather than silently succeed.
-mcp_execute_ability 'miriamschwab/patch-post-content' "$(jq -cn --argjson id "$TEST_POST_ID" '{
+mcp_execute_ability "$ABILITY_NS/patch-post-content" "$(jq -cn --argjson id "$TEST_POST_ID" '{
     post_id: $id, find: "this string is not in the content", replace: "x"
 }')"
 assert_eq 'patch-post-content fails when the find string is absent' 'true' "$(mcp_is_error)"
 assert_contains 'the failure explains why' "$MCP_LAST_BODY" 'find string was not found'
 
 # Trash it.
-mcp_execute_ability 'miriamschwab/trash-post' "$(jq -cn --argjson id "$TEST_POST_ID" '{post_id:$id}')"
+mcp_execute_ability "$ABILITY_NS/trash-post" "$(jq -cn --argjson id "$TEST_POST_ID" '{post_id:$id}')"
 trashed="$(mcp_payload)"
 assert_eq 'trash-post reports success' 'true' "$(jq -r '.success // false' <<<"$trashed")"
 assert_eq 'trash-post reports the page as trashed' 'trashed' \
@@ -216,7 +216,7 @@ assert_eq 'trash-post reports the page as trashed' 'trashed' \
 assert_eq 'the database confirms the page is in the trash' 'trash' \
     "$(wp_cli post get "$TEST_POST_ID" --field=post_status 2>/dev/null | tr -d '\r' || true)"
 
-mcp_execute_ability 'miriamschwab/get-pages' \
+mcp_execute_ability "$ABILITY_NS/get-pages" \
     "$(jq -cn --arg s "$TEST_TITLE" '{search:$s,status:"any"}')"
 assert_eq 'the trashed page no longer appears in get-pages' '' \
     "$(mcp_payload | jq -r --argjson id "$TEST_POST_ID" \
@@ -241,8 +241,8 @@ done < <(jq -r 'to_entries[] | [.key, (.value.write | tostring)] | @tsv' <<<"$po
 
 write_log="$(wp_cli option get mswpa_write_log --format=json 2>/dev/null | tr -d '\r' || printf '[]')"
 for ability in patch-post-content trash-post; do
-    assert_eq "the audit log recorded $ability on post $TEST_POST_ID" "miriamschwab/$ability" \
-        "$(jq -r --arg a "miriamschwab/$ability" --arg id "$TEST_POST_ID" \
+    assert_eq "the audit log recorded $ability on post $TEST_POST_ID" "$ABILITY_NS/$ability" \
+        "$(jq -r --arg a "$ABILITY_NS/$ability" --arg id "$TEST_POST_ID" \
             '[.[] | select(.ability == $a and (.values.post_id // "") == $id)][0].ability // empty' <<<"$write_log")"
 done
 

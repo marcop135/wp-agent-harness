@@ -8,12 +8,12 @@ approval gate asks.
 
 | Ability | Used for | Type |
 |---------|----------|------|
-| `miriamschwab/get-plugins` | name, version, active state, update availability; optional `status`: `all` (default), `active`, `inactive` | read |
-| `miriamschwab/get-available-updates` | pending plugin, theme and core updates, from cached data | read |
-| `miriamschwab/get-themes` | the same for themes | read |
-| `miriamschwab/install-plugin` | a **wordpress.org slug**, plus optional `activate: true` | write, gate asks |
-| `miriamschwab/activate-plugin` | a plugin file path, e.g. `woocommerce/woocommerce.php` | write, gate asks |
-| `miriamschwab/update-plugin` | a plugin file path | write, gate asks |
+| `get-plugins` | name, version, active state, update availability; optional `status`: `all` (default), `active`, `inactive` | read |
+| `get-available-updates` | pending plugin, theme and core updates, from cached data | read |
+| `get-themes` | the same for themes | read |
+| `install-plugin` | a **wordpress.org slug**, plus optional `activate: true` | write, gate asks |
+| `activate-plugin` | a plugin file path, e.g. `woocommerce/woocommerce.php` | write, gate asks |
+| `update-plugin` | a plugin file path | write, gate asks |
 
 ## What you should see
 

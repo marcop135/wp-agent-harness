@@ -21,10 +21,10 @@ capability:
 
 So the loop is: discover, inspect the schema, execute. Do not assume ability
 names or parameters from memory; call `get-ability-info` when you are unsure.
-The abilities themselves come from the MS WP Abilities plugin (`miriamschwab/*`)
+The abilities themselves come from the MS WP Abilities plugin
 and WordPress core (`core/*`).
 
-`miriamschwab/rest-get` and `miriamschwab/rest-write` bridge to any registered
+Its `rest-get` and `rest-write` abilities bridge to any registered
 REST route, so reach for them before concluding something is not possible.
 
 ## How to work on this site

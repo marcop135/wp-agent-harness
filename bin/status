@@ -70,9 +70,9 @@ done < <(wp_cli plugin list --fields=name,status,version --format=csv 2>/dev/nul
 step 'Abilities'
 # ---------------------------------------------------------------------------
 total="$(wp_cli ability list --format=count 2>/dev/null | tr -d '\r' || echo 0)"
-ms="$(wp_cli ability list --namespace=miriamschwab --format=count 2>/dev/null | tr -d '\r' || echo 0)"
+ms="$(wp_cli ability list --namespace="$ABILITY_NS" --format=count 2>/dev/null | tr -d '\r' || echo 0)"
 if [[ "${total:-0}" -gt 0 ]]; then
-    ok "$total abilities registered ($ms in the miriamschwab namespace)"
+    ok "$total abilities registered ($ms from MS WP Abilities)"
 else
     bad 'no abilities are registered'
 fi

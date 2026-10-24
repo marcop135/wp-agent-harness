@@ -8,8 +8,8 @@ have none. A fresh install has an empty media library.
 
 | Ability | Used for | Type |
 |---------|----------|------|
-| `miriamschwab/get-media` | listing media items | read |
-| `miriamschwab/update-media-meta` | setting alt, title, caption, description | write, gate asks |
+| `get-media` | listing media items | read |
+| `update-media-meta` | setting alt, title, caption, description | write, gate asks |
 
 `get-media` takes `per_page` (default 20), `mime_type` (`image`, `image/jpeg`,
 `application/pdf`, ...), `search`, and a `fields` list. Each item carries `ID`,

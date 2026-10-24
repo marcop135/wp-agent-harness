@@ -9,6 +9,8 @@
 # Destroying state is ./bin/reset's job, never this script's.
 set -euo pipefail
 
+# Namespace MS WP Abilities registers its abilities under.
+MS_WP_ABILITIES_NS='miriamschwab'
 WP_SITE_TITLE="${WP_SITE_TITLE:-WP Agent Harness}"
 WP_ADMIN_USER="${WP_ADMIN_USER:-admin}"
 WP_ADMIN_EMAIL="${WP_ADMIN_EMAIL:-admin@wp-agent-harness.test}"
@@ -186,9 +188,9 @@ ability_total="$(wp ability list --format=count)"
 [ "$ability_total" -gt 0 ] || fail 'No abilities are registered. Is ms-wp-abilities active?'
 info "$ability_total abilities registered"
 
-ms_total="$(wp ability list --namespace=miriamschwab --format=count)"
-[ "$ms_total" -gt 0 ] || fail 'MS WP Abilities registered no abilities in the miriamschwab namespace.'
-info "$ms_total abilities in the miriamschwab namespace"
+ms_total="$(wp ability list --namespace="$MS_WP_ABILITIES_NS" --format=count)"
+[ "$ms_total" -gt 0 ] || fail 'MS WP Abilities registered no abilities.'
+info "$ms_total abilities from MS WP Abilities"
 
 # ---------------------------------------------------------------------------
 step 'Verifying the MCP endpoint'

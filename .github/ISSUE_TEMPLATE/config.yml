@@ -4,8 +4,8 @@ contact_links:
     url: https://github.com/WordPress/mcp-adapter/issues
     about: Transport, sessions, the three meta-tools, permission callbacks.
   - name: MS WordPress Abilities (upstream)
-    url: https://github.com/miriamschwab/ms-wp-abilities/issues
-    about: Any miriamschwab/* ability, including rest-get and rest-write.
+    url: https://github.com/marcop135/wp-agent-harness/blob/main/NOTICE
+    about: Any of its abilities, including rest-get and rest-write. NOTICE links its tracker.
   - name: Security report
     url: https://github.com/marcop135/wp-agent-harness/security/advisories/new
     about: Report privately. Never in a public issue.
