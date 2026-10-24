@@ -248,13 +248,11 @@ done
 
 assert_ok 'matomo.js is cookieless and honours Do Not Track'     bash -c "grep -qF \"disableCookies\" site/js/matomo.js && grep -qF \"setDoNotTrack\" site/js/matomo.js && grep -qF \"$MATOMO_URL/\" site/js/matomo.js"
 
-for f in site/.htaccess; do
-    csp="$(grep -m1 'Content-Security-Policy' "$f")"
-    for directive in script-src connect-src img-src; do
-        assert_ok "$f CSP $directive allows $MATOMO_URL"             grep -qE "$directive [^;]*$MATOMO_URL" <<<"$csp"
-    done
-    assert_fails "$f CSP has no unsafe-inline" grep -qF 'unsafe-inline' <<<"$csp"
+csp="$(grep -m1 'Content-Security-Policy' site/.htaccess)"
+for directive in script-src connect-src img-src; do
+    assert_ok "site/.htaccess CSP $directive allows $MATOMO_URL"         grep -qE "$directive [^;]*$MATOMO_URL" <<<"$csp"
 done
+assert_fails "site/.htaccess CSP has no unsafe-inline" grep -qF 'unsafe-inline' <<<"$csp"
 
 assert_ok 'deploy.yml uploads only ./site/'     bash -c "! grep -E 'local-dir:' .github/workflows/deploy.yml | grep -vqF './site/'"
 assert_ok 'deploy.yml purges the wpagent host'     grep -qF '"hosts":["wpagent.marcopontili.com"]' .github/workflows/deploy.yml
