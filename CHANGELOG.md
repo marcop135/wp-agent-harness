@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.10.2] - 2026-10-24
+
 ### Changed
 
 - Refer to MS WP Abilities by name in docs, examples, and issue templates, with its upstream links in `NOTICE`.
