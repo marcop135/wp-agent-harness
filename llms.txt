@@ -21,7 +21,7 @@ do not invent names or parameters from memory.
    `./bin/wp ability list` / `./bin/wp ability run` (bypasses MCP).
 3. MCP meta-tools only: `mcp-adapter-discover-abilities`,
    `mcp-adapter-get-ability-info`, `mcp-adapter-execute-ability`.
-4. Prefer `miriamschwab/rest-get` and `miriamschwab/rest-write` before
+4. Prefer the `rest-get` and `rest-write` abilities before
    concluding a REST route is unreachable.
 5. Obey the hard rules in this file and in [docs/AGENTS.md](docs/AGENTS.md).
 

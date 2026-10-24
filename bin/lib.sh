@@ -10,6 +10,9 @@ readonly ENV_FILE="$REPO_ROOT/.env"
 readonly ENV_EXAMPLE="$REPO_ROOT/.env.example"
 readonly SECRETS_DIR="$REPO_ROOT/.secrets"
 readonly APP_PASSWORD_FILE="$SECRETS_DIR/application-password"
+# Namespace of the MS WP Abilities plugin, as it registers its abilities.
+# shellcheck disable=SC2034  # read by bin/status and the tests, which source this file
+readonly ABILITY_NS='miriamschwab'
 
 if [[ -t 1 ]]; then
     C_RESET=$'\033[0m'; C_BOLD=$'\033[1m'; C_DIM=$'\033[2m'

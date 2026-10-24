@@ -168,15 +168,15 @@ Not over MCP:
 
 ```bash
 ./bin/wp ability list --field=name | sort > /tmp/registered
-./bin/wp ability get miriamschwab/get-posts --fields=name,meta
+./bin/wp ability get core/get-site-info --fields=name,meta
 ```
 
 Failed execution, without MCP:
 
 ```bash
-./bin/wp ability can-run miriamschwab/create-post --user=admin
-./bin/wp ability validate miriamschwab/create-post --input='{"title":"x"}'
-./bin/wp ability run miriamschwab/get-posts --input='{"per_page":1}' --user=admin
+./bin/wp ability can-run <name> --user=admin
+./bin/wp ability validate <name> --input='{"title":"x"}'
+./bin/wp ability run <name> --input='{}' --user=admin
 ./bin/logs --debug
 ```
 
@@ -224,7 +224,7 @@ Registration and verification: [claude-code.md](claude-code.md#verify-the-connec
 | `claude mcp get wordpress` finds nothing | Registration is `local` scope, keyed to the project path | Run from the repository root; if already there, `./bin/connect` |
 | Connected, but no WordPress tools | MCP config is read at session start | Restart the session |
 | Tools listed, every call fails | Rotated Application Password: `./bin/reset` issued a new one, `~/.claude.json` holds the old | Confirm with `./bin/status` and `./bin/test integration`, then `./bin/setup && ./bin/connect` and restart Claude Code |
-| Only three tools listed | Correct: the 29 abilities (26 `miriamschwab/*`, 3 `core/*`) sit behind the three meta-tools | [architecture.md](architecture.md#why-three-tools-and-not-thirty) |
+| Only three tools listed | Correct: the 29 abilities (26 from MS WP Abilities, 3 `core/*`) sit behind the three meta-tools | [architecture.md](architecture.md#why-three-tools-and-not-thirty) |
 | Port changed, calls stopped | Registered URL points at the old port | `./bin/connect`, then restart Claude Code |
 | `./bin/connect`: `claude is not on PATH` | Claude Code not installed or not on this shell's `PATH` | Install it. Everything except `./bin/connect` and test layer 4 works without it |
 
@@ -234,7 +234,7 @@ Codex and Cursor: [codex.md](codex.md).
 
 Claude Code or Cursor asks before every write ability. That is the approval
 gate (`bin/ability-gate`): reads pass, writes and unknown abilities ask, naming
-the ability and that it runs as your connected user. Codex uses its own approval policy. `./bin/audit` lists recorded
+the action and the WordPress user it runs as. Codex uses its own approval policy. `./bin/audit` lists recorded
 writes. Details: [security.md](security.md#the-approval-gate).
 
 ---
@@ -289,4 +289,4 @@ Failures in the MCP Adapter or MS WP Abilities themselves, not this wiring,
 belong upstream:
 
 - https://github.com/WordPress/mcp-adapter/issues
-- https://github.com/miriamschwab/ms-wp-abilities/issues
+- MS WP Abilities: tracker linked in [NOTICE](../NOTICE)

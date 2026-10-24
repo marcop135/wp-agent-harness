@@ -33,7 +33,7 @@ work ([docs/architecture.md](../docs/architecture.md#why-three-tools-and-not-thi
 The pinned MS WP Abilities release defines the real set:
 
 ```bash
-./bin/wp ability list --namespace=miriamschwab --fields=name,label
+./bin/wp ability list --fields=name,label
 ```
 
 ## End-to-end demonstration

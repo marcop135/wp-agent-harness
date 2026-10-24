@@ -7,7 +7,7 @@ the Docker image, the tests or the documentation.
 
 **A bug in an ability, in the MCP protocol handling, or in the adapter itself
 belongs upstream:** [WordPress/mcp-adapter](https://github.com/WordPress/mcp-adapter/issues)
-or [miriamschwab/ms-wp-abilities](https://github.com/miriamschwab/ms-wp-abilities/issues).
+or MS WP Abilities (tracker linked in [NOTICE](NOTICE)).
 `./bin/wp ability run <name> --user=admin` tells the two apart: if it fails
 there, MCP is not involved.
 

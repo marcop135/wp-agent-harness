@@ -7,8 +7,8 @@ Read-only: the approval gate never asks.
 
 | Ability | Used for | Type |
 |---------|----------|------|
-| `miriamschwab/get-themes` | installed themes, versions, which is active | read |
-| `miriamschwab/rest-get` | the block-theme routes below | read |
+| `get-themes` | installed themes, versions, which is active | read |
+| `rest-get` | the block-theme routes below | read |
 
 No ability reads theme files. Twenty Twenty-Five is a block theme, so
 `rest-get` reaches it through REST:
@@ -59,7 +59,7 @@ To edit theme source from the host, bind-mount it:
 
 ## Changing the theme
 
-`miriamschwab/update-theme` updates a theme to its latest version (write, gate
+`update-theme` updates a theme to its latest version (write, gate
 asks). No ability writes template files. `source: custom` templates can be
 modified with `rest-write` on `/wp/v2/templates`; that changes what the site
 renders, so ask for the change to be stated first.

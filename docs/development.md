@@ -111,10 +111,10 @@ The abilities:
 
 ```bash
 ./bin/wp ability list
-./bin/wp ability list --namespace=miriamschwab --fields=name,label
-./bin/wp ability get miriamschwab/create-post
-./bin/wp ability can-run miriamschwab/create-post --user=admin
-./bin/wp ability validate miriamschwab/create-post --input='{"title":"Test"}'
+./bin/wp ability list --fields=name,label
+./bin/wp ability get core/get-site-info
+./bin/wp ability can-run core/get-site-info --user=admin
+./bin/wp ability validate <name> --input='{"title":"Test"}'  # <name>: create-post's full name from the list
 ./bin/wp ability run core/get-site-info --user=admin
 ./bin/wp ability category list
 ```
@@ -160,7 +160,7 @@ curl -sS -X POST "$ENDPOINT" --user "$CREDS" \
 # 4. execute an ability
 curl -sS -X POST "$ENDPOINT" --user "$CREDS" \
   -H 'Content-Type: application/json' -H "Mcp-Session-Id: $SESSION" \
-  -d '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"mcp-adapter-execute-ability","arguments":{"ability_name":"miriamschwab/get-plugins","parameters":{}}}}' | jq
+  -d '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"mcp-adapter-execute-ability","arguments":{"ability_name":"core/get-site-info","parameters":{}}}}' | jq
 
 # 5. end the session
 curl -sS -X DELETE "$ENDPOINT" --user "$CREDS" -H "Mcp-Session-Id: $SESSION"
@@ -260,7 +260,7 @@ skills are the only upstream source tree committed to this repository.
 | Variable | Source | Find the new version |
 |----------|--------|----------------------|
 | `MCP_ADAPTER_VERSION` / `MCP_ADAPTER_SHA256` | GitHub release ZIP | `gh release list --repo WordPress/mcp-adapter`; recompute the ZIP's SHA-256 |
-| `MS_WP_ABILITIES_VERSION` / `MS_WP_ABILITIES_SHA256` | GitHub release ZIP | `gh release list --repo miriamschwab/ms-wp-abilities`; recompute SHA-256 |
+| `MS_WP_ABILITIES_VERSION` / `MS_WP_ABILITIES_SHA256` | GitHub release ZIP | `gh release list --repo <owner/repo>` (repository in [NOTICE](../NOTICE)); recompute SHA-256 |
 | `WORDPRESS_IMAGE` | Docker Hub | `docker run --rm wordpress:7.1-php8.3-apache wp core version` |
 | `MARIADB_IMAGE` | Docker Hub | the MariaDB LTS line |
 | `WP_CLI_VERSION` | GitHub release phar | `gh release list --repo wp-cli/wp-cli` |

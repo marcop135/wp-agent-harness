@@ -12,7 +12,7 @@
 [![MariaDB 11.8.9](https://img.shields.io/badge/MariaDB-11.8.9-C3363F.svg)](https://mariadb.org/)
 [![Docker Compose v2](https://img.shields.io/badge/Docker_Compose-v2-2496ED.svg)](https://docs.docker.com/compose/)
 [![MCP Adapter 0.7.1](https://img.shields.io/badge/MCP_Adapter-0.7.1-555.svg)](https://github.com/WordPress/mcp-adapter)
-[![MS Abilities 1.13.0](https://img.shields.io/badge/MS_Abilities-1.13.0-555.svg)](https://github.com/miriamschwab/ms-wp-abilities)
+[![MS Abilities 1.13.0](https://img.shields.io/badge/MS_Abilities-1.13.0-555.svg)](NOTICE)
 
 A real WordPress site on your machine that your coding agent (Claude Code,
 Codex, or Cursor) can inspect and build on. One command sets it up in Docker;
@@ -21,7 +21,7 @@ another rebuilds it from scratch.
 The agent talks to WordPress over MCP: the official
 [MCP Adapter](https://github.com/WordPress/mcp-adapter) exposes the
 [Abilities API](https://developer.wordpress.org/apis/abilities-api/), and the
-[MS WordPress Abilities](https://github.com/miriamschwab/ms-wp-abilities)
+[MS WordPress Abilities](NOTICE)
 plugin provides the abilities. All three come from upstream at pinned versions;
 this repo wires them together and adds setup, tests, and agent instructions.
 
