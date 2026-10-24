@@ -13,7 +13,7 @@ Local, disposable WordPress harness for coding agents. Docker Compose runs WordP
 ## Stack pin
 
 ```text
-WordPress|7.1.2 (image wordpress:7.1.2-php8.3-apache) | PHP 8.3 | Apache 2.4
+WordPress|7.1.3 (image wordpress:7.1.3-php8.3-apache) | PHP 8.3 | Apache 2.4
 MariaDB|11.8.9
 MCP Adapter|0.7.1 (GitHub release ZIP)
 MS WordPress Abilities|1.13.0 (GitHub release ZIP)
@@ -59,6 +59,7 @@ Full detail: [docs/AGENTS.md](docs/AGENTS.md), [docs/agents/agent-contract.md](d
 | Full index + domain | [docs/AGENTS.md](docs/AGENTS.md) |
 | Task contract | [docs/agents/agent-contract.md](docs/agents/agent-contract.md) |
 | Risk tiers | [docs/agents/runtime-policy.md](docs/agents/runtime-policy.md) |
+| Abilities | [docs/abilities.md](docs/abilities.md) |
 | AI skills map | [docs/ai-skills.md](docs/ai-skills.md) |
 | Architecture | [docs/architecture.md](docs/architecture.md) |
 | Claude Code MCP | [docs/claude-code.md](docs/claude-code.md) |

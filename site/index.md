@@ -1,8 +1,8 @@
 ---
-title: "Agent Harness for WordPress: Docker for AI agents"
+title: "Agent Harness for WordPress: local WordPress for AI agents"
 canonical: https://wpagent.marcopontili.com/
-description: Agent Harness for WordPress: local Docker WordPress for Claude Code, Cursor, and Codex. Loopback-only; one-command reset.
-dateModified: 2026-10-22
+description: Local Docker WordPress for Claude Code, Cursor, and Codex, wired over MCP. Every change needs your approval and is logged; one command resets it.
+dateModified: 2026-10-24
 ---
 
 # Agent Harness for WordPress
@@ -24,7 +24,7 @@ A disposable harness, not a hosted WordPress. The MCP server and abilities come 
 
 ## Quick start
 
-Needs Docker Compose v2, Git, and Bash. About ten minutes from clone to first prompt.
+Needs Docker Compose v2, Git, Bash, curl, and jq. About ten minutes from clone to first prompt.
 
 ```bash
 git clone https://github.com/marcop135/wp-agent-harness.git
@@ -73,9 +73,17 @@ Agent Harness for WordPress is a free, open-source WordPress site for AI coding 
 
 Claude Code, Cursor, and Codex connect over HTTP MCP to the same endpoint. `./bin/connect` registers it with Claude Code; `./bin/connect --print` prints the URL and Authorization header for Cursor, and the variable the repo's `.codex/config.toml` reads for Codex.
 
+### How is it different from wp-env or WordPress Playground?
+
+[wp-env](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-env/) and [WordPress Playground](https://wordpress.org/playground/) give you a WordPress site; this harness also connects your coding agent to it. `./bin/setup` installs and authenticates the MCP Adapter and MS WordPress Abilities, Claude Code and Cursor ask before every write, and each change lands in an audit log.
+
 ### Is the WordPress site public?
 
 No. WordPress is published on `127.0.0.1:8080` and MariaDB on `127.0.0.1:3307`, so no other machine can reach them. This website only describes the harness and has no MCP endpoint.
+
+### Where does the site run, and how do I log in?
+
+After `./bin/setup`, WordPress runs at `http://localhost:8080`. Log in to wp-admin as `admin` with the `WP_ADMIN_PASSWORD` that setup generates in `.env`.
 
 ### Will the agent publish or delete things on its own?
 
@@ -93,9 +101,9 @@ The same MCP path works against any WordPress 6.9+ site running the MCP Adapter 
 
 No. The MCP Adapter and MS WordPress Abilities come from upstream, pinned to tested releases. This repository provides Docker Compose, provisioning, tests, docs, and curated WordPress agent skills.
 
-## Run it on your machine
+## Try it with your agent
 
-Clone the repo, run `./bin/setup` and `./bin/connect`, and give your agent its first prompt. The code, the docs, and the issue tracker are on [GitHub](https://github.com/marcop135/wp-agent-harness).
+Free and open source. Setup takes about ten minutes, everything stays on your computer, and Claude Code and Cursor ask before they change anything. If an experiment goes wrong, `./bin/reset` gives you a fresh WordPress. [Get it on GitHub](https://github.com/marcop135/wp-agent-harness).
 
 ## License
 

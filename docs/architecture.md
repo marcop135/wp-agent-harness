@@ -18,7 +18,7 @@ flowchart TB
     API["WordPress Abilities API<br/>core since 6.9"]
     MS["MS WP Abilities 1.13.0<br/>26 abilities"]
     Core["core/* abilities<br/>get-site-info · get-user-info · get-environment-info"]
-    WP["WordPress 7.1.2 core + REST API<br/>Twenty Twenty-Five · content · media<br/>plugins · themes · site configuration"]
+    WP["WordPress 7.1.3 core + REST API<br/>Twenty Twenty-Five · content · media<br/>plugins · themes · site configuration"]
   end
   DB[("db container<br/>MariaDB 11.8.9<br/>volume &lt;project&gt;_db_data")]
 
@@ -98,10 +98,11 @@ core          core/get-site-info core/get-user-info core/get-environment-info
 ```
 
 `./bin/wp ability list` prints the live list. Trust it over this table.
+What each one does, and which ones ask first: [abilities.md](abilities.md).
 
 ### WordPress
 
-WordPress 7.1.2 on PHP 8.3, with **Twenty Twenty-Five** installed from
+WordPress 7.1.3 on PHP 8.3, with **Twenty Twenty-Five** installed from
 wordpress.org and activated. No custom theme: the point is the integration, and
 a stock block theme is the most useful thing for an agent to inspect and
 extend.
@@ -157,7 +158,7 @@ Two services in `docker-compose.yml`, both published on `127.0.0.1` only:
 | Service | Image | Data | Health check |
 |---------|-------|------|--------------|
 | `db` | `mariadb:11.8.9` (11.8 LTS) | volume `<project>_db_data` | `healthcheck.sh --connect --innodb_initialized`; WordPress waits for it |
-| `wordpress` | `docker/wordpress/Dockerfile` on `wordpress:7.1.2-php8.3-apache` | volume `<project>_wp_data` (whole install) | curl `/wp-json/` |
+| `wordpress` | `docker/wordpress/Dockerfile` on `wordpress:7.1.3-php8.3-apache` | volume `<project>_wp_data` (whole install) | curl `/wp-json/` |
 
 ## MCP transport
 
@@ -313,7 +314,7 @@ wp-agent-harness/
 ├── CLAUDE.md                    Claude Code entry (points at docs/AGENTS.md)
 ├── llms.txt                     LLM entry: hard rules and file map
 ├── docker-compose.yml
-├── netlify.toml                 Netlify previews of site/ (production is Netsons)
+├── netlify.toml                 301s the old Netlify host; builds skipped (production is Netsons)
 └── Makefile
 ```
 

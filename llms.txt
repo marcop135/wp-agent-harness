@@ -51,6 +51,7 @@ do not invent names or parameters from memory.
 - Agent index (canonical): [docs/AGENTS.md](docs/AGENTS.md)
 - Root agent mirror: [AGENTS.md](AGENTS.md)
 - Claude Code entry: [CLAUDE.md](CLAUDE.md)
+- Abilities: [docs/abilities.md](docs/abilities.md)
 - AI skills map: [docs/ai-skills.md](docs/ai-skills.md)
 - Task contract: [docs/agents/agent-contract.md](docs/agents/agent-contract.md)
 - Risk tiers: [docs/agents/runtime-policy.md](docs/agents/runtime-policy.md)

@@ -1,80 +1,9 @@
+# Netlify only keeps the old host redirecting (below). Every build is skipped,
+# so pushes and pull requests no longer trigger deploys; the last deploy stays live.
 [build]
   publish = "site"
   command = "true"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-    Cross-Origin-Opener-Policy = "same-origin"
-    Cross-Origin-Resource-Policy = "same-origin"
-    Content-Language = "en"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' https://mt.marcopontili.com; style-src 'self'; font-src 'self'; img-src 'self' https://mt.marcopontili.com; connect-src 'self' https://mt.marcopontili.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
-    Strict-Transport-Security = "max-age=63072000; includeSubDomains"
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-[[headers]]
-  for = "/"
-  [headers.values]
-    Link = "</index.md>; rel=\"alternate\"; type=\"text/markdown\", </llms.txt>; rel=\"alternate\"; type=\"text/plain\"; title=\"llms.txt\", </sitemap.xml>; rel=\"sitemap\"; type=\"application/xml\", </.well-known/security.txt>; rel=\"securitytxt\", </.well-known/api-catalog>; rel=\"api-catalog\""
-
-[[headers]]
-  for = "/index.html"
-  [headers.values]
-    Link = "</index.md>; rel=\"alternate\"; type=\"text/markdown\", </llms.txt>; rel=\"alternate\"; type=\"text/plain\"; title=\"llms.txt\", </sitemap.xml>; rel=\"sitemap\"; type=\"application/xml\", </.well-known/security.txt>; rel=\"securitytxt\", </.well-known/api-catalog>; rel=\"api-catalog\""
-
-[[headers]]
-  for = "/fonts/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/prism/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/styles.745f8750.css"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/.well-known/*"
-  [headers.values]
-    Cache-Control = "public, max-age=86400"
-
-[[headers]]
-  for = "/.well-known/api-catalog"
-  [headers.values]
-    Content-Type = "application/linkset+json; charset=utf-8"
-
-[[headers]]
-  for = "/.well-known/security.txt"
-  [headers.values]
-    Content-Type = "text/plain; charset=utf-8"
-
-[[headers]]
-  for = "/*.png"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/*.svg"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/*.ico"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/site.webmanifest"
-  [headers.values]
-    Cache-Control = "public, max-age=86400"
+  ignore = "exit 0"
 
 # The marketing site moved to wpagent.marcopontili.com (Netsons). Every path
 # on the Netlify host answers with a permanent redirect to the same path there.
