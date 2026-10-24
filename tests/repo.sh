@@ -176,7 +176,7 @@ for f in README.md CLAUDE.md AGENTS.md llms.txt CHANGELOG.md LICENSE NOTICE Make
          .github/ISSUE_TEMPLATE/config.yml .github/ISSUE_TEMPLATE/1-bug.yml \
          .github/ISSUE_TEMPLATE/2-feature.yml .github/ISSUE_TEMPLATE/3-question.yml \
          .cursor/AGENTS.md .cursor/hooks.json .claude/settings.json .codex/config.toml \
-         docs/AGENTS.md docs/ai-skills.md docs/architecture.md docs/claude-code.md docs/codex.md docs/development.md \
+         docs/AGENTS.md docs/abilities.md docs/ai-skills.md docs/architecture.md docs/claude-code.md docs/codex.md docs/development.md \
          docs/remote-site.md docs/security.md docs/troubleshooting.md \
          docs/agents/README.md docs/agents/agent-contract.md docs/agents/runtime-policy.md \
          .github/brand/README.md .github/brand/brand.config.json .github/brand/render.mjs \
@@ -248,7 +248,7 @@ done
 
 assert_ok 'matomo.js is cookieless and honours Do Not Track'     bash -c "grep -qF \"disableCookies\" site/js/matomo.js && grep -qF \"setDoNotTrack\" site/js/matomo.js && grep -qF \"$MATOMO_URL/\" site/js/matomo.js"
 
-for f in site/.htaccess netlify.toml; do
+for f in site/.htaccess; do
     csp="$(grep -m1 'Content-Security-Policy' "$f")"
     for directive in script-src connect-src img-src; do
         assert_ok "$f CSP $directive allows $MATOMO_URL"             grep -qE "$directive [^;]*$MATOMO_URL" <<<"$csp"

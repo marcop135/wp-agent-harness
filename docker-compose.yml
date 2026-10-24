@@ -28,7 +28,7 @@ services:
     build:
       context: ./docker/wordpress
       args:
-        WORDPRESS_IMAGE: ${WORDPRESS_IMAGE:-wordpress:7.1.2-php8.3-apache}
+        WORDPRESS_IMAGE: ${WORDPRESS_IMAGE:-wordpress:7.1.3-php8.3-apache}
         WP_CLI_VERSION: ${WP_CLI_VERSION:-2.12.0}
         WP_CLI_ABILITY_COMMAND_VERSION: ${WP_CLI_ABILITY_COMMAND_VERSION:-1.0.2}
         WP_CLI_ABILITY_COMMAND_SHA256: ${WP_CLI_ABILITY_COMMAND_SHA256:-aec68d8df8cf6d63f9ade5151a54c3b95266522857aacd2141f521fe0720991a}

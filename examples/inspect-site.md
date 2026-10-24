@@ -19,7 +19,7 @@ report includes the Harbor Coffee pages, posts and categories.
 
 ## What you should see
 
-- WordPress 7.1.2, PHP 8.3, MariaDB 11.8.9, environment type `local`
+- WordPress 7.1.3, PHP 8.3, MariaDB 11.8.9, environment type `local`
 - Active theme **Twenty Twenty-Five 1.5**
 - Exactly two plugins, both active: **MCP Adapter 0.7.1** and **MS WordPress Abilities 1.13.0**
 - Post types `post`, `page`, `attachment`

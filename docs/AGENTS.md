@@ -22,7 +22,7 @@ Portable task contract: [agents/agent-contract.md](agents/agent-contract.md).
 ## Stack pin
 
 ```text
-WordPress|7.1.2 (image wordpress:7.1.2-php8.3-apache) | PHP 8.3 | Apache 2.4
+WordPress|7.1.3 (image wordpress:7.1.3-php8.3-apache) | PHP 8.3 | Apache 2.4
 MariaDB|11.8.9
 MCP Adapter|0.7.1 (GitHub release ZIP)
 MS WordPress Abilities|1.13.0 (GitHub release ZIP)
@@ -38,7 +38,7 @@ Ports|127.0.0.1 only (WP + DB)
 Paths are repo-relative from project root unless noted.
 
 |root:{README.md,CHANGELOG.md,AGENTS.md,CLAUDE.md,llms.txt,CONTRIBUTING.md,SECURITY.md,CODE_OF_CONDUCT.md,LICENSE,NOTICE,Makefile,docker-compose.yml,.env.example,netlify.toml,site/}
-|docs:{AGENTS.md,ai-skills.md,architecture.md,claude-code.md,codex.md,development.md,remote-site.md,security.md,troubleshooting.md}
+|docs:{AGENTS.md,abilities.md,ai-skills.md,architecture.md,claude-code.md,codex.md,development.md,remote-site.md,security.md,troubleshooting.md}
 |docs/agents:{README.md,agent-contract.md,runtime-policy.md}
 |examples:{README.md,inspect-site.md,create-content.md,modify-content.md,media.md,theme.md,plugins.md,site-development.md}
 |bin:{setup,start,stop,status,reset,connect,wp,logs,test,lib.sh}

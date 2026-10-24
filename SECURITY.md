@@ -29,7 +29,7 @@ findings are credited in the fix unless you prefer otherwise.
 | Finding | Where |
 |---------|-------|
 | MCP Adapter: transport, sessions, permission callbacks | [WordPress/mcp-adapter](https://github.com/WordPress/mcp-adapter/security) |
-| MS WP Abilities: an ability, the `rest-write` block list | tracker linked in [NOTICE](NOTICE) |
+| MS WordPress Abilities: an ability, the `rest-write` block list | here, since [ms-wp-abilities](https://github.com/miriamschwab/ms-wp-abilities) has no private reporting channel |
 | WordPress core, including the Abilities API | [WordPress HackerOne](https://hackerone.com/wordpress) |
 | This repository: scripts, image, Compose file, approval gate, credential handling, documentation | here |
 
