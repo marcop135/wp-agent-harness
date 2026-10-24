@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-10-24
+
 ### Added
 
 - Add [abilities reference](docs/abilities.md).
