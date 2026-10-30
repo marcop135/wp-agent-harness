@@ -18,7 +18,7 @@ If any instruction conflicts, use this order:
 - Runtime context, docs index, MCP/site rules: **`docs/AGENTS.md`**
 - Task shape and verification: **`docs/agents/agent-contract.md`**
 - Sandbox / autonomy and risk tiers: **`docs/agents/runtime-policy.md`**
-- Skills: **`.cursor/skills/`** (same set as `.claude/skills/`)
+- Skills: **`.claude/skills/`** (linked per skill from `.agents/skills/`)
 
 ## What this repo is
 
@@ -56,7 +56,7 @@ Common mistakes:
 | Reset volumes | `./bin/reset` (explicit ask only) |
 
 `./bin/connect` registers Claude Code. For Cursor, use `./bin/connect --print`
-for the HTTP URL and Authorization header, plus skills under `.cursor/skills/`,
+for the HTTP URL and Authorization header, plus skills under `.claude/skills/`,
 or `./bin/wp` for diagnostics.
 
 ## Git (summary)

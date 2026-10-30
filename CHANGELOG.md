@@ -7,6 +7,16 @@
 
 ## [Unreleased]
 
+## [0.11.1] - 2026-10-30
+
+### Changed
+
+- Share one WordPress skills copy across Claude Code, Cursor, and Codex.
+
+### Fixed
+
+- Correct the copyright holder in `LICENSE` and `NOTICE`.
+
 ## [0.11.0] - 2026-10-24
 
 ### Added

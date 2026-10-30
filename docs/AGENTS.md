@@ -9,7 +9,7 @@ Canonical narrative, documentation index, and working rules for this repository.
 - [Claude Code](https://code.claude.com/docs): [`CLAUDE.md`](../CLAUDE.md) at session start.
 - [Cursor agent](https://docs.cursor.com/agent): root [`AGENTS.md`](../AGENTS.md) and [`.cursor/AGENTS.md`](../.cursor/AGENTS.md) (precedence there).
 - [Cursor CLI](https://cursor.com/docs/cli/using): root [`AGENTS.md`](../AGENTS.md) and [`CLAUDE.md`](../CLAUDE.md); not `.cursor/AGENTS.md`.
-- Project skills: [`.claude/skills/`](../.claude/skills/) and [`.cursor/skills/`](../.cursor/skills/) (same curated set).
+- Project skills: [`.claude/skills/`](../.claude/skills/), linked per skill from [`.agents/skills/`](../.agents/skills/).
 
 **Update this file** when changing shared narrative, then refresh the root mirror, `CLAUDE.md`, and `.cursor/AGENTS.md` (see [agents/agent-contract.md](agents/agent-contract.md), Cross-tool parity).
 
@@ -80,7 +80,7 @@ Paths are repo-relative from project root unless noted.
 
 **Infrastructure vs site:** `docker-compose.yml`, `docker/`, `bin/`, and `.env` are the environment, not the site. Do not change them for a content or site-building task; say so first if a task needs an infra change. Volumes are disposable: `./bin/reset` destroys and rebuilds them. Never store non-reproducible data there.
 
-**Skills:** Curated [WordPress/agent-skills](https://github.com/WordPress/agent-skills) under `.claude/skills/` and `.cursor/skills/` (blocks, themes, plugins, REST, Abilities API, WP-CLI, router/triage). They do not replace this stack. Site work still goes through the `wordpress` MCP abilities or `./bin/wp`. Do not switch to `@wordpress/env`, WordPress Playground, or Blueprints for the local site.
+**Skills:** Curated [WordPress/agent-skills](https://github.com/WordPress/agent-skills) under `.claude/skills/` (blocks, themes, plugins, REST, Abilities API, WP-CLI, router/triage). They do not replace this stack. Site work still goes through the `wordpress` MCP abilities or `./bin/wp`. Do not switch to `@wordpress/env`, WordPress Playground, or Blueprints for the local site.
 
 **Boundaries:** Never expose this harness's MCP endpoint or WordPress site beyond localhost. A separate live site is outside the harness: [remote-site.md](remote-site.md). Never put credentials in a tracked file (`.env` and `.secrets/` stay ignored). Test content must be uniquely named and cleaned up. `./bin/reset` is the only thing allowed to destroy unrelated development content.
 
