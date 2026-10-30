@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.11.1] - 2026-10-30
+
 ### Changed
 
 - Share one WordPress skills copy across Claude Code, Cursor, and Codex.
