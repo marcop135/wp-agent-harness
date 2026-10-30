@@ -1,5 +1,5 @@
 wp-agent-harness
-Copyright (c) 2026 marcop135
+Copyright (c) 2026 Marco Pontili
 
 The MIT license in LICENSE applies to the harness itself: Docker Compose,
 `bin/`, `docker/`, `tests/`, docs, examples, and related project files
@@ -24,11 +24,11 @@ clike, bash) for the website code samples.
 Pinned upstream releases, fetched when you run `./bin/setup` or build the
 WordPress image. None of their source is committed here:
 
-  WordPress                 GPL-2.0-or-later   https://wordpress.org
-  MCP Adapter               GPL-2.0-or-later   https://github.com/WordPress/mcp-adapter
-  MS WordPress Abilities    GPL-2.0-or-later   https://github.com/miriamschwab/ms-wp-abilities
-  Twenty Twenty-Five        GPL-2.0-or-later   https://wordpress.org/themes/twentytwentyfive/
-  WP-CLI                    MIT                https://wp-cli.org
-  wp-cli/ability-command    MIT                https://github.com/wp-cli/ability-command
+WordPress GPL-2.0-or-later https://wordpress.org
+MCP Adapter GPL-2.0-or-later https://github.com/WordPress/mcp-adapter
+MS WordPress Abilities GPL-2.0-or-later https://github.com/miriamschwab/ms-wp-abilities
+Twenty Twenty-Five GPL-2.0-or-later https://wordpress.org/themes/twentytwentyfive/
+WP-CLI MIT https://wp-cli.org
+wp-cli/ability-command MIT https://github.com/wp-cli/ability-command
 
 Each remains under its own licence.
