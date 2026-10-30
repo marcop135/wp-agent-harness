@@ -9,7 +9,11 @@
 
 ### Changed
 
-- Load skills in Claude Code, Cursor, and Codex from one copy in `.claude/skills/`; drop `.cursor/skills/`.
+- Share one WordPress skills copy across Claude Code, Cursor, and Codex.
+
+### Fixed
+
+- Correct the copyright holder in `LICENSE` and `NOTICE`.
 
 ## [0.11.0] - 2026-10-24
 
