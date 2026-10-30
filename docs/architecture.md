@@ -240,7 +240,7 @@ same site. Nothing that matters should live only there.
 
 Git tracks infrastructure and documentation only (see
 [Project structure](#project-structure)), plus the curated WordPress agent
-skills under `.claude/skills/` and `.cursor/skills/` (GPL-2.0-or-later upstream
+skills under `.claude/skills/` and their `.agents/skills/` links (GPL-2.0-or-later upstream
 copies; see [claude-code.md](claude-code.md)). Excluded:
 
 | Excluded | Why |

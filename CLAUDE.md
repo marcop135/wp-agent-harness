@@ -77,7 +77,7 @@ the MCP layer, not in WordPress.
 ## Skills
 
 A curated subset of [WordPress/agent-skills](https://github.com/WordPress/agent-skills)
-lives under `.claude/skills/` and `.cursor/skills/` (blocks, themes, plugins,
+lives under `.claude/skills/`, linked per skill from `.agents/skills/` (blocks, themes, plugins,
 REST, Abilities API, WP-CLI, router/triage). Use them for WordPress coding
 patterns.
 

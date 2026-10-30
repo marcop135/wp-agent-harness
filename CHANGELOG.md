@@ -7,6 +7,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Load skills in Claude Code, Cursor, and Codex from one copy in `.claude/skills/`; drop `.cursor/skills/`.
+
 ## [0.11.0] - 2026-10-24
 
 ### Added

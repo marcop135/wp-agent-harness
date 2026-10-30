@@ -130,8 +130,8 @@ claude -p "Using the WordPress MCP server, list the active plugins." \
 
 A curated subset of
 [WordPress/agent-skills](https://github.com/WordPress/agent-skills)
-(GPL-2.0-or-later) is vendored into `.claude/skills/` and `.cursor/skills/`, so
-Claude Code and Cursor share one pack:
+(GPL-2.0-or-later) is vendored into `.claude/skills/`, with per-skill links in `.agents/skills/`, so
+Claude Code, Cursor, and Codex share one pack:
 
 | Skill | Role |
 |-------|------|

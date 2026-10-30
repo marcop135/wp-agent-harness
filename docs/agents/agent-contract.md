@@ -50,7 +50,7 @@ Portable rules for AI agents (Cursor agent, Claude Code, and similar). Canonical
 When changing team-wide agent behavior, keep these surfaces aligned in the same PR:
 
 - **Commands, MCP/site rules, skill triggers:** [`docs/AGENTS.md`](../AGENTS.md), root [`AGENTS.md`](../../AGENTS.md), [`CLAUDE.md`](../../CLAUDE.md), [`.cursor/AGENTS.md`](../../.cursor/AGENTS.md).
-- **Skills:** keep `.claude/skills/` and `.cursor/skills/` in sync (same curated set).
+- **Skills:** one copy in `.claude/skills/`; each `.agents/skills/<name>` is a link to it.
 
 Optional sanity check before merge: compare substantive sections of `docs/AGENTS.md`, root `AGENTS.md`, `CLAUDE.md`, and `.cursor/AGENTS.md` (excluding the Cursor precedence block).
 

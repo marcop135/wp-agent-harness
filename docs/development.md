@@ -250,7 +250,7 @@ Nothing tracks a moving upstream branch; every pin is a variable in `.env` and
 | **WordPress** | The site | Official Docker image | GPL-2.0-or-later | `WORDPRESS_IMAGE` |
 | **MariaDB** | Database | Official Docker image | GPL-2.0-or-later | `MARIADB_IMAGE` |
 | **Twenty Twenty-Five** | Default theme | wordpress.org via setup | GPL-2.0-or-later | `WP_THEME` |
-| **WordPress agent skills** | Agent procedures (blocks, themes, Abilities, …) | **Vendored** under `.claude/skills/` and `.cursor/skills/` | GPL-2.0-or-later | manual refresh (below) |
+| **WordPress agent skills** | Agent procedures (blocks, themes, Abilities, …) | **Vendored** under `.claude/skills/` | GPL-2.0-or-later | manual refresh (below) |
 
 `ability-command` is a WP-CLI package in the image, not a plugin. The agent
 skills are the only upstream source tree committed to this repository.
@@ -295,8 +295,8 @@ purpose.
 
 ### Agent skills (vendored)
 
-Not `.env` variables: committed trees under `.claude/skills/` and
-`.cursor/skills/`. Refresh them deliberately, keep the curated list, and add no
+Not `.env` variables: one committed tree under `.claude/skills/`, with a
+`.agents/skills/<name>` link per skill. Refresh them deliberately, keep the curated list, and add no
 Playground or `@wordpress/env` skills (this stack is Docker Compose + MCP). See
 [claude-code.md](claude-code.md#wordpress-agent-skills).
 
@@ -315,7 +315,7 @@ npx skills add WordPress/agent-skills \
   --skill wp-abilities-verify
 ```
 
-Commit both directories so the two agents stay in sync.
+Commit `.claude/skills/`; a new skill also gets its `.agents/skills/<name>` link.
 
 ## Reuse as a template
 
