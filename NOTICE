@@ -10,8 +10,8 @@ authored here.
 ### Vendored in this repository (GPL-2.0-or-later)
 
 A curated subset of [WordPress/agent-skills](https://github.com/WordPress/agent-skills)
-is committed under `.claude/skills/` and `.cursor/skills/`. Those trees keep
-their upstream GPL-2.0-or-later licence (see `LICENSE` beside each skills root).
+is committed under `.claude/skills/`; `.agents/skills/` only links to it. It keeps
+its upstream GPL-2.0-or-later licence (see `.claude/skills/LICENSE`).
 They are not MIT.
 
 ### Vendored in this repository (MIT)

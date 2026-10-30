@@ -64,10 +64,10 @@ do not invent names or parameters from memory.
 - Troubleshooting: [docs/troubleshooting.md](docs/troubleshooting.md)
 - Contributing: [CONTRIBUTING.md](CONTRIBUTING.md)
 - Examples: [examples/README.md](examples/README.md)
-- Skills: [.claude/skills/](.claude/skills/) and [.cursor/skills/](.cursor/skills/)
+- Skills: [.claude/skills/](.claude/skills/), linked per skill from [.agents/skills/](.agents/skills/)
 
 ## Agent skills
 
 Curated WordPress coding skills (blocks, themes, plugins, REST, Abilities API,
-WP-CLI, router/triage) under `.claude/skills/` and `.cursor/skills/`. They do
+WP-CLI, router/triage) under `.claude/skills/`. They do
 not replace MCP/`./bin/wp` for site work on this harness.

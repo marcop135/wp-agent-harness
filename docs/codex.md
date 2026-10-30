@@ -43,7 +43,7 @@ Claude Code: `./bin/connect`, then `claude` ([claude-code.md](claude-code.md)).
    `url` and the `Authorization: Basic …` header.
 3. Open this repository as the workspace. Cursor reads
    [`.cursor/AGENTS.md`](../.cursor/AGENTS.md) and the skills under
-   `.cursor/skills/` (the same pack as Claude Code's).
+   `.claude/skills/` and `.agents/skills/` (one pack, shared with Claude Code).
 4. Verify: ask the agent to discover WordPress abilities; it should see the
    three `mcp-adapter-*` tools.
 

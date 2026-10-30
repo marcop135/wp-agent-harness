@@ -18,13 +18,13 @@ Editor-agnostic contracts for AI agents working in this harness. File layout: ca
 
 **OpenAI Codex:** [`.codex/config.toml`](../../.codex/config.toml) + [`../codex.md`](../codex.md).
 
-**Project skills (Claude / Cursor):** [`.claude/skills/`](../../.claude/skills/) and [`.cursor/skills/`](../../.cursor/skills/) (same curated WordPress set).
+**Project skills (Claude / Cursor / Codex):** [`.claude/skills/`](../../.claude/skills/), linked per skill from [`.agents/skills/`](../../.agents/skills/) (one curated WordPress set).
 
 ## Tool loading matrix
 
 | Tool | Entry files | Skills / MCP |
 | --- | --- | --- |
 | Claude Code | `CLAUDE.md`, root `AGENTS.md` | `.claude/skills/`; `./bin/connect` |
-| Cursor IDE | root `AGENTS.md`, `.cursor/AGENTS.md` | `.cursor/skills/`; MCP from `--print` |
-| Cursor CLI | root `AGENTS.md`, `CLAUDE.md` | `.cursor/skills/` / `.claude/skills/` |
-| Codex | root `AGENTS.md`, `.codex/config.toml` | MCP via `WORDPRESS_MCP_BASIC_AUTH` |
+| Cursor IDE | root `AGENTS.md`, `.cursor/AGENTS.md` | `.claude/skills/`, `.agents/skills/`; MCP from `--print` |
+| Cursor CLI | root `AGENTS.md`, `CLAUDE.md` | `.claude/skills/`, `.agents/skills/` |
+| Codex | root `AGENTS.md`, `.codex/config.toml` | `.agents/skills/`; MCP via `WORDPRESS_MCP_BASIC_AUTH` |
