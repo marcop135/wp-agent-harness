@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.11.2] - 2026-11-03
+
 ### Security
 
 - Require approval for malformed hook payloads and unknown abilities, including unrecognized `get-*` names ([#62](https://github.com/marcop135/wp-agent-harness/pull/62)).
