@@ -53,8 +53,8 @@ it. It runs before every `mcp-adapter-execute-ability` call:
 | Cursor | `beforeMCPExecution` hook in `.cursor/hooks.json`, fail-closed | asks you, naming the action and the WordPress user it runs as |
 | Codex | none | Codex's own approval policy applies |
 
-- Reads pass: MS WP Abilities' `get-*`, `rest-get`, `preview-post-update`, and
-  `core/get-*`. This mirrors the plugin's own policy table; `tests/integration.sh`
+- Only explicitly listed reads pass, including `rest-get` and `preview-post-update`.
+  The list mirrors the pinned plugin's policy table; `tests/integration.sh`
   fails if the two disagree.
 - Everything else asks: all write abilities, any ability from another plugin,
   and any call the gate cannot parse. The prompt names the login the

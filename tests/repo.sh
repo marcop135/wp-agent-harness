@@ -140,11 +140,29 @@ for ability in "$ABILITY_NS/get-posts" "$ABILITY_NS/rest-get" "$ABILITY_NS/previ
 done
 
 for ability in "$ABILITY_NS/create-post" "$ABILITY_NS/apply-post-update" "$ABILITY_NS/trash-post" \
-               "$ABILITY_NS/rest-write" "$ABILITY_NS/install-plugin" other/get-anything ''; do
+               "$ABILITY_NS/rest-write" "$ABILITY_NS/install-plugin" other/get-anything \
+               "$ABILITY_NS/get-unknown-write" core/get-unknown-write ''; do
     assert_eq "gate asks before ${ability:-an unnamed ability} (Claude Code)" 'ask' \
         "$(gate claude "$(execute "$ability")" | jq -r '.hookSpecificOutput.permissionDecision')"
     assert_eq "gate asks before ${ability:-an unnamed ability} (Cursor)" 'ask' \
         "$(gate cursor "$(execute_cursor "$ability")" | jq -r '.permission')"
+done
+
+for payload in '' '{invalid' '{}' 'null' '[]' '{"tool_name":42}' \
+               '{"tool_name":""}' '{"tool_name":"discovery"} {}'; do
+    assert_eq 'gate asks on a malformed hook payload (Claude Code)' 'ask' \
+        "$(gate claude "$payload" | jq -r '.hookSpecificOutput.permissionDecision')"
+    assert_eq 'gate asks on a malformed hook payload (Cursor)' 'ask' \
+        "$(gate cursor "$payload" | jq -r '.permission')"
+done
+
+for ability in "$ABILITY_NS/get-posts"$'\r' "$ABILITY_NS/get-posts"$'\n'; do
+    payload="$(jq -nc --arg ability "$ability" '{tool_name:"mcp-adapter-execute-ability",tool_input:{ability_name:$ability}}')"
+    assert_eq 'gate rejects control characters in ability names (Claude Code)' 'ask' \
+        "$(gate claude "$payload" | jq -r '.hookSpecificOutput.permissionDecision')"
+    payload="$(jq -nc --arg ability "$ability" '{tool_name:"mcp-adapter-execute-ability",tool_input:({ability_name:$ability}|tojson)}')"
+    assert_eq 'gate rejects control characters in ability names (Cursor)' 'ask' \
+        "$(gate cursor "$payload" | jq -r '.permission')"
 done
 
 gate_env_file="$(mktemp)"
