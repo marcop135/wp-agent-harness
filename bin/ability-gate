@@ -17,14 +17,23 @@
 
 set -euo pipefail
 
-readonly READ_ABILITIES='^(miriamschwab/(get-[a-z-]+|rest-get|preview-post-update)|core/get-[a-z-]+)$'
-
 classify() {
-    if [[ "$1" =~ $READ_ABILITIES ]]; then
-        printf 'read'
-    else
-        printf 'write'
-    fi
+    case "$1" in
+        miriamschwab/get-posts|miriamschwab/get-pages|miriamschwab/get-post-meta|\
+        miriamschwab/get-post-types|miriamschwab/get-categories|miriamschwab/get-tags|\
+        miriamschwab/get-media|miriamschwab/get-site-settings|miriamschwab/get-users|\
+        miriamschwab/get-menus|miriamschwab/get-plugins|miriamschwab/get-themes|\
+        miriamschwab/get-available-updates|miriamschwab/rest-get|\
+        miriamschwab/preview-post-update|core/get-site-info|core/get-user-info|\
+        core/get-environment-info) printf 'read' ;;
+        *) printf 'write' ;;
+    esac
+}
+
+# Accept one hook object only. Invalid input must reach the approval path.
+hook_field() {
+    jq -ers "select(length == 1) | .[0] | select(type == \"object\") | $1 | select(type == \"string\" and length > 0) | select(explode | all(. >= 32 and . != 127))" \
+        <<<"$payload" 2>/dev/null | tr -d '\r' || true
 }
 
 # The agent connects as the harness administrator, WP_ADMIN_USER in .env.
@@ -50,9 +59,12 @@ case "$mode" in
 
     claude)
         payload="$(cat)"
-        tool="$(jq -r '.tool_name // empty' <<<"$payload" 2>/dev/null || true)"
-        [[ "$tool" == *mcp-adapter-execute-ability ]] || exit 0
-        ability="$(jq -r '.tool_input.ability_name // empty' <<<"$payload" 2>/dev/null || true)"
+        tool="$(hook_field '.tool_name')"
+        if [[ -n "$tool" && "$tool" != *mcp-adapter-execute-ability ]]; then
+            exit 0
+        fi
+        ability=''
+        [[ -z "$tool" ]] || ability="$(hook_field '.tool_input.ability_name')"
         [[ "$(classify "$ability")" == 'read' ]] && exit 0
         jq -n --arg reason "$(reason "$ability")" '{
             hookSpecificOutput: {
@@ -65,13 +77,14 @@ case "$mode" in
 
     cursor)
         payload="$(cat)"
-        tool="$(jq -r '.tool_name // empty' <<<"$payload" 2>/dev/null || true)"
-        if [[ "$tool" != *mcp-adapter-execute-ability ]]; then
+        tool="$(hook_field '.tool_name')"
+        if [[ -n "$tool" && "$tool" != *mcp-adapter-execute-ability ]]; then
             printf '{"permission":"allow"}\n'
             exit 0
         fi
         # Cursor passes tool_input as a JSON string.
-        ability="$(jq -r '.tool_input | (fromjson? // .) | .ability_name? // empty' <<<"$payload" 2>/dev/null || true)"
+        ability=''
+        [[ -z "$tool" ]] || ability="$(hook_field '.tool_input | (fromjson? // .) | .ability_name?')"
         if [[ "$(classify "$ability")" == 'read' ]]; then
             printf '{"permission":"allow"}\n'
         else
