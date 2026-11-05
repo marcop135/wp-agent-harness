@@ -264,7 +264,7 @@ for f in site/*.html; do
     assert_fails "$f has no inline executable script"         grep -qE '<script>|<script (defer|async)?>' "$f"
 done
 
-assert_ok 'matomo.js is cookieless and honours Do Not Track'     bash -c "grep -qF \"disableCookies\" site/js/matomo.js && grep -qF \"setDoNotTrack\" site/js/matomo.js && grep -qF \"$MATOMO_URL/\" site/js/matomo.js"
+assert_ok 'matomo.js loads the self-hosted Tag Manager container'     grep -qE "$MATOMO_URL/c/[A-Za-z0-9]{8}\.js" site/js/matomo.js
 
 csp="$(grep -m1 'Content-Security-Policy' site/.htaccess)"
 for directive in script-src connect-src img-src; do

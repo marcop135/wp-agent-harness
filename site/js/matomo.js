@@ -1,22 +1,15 @@
 /**
- * Self-hosted Matomo (mt.marcopontili.com, site 7): cookieless, Do Not Track
- * honoured, POST requests. Mirrors the marcopontili.com snippet.
+ * Self-hosted Matomo Tag Manager container (mt.marcopontili.com, site 7):
+ * cookieless, Do Not Track honoured, POST requests. Tracker settings, tags and
+ * triggers live in the container.
  */
-var _paq = (window._paq = window._paq || []);
-_paq.push(['setDoNotTrack', true]);
-_paq.push(['disableCookies']);
-_paq.push(['setRequestMethod', 'POST']);
-_paq.push(['trackPageView']);
-_paq.push(['enableLinkTracking']);
+var _mtm = (window._mtm = window._mtm || []);
+_mtm.push({ 'mtm.startTime': new Date().getTime(), event: 'mtm.Start' });
 (function () {
-  var u = 'https://mt.marcopontili.com/';
-  var p = 'm/';
-  _paq.push(['setTrackerUrl', u + p]);
-  _paq.push(['setSiteId', '7']);
   var d = document,
     g = d.createElement('script'),
     s = d.getElementsByTagName('script')[0];
   g.async = true;
-  g.src = u + p;
+  g.src = 'https://mt.marcopontili.com/c/ikEVoMuW.js';
   s.parentNode.insertBefore(g, s);
 })();
