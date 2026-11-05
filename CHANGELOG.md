@@ -9,8 +9,8 @@
 
 ### Changed
 
-- Load analytics through a cookieless Matomo Tag Manager container that also measures time on page and script errors
-- List the anonymous interaction events in the privacy page
+- Load analytics through a cookieless Matomo Tag Manager container, adding time on page and script errors ([#65](https://github.com/marcop135/wp-agent-harness/pull/65), [#64](https://github.com/marcop135/wp-agent-harness/issues/64)).
+- List the anonymous interaction events in the privacy page ([#65](https://github.com/marcop135/wp-agent-harness/pull/65)).
 
 ## [0.11.2] - 2026-11-03
 
