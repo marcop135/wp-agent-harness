@@ -7,6 +7,11 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Load analytics through a cookieless Matomo Tag Manager container that also measures time on page and script errors
+- List the anonymous interaction events in the privacy page
+
 ## [0.11.2] - 2026-11-03
 
 ### Security
