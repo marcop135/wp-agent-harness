@@ -166,12 +166,28 @@ for ability in "$ABILITY_NS/get-posts"$'\r' "$ABILITY_NS/get-posts"$'\n'; do
 done
 
 gate_env_file="$(mktemp)"
-printf 'WP_ADMIN_USER=editor
-' > "$gate_env_file"
-assert_eq 'gate names the action and the WP_ADMIN_USER login (Claude Code)'     'WordPress write: create-post, as editor. Approve only if this matches what you asked for.'     "$(execute "$ABILITY_NS/create-post" | ABILITY_GATE_ENV_FILE="$gate_env_file" bash bin/ability-gate claude         | jq -r '.hookSpecificOutput.permissionDecisionReason')"
-assert_eq 'gate names the action and the WP_ADMIN_USER login (Cursor)'     'WordPress write: create-post, as editor. Approve only if this matches what you asked for.'     "$(execute_cursor "$ABILITY_NS/create-post" | ABILITY_GATE_ENV_FILE="$gate_env_file" bash bin/ability-gate cursor         | jq -r '.user_message')"
-assert_eq 'gate falls back to admin without a .env'     'WordPress write: create-post, as admin. Approve only if this matches what you asked for.'     "$(execute "$ABILITY_NS/create-post" | ABILITY_GATE_ENV_FILE=/nonexistent bash bin/ability-gate claude         | jq -r '.hookSpecificOutput.permissionDecisionReason')"
+printf 'WP_ADMIN_USER=editor\n' > "$gate_env_file"
+assert_eq 'gate names the action and the WP_ADMIN_USER login (Claude Code)' \
+    'WordPress write: create-post, as editor. Approve only if this matches what you asked for.' \
+    "$(execute "$ABILITY_NS/create-post" | ABILITY_GATE_ENV_FILE="$gate_env_file" bash bin/ability-gate claude \
+        | jq -r '.hookSpecificOutput.permissionDecisionReason')"
+assert_eq 'gate names the action and the WP_ADMIN_USER login (Cursor)' \
+    'WordPress write: create-post, as editor. Approve only if this matches what you asked for.' \
+    "$(execute_cursor "$ABILITY_NS/create-post" | ABILITY_GATE_ENV_FILE="$gate_env_file" bash bin/ability-gate cursor \
+        | jq -r '.user_message')"
+assert_eq 'gate falls back to admin without a .env' \
+    'WordPress write: create-post, as admin. Approve only if this matches what you asked for.' \
+    "$(execute "$ABILITY_NS/create-post" | ABILITY_GATE_ENV_FILE=/nonexistent bash bin/ability-gate claude \
+        | jq -r '.hookSpecificOutput.permissionDecisionReason')"
 rm -f "$gate_env_file"
+
+# Without jq the gate must block (exit 2), never fail open. The empty PATH
+# hides jq; the shell runs from its absolute path.
+for client in claude cursor; do
+    assert_eq "gate blocks with exit 2 when jq is missing ($client)" '2' \
+        "$(execute "$ABILITY_NS/create-post" | PATH="$REPO_ROOT/.no-such-dir" "$BASH" bin/ability-gate "$client" \
+            >/dev/null 2>&1; echo $?)"
+done
 
 assert_eq 'gate asks on an unreadable payload' 'ask' \
     "$(gate claude '{"tool_name":"mcp__wordpress__mcp-adapter-execute-ability"}' | jq -r '.hookSpecificOutput.permissionDecision')"
@@ -203,7 +219,8 @@ for f in README.md CLAUDE.md AGENTS.md llms.txt CHANGELOG.md LICENSE NOTICE Make
          .github/brand/social.svg .github/brand/social.png \
          .github/brand/og.svg .github/brand/og.png \
          site/index.html site/privacy.html site/404.html site/500.html \
-         site/.well-known/security.txt site/.well-known/api-catalog          site/.htaccess site/js/matomo.js site/js/site.js \
+         site/.well-known/security.txt site/.well-known/api-catalog \
+         site/.htaccess site/js/matomo.js site/js/site.js \
          examples/README.md examples/inspect-site.md examples/create-content.md \
          examples/modify-content.md examples/media.md examples/theme.md \
          examples/plugins.md examples/site-development.md \
@@ -252,28 +269,36 @@ fi
 for f in site/index.html site/privacy.html; do
     page="${f#site/}"
     [[ "$page" == 'index.html' ]] && page=''
-    assert_ok "$f canonical is $SITE_URL/$page"         grep -qF "<link rel=\"canonical\" href=\"$SITE_URL/$page\">" "$f"
+    assert_ok "$f canonical is $SITE_URL/$page" \
+        grep -qF "<link rel=\"canonical\" href=\"$SITE_URL/$page\">" "$f"
 done
 
-for f in site/robots.txt site/sitemap.xml site/llms.txt site/index.md          site/.well-known/security.txt site/.well-known/api-catalog; do
+for f in site/robots.txt site/sitemap.xml site/llms.txt site/index.md \
+    site/.well-known/security.txt site/.well-known/api-catalog; do
     assert_ok "$f names $SITE_URL" grep -qF "$SITE_URL" "$f"
 done
 
 for f in site/*.html; do
-    assert_ok "$f loads the self-hosted Matomo script"         grep -qF '<script src="/js/matomo.js" defer></script>' "$f"
-    assert_fails "$f has no inline executable script"         grep -qE '<script>|<script (defer|async)?>' "$f"
+    assert_ok "$f loads the self-hosted Matomo script" \
+        grep -qF '<script src="/js/matomo.js" defer></script>' "$f"
+    assert_fails "$f has no inline executable script" \
+        grep -qE '<script>|<script (defer|async)?>' "$f"
 done
 
-assert_ok 'matomo.js loads the self-hosted Tag Manager container'     grep -qE "$MATOMO_URL/c/[A-Za-z0-9]{8}\.js" site/js/matomo.js
+assert_ok 'matomo.js loads the self-hosted Tag Manager container' \
+    grep -qE "$MATOMO_URL/c/[A-Za-z0-9]{8}\.js" site/js/matomo.js
 
 csp="$(grep -m1 'Content-Security-Policy' site/.htaccess)"
 for directive in script-src connect-src img-src; do
-    assert_ok "site/.htaccess CSP $directive allows $MATOMO_URL"         grep -qE "$directive [^;]*$MATOMO_URL" <<<"$csp"
+    assert_ok "site/.htaccess CSP $directive allows $MATOMO_URL" \
+        grep -qE "$directive [^;]*$MATOMO_URL" <<<"$csp"
 done
 assert_fails "site/.htaccess CSP has no unsafe-inline" grep -qF 'unsafe-inline' <<<"$csp"
 
-assert_ok 'deploy.yml uploads only ./site/'     bash -c "! grep -E 'local-dir:' .github/workflows/deploy.yml | grep -vqF './site/'"
-assert_ok 'deploy.yml purges the wpagent host'     grep -qF '"hosts":["wpagent.marcopontili.com"]' .github/workflows/deploy.yml
+assert_ok 'deploy.yml uploads only ./site/' \
+    bash -c "! grep -E 'local-dir:' .github/workflows/deploy.yml | grep -vqF './site/'"
+assert_ok 'deploy.yml purges the wpagent host' \
+    grep -qF '"hosts":["wpagent.marcopontili.com"]' .github/workflows/deploy.yml
 
 # ===========================================================================
 suite 'Repository — versions agree between .env.example and docs/development.md'

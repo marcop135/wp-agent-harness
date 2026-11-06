@@ -7,6 +7,23 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Update `wp-cli/ability-command` to 1.0.4 (PRLINK).
+- Cache the site's images for one day instead of one year, so a replaced `og.png` or favicon shows up (PRLINK).
+- Link the website's docs to `main` instead of `develop` (PRLINK).
+
+### Fixed
+
+- Remove only the project's own MCP registration in `./bin/connect` and `./bin/reset`, never a user-scope server (PRLINK).
+- Stop `./bin/reset --help` and `./bin/connect --help` printing a line of code (PRLINK).
+- Fix the WordPress image version command in the dependency update guide (PRLINK).
+
+### Security
+
+- Block WordPress ability calls in Claude Code when `jq` is missing, instead of letting them run (PRLINK).
+- Require `jq` in `./bin/setup` and fail the loopback port check without it (PRLINK).
+
 ## [0.12.0] - 2026-11-05
 
 ### Changed

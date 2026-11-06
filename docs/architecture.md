@@ -138,7 +138,7 @@ changes nothing else:
 1. `less`, `unzip`, `curl` and `mariadb-client`, which WP-CLI needs.
 2. **WP-CLI 2.12.0** from its GitHub release, verified against the published
    SHA-512.
-3. **`wp-cli/ability-command` 1.0.2**, which provides `wp ability`, loaded
+3. **`wp-cli/ability-command` 1.0.4**, which provides `wp ability`, loaded
    through WP-CLI's `require` config key rather than `wp package install`. The
    package declares `wp-cli/wp-cli ^3.0` (the unreleased WP-CLI 3.0), but its
    code only uses `WP_CLI`, `WP_CLI\Formatter` and `WP_CLI\Utils`, all present

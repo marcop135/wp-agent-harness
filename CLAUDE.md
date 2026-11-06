@@ -60,6 +60,7 @@ them as durable, and do not store anything there that is not reproducible.
 
 ## Commands
 
+    ./bin/setup               build, start and provision the stack
     ./bin/status              container, WordPress, ability and MCP health
     ./bin/connect             register MCP with Claude Code
     ./bin/connect --print     MCP URL + auth export (Codex / Cursor)

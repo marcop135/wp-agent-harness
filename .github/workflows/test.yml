@@ -18,7 +18,7 @@ jobs:
     name: shell and repository integrity
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: shellcheck
         run: |
@@ -26,6 +26,7 @@ jobs:
           shellcheck --severity=warning \
             bin/lib.sh bin/setup bin/start bin/stop bin/reset \
             bin/status bin/logs bin/test bin/connect bin/wp \
+            bin/ability-gate bin/audit bin/seed \
             tests/lib.sh tests/repo.sh tests/smoke.sh \
             tests/integration.sh tests/claude-code.sh
 
@@ -59,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: setup
         run: ./bin/setup
