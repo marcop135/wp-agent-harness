@@ -14,9 +14,9 @@ This site (https://wpagent.marcopontili.com) is the public project page; source 
 ## Docs on GitHub
 
 - [README](https://github.com/marcop135/wp-agent-harness#readme): Clone and connect
-- [Agent docs](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/AGENTS.md): MCP loop and harness rules
-- [Architecture](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/architecture.md): Stack diagram
-- [Repo llms.txt](https://github.com/marcop135/wp-agent-harness/blob/develop/llms.txt): Hard rules for agents driving the local site
+- [Agent docs](https://github.com/marcop135/wp-agent-harness/blob/main/docs/AGENTS.md): MCP loop and harness rules
+- [Architecture](https://github.com/marcop135/wp-agent-harness/blob/main/docs/architecture.md): Stack diagram
+- [Repo llms.txt](https://github.com/marcop135/wp-agent-harness/blob/main/llms.txt): Hard rules for agents driving the local site
 
 ## Facts agents should not invent
 

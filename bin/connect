@@ -20,7 +20,7 @@ case "${1:-}" in
     '')                 ;;
     --remove|--disconnect) action='remove' ;;
     --print)            action='print' ;;
-    -h|--help)          sed -n '2,14p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help)          sed -n '2,12p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *)                  die "Unknown option: $1" ;;
 esac
 
@@ -30,7 +30,7 @@ endpoint="$(mcp_endpoint)"
 if [[ "$action" == 'remove' ]]; then
     have claude || die 'claude is not on PATH. Install Claude Code, then re-run ./bin/connect --remove.'
     step "Removing MCP server '$server_name'"
-    ( cd "$REPO_ROOT" && claude mcp remove "$server_name" ) \
+    ( cd "$REPO_ROOT" && claude mcp remove --scope local "$server_name" ) \
         || die "Claude Code has no MCP server called '$server_name' for this project."
     ok 'Removed'
     exit 0
@@ -74,7 +74,7 @@ info "auth       Authorization: Basic <application password>"
 
 # Replace rather than append, so re-running after ./bin/reset picks up the new
 # Application Password instead of leaving a stale one behind.
-( cd "$REPO_ROOT" && claude mcp remove "$server_name" >/dev/null 2>&1 ) || true
+( cd "$REPO_ROOT" && claude mcp remove --scope local "$server_name" >/dev/null 2>&1 ) || true
 
 (
     cd "$REPO_ROOT" && claude mcp add \

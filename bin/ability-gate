@@ -51,6 +51,14 @@ reason() {
 
 mode="${1:-}"
 
+# Without jq the gate can neither read the payload nor answer "ask". Exit 2
+# is the one code both clients treat as a block; any other failure lets the
+# call through in Claude Code.
+if [[ "$mode" == 'claude' || "$mode" == 'cursor' ]] && ! command -v jq >/dev/null 2>&1; then
+    printf 'ability-gate: jq is not installed, so WordPress ability calls are blocked. See docs/development.md.\n' >&2
+    exit 2
+fi
+
 case "$mode" in
     classify)
         classify "${2:-}"

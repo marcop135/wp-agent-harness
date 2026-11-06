@@ -2,7 +2,7 @@
 title: "Agent Harness for WordPress: local WordPress for AI agents"
 canonical: https://wpagent.marcopontili.com/
 description: Local Docker WordPress for Claude Code, Cursor, and Codex, wired over MCP. Every change needs your approval and is logged; one command resets it.
-dateModified: 2026-10-24
+dateModified: 2026-11-06
 ---
 
 # Agent Harness for WordPress
@@ -33,18 +33,18 @@ cd wp-agent-harness
 ./bin/connect
 ```
 
-Cursor or Codex: [docs/codex.md](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/codex.md).
+Cursor or Codex: [docs/codex.md](https://github.com/marcop135/wp-agent-harness/blob/main/docs/codex.md).
 
 ## What to ask your agent
 
 Worked examples from the repo, each with the abilities it uses and what you should see back.
 
-- [Site inspection](https://github.com/marcop135/wp-agent-harness/blob/develop/examples/inspect-site.md) (read-only): "Inspect the local WordPress site. Tell me the WordPress version, active theme, active plugins, site title, available post types, and current content structure."
-- [Creating content](https://github.com/marcop135/wp-agent-harness/blob/develop/examples/create-content.md) (markdown in, native blocks out): "Create a draft page called "About This Site". Use Gutenberg-compatible content with a heading, two paragraphs, and a list. Do not publish it."
-- [Modifying content](https://github.com/marcop135/wp-agent-harness/blob/develop/examples/modify-content.md) (the change shown first): "Find the draft page "About This Site" and improve its structure without changing its meaning. Show me the intended changes before applying them."
-- [Media](https://github.com/marcop135/wp-agent-harness/blob/develop/examples/media.md) (audit first, fix on request): "Inspect the media library and identify images with missing alt text."
-- [Plugins and updates](https://github.com/marcop135/wp-agent-harness/blob/develop/examples/plugins.md) (read-only): "Inspect the installed plugins and report their active/inactive state and available updates. Do not change anything."
-- [Site development](https://github.com/marcop135/wp-agent-harness/blob/develop/examples/site-development.md) (inspect, propose, build): "Build a Services section: a top-level "Services" page and three child pages. Keep everything as drafts and show me the structure before you start."
+- [Site inspection](https://github.com/marcop135/wp-agent-harness/blob/main/examples/inspect-site.md) (read-only): "Inspect the local WordPress site. Tell me the WordPress version, active theme, active plugins, site title, available post types, and current content structure."
+- [Creating content](https://github.com/marcop135/wp-agent-harness/blob/main/examples/create-content.md) (markdown in, native blocks out): "Create a draft page called "About This Site". Use Gutenberg-compatible content with a heading, two paragraphs, and a list. Do not publish it."
+- [Modifying content](https://github.com/marcop135/wp-agent-harness/blob/main/examples/modify-content.md) (the change shown first): "Find the draft page "About This Site" and improve its structure without changing its meaning. Show me the intended changes before applying them."
+- [Media](https://github.com/marcop135/wp-agent-harness/blob/main/examples/media.md) (audit first, fix on request): "Inspect the media library and identify images with missing alt text."
+- [Plugins and updates](https://github.com/marcop135/wp-agent-harness/blob/main/examples/plugins.md) (read-only): "Inspect the installed plugins and report their active/inactive state and available updates. Do not change anything."
+- [Site development](https://github.com/marcop135/wp-agent-harness/blob/main/examples/site-development.md) (inspect, propose, build): "Build a Services section: a top-level "Services" page and three child pages. Keep everything as drafts and show me the structure before you start."
 
 ## How a request travels
 
@@ -58,10 +58,10 @@ In wp-admin you click Save. Here you type one sentence to your agent, and it mak
 ## Docs
 
 - [README](https://github.com/marcop135/wp-agent-harness#readme)
-- [Agent docs](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/AGENTS.md)
-- [Architecture](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/architecture.md)
-- [Security model](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/security.md)
-- [Examples](https://github.com/marcop135/wp-agent-harness/tree/develop/examples)
+- [Agent docs](https://github.com/marcop135/wp-agent-harness/blob/main/docs/AGENTS.md)
+- [Architecture](https://github.com/marcop135/wp-agent-harness/blob/main/docs/architecture.md)
+- [Security model](https://github.com/marcop135/wp-agent-harness/blob/main/docs/security.md)
+- [Examples](https://github.com/marcop135/wp-agent-harness/tree/main/examples)
 
 ## Questions answered
 
@@ -95,7 +95,7 @@ Run `./bin/reset`. It removes the containers and both Docker volumes, then runs 
 
 ### Can I point an agent at a live site?
 
-The same MCP path works against any WordPress 6.9+ site running the MCP Adapter and MS WordPress Abilities, with an Application Password. [Connecting to a live site](https://github.com/marcop135/wp-agent-harness/blob/develop/docs/remote-site.md) covers it, and it leaves the harness behind: no reset, no pinned stack, every call a real change.
+The same MCP path works against any WordPress 6.9+ site running the MCP Adapter and MS WordPress Abilities, with an Application Password. [Connecting to a live site](https://github.com/marcop135/wp-agent-harness/blob/main/docs/remote-site.md) covers it, and it leaves the harness behind: no reset, no pinned stack, every call a real change.
 
 ### Does this repo ship an MCP server or plugin?
 

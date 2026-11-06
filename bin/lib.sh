@@ -186,6 +186,11 @@ check_loopback_bindings() {
     local cfg bad host_modes
     cfg="$(dc config --format json 2>/dev/null)" || return 0
 
+    if ! have jq; then
+        printf 'jq is not installed, so the Compose port bindings cannot be checked (docs/development.md)\n' >&2
+        return 1
+    fi
+
     host_modes="$(printf '%s' "$cfg" | jq -r '
         .services // {}
         | to_entries[]
