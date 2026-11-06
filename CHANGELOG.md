@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.12.1] - 2026-11-06
+
 ### Changed
 
 - Update `wp-cli/ability-command` to 1.0.4 ([#68](https://github.com/marcop135/wp-agent-harness/pull/68)).
