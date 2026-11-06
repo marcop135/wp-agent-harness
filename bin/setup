@@ -26,6 +26,7 @@ else
 fi
 
 have curl || die 'curl is not installed or not on PATH.'
+have jq || die 'jq is not installed or not on PATH. See docs/development.md.'
 
 # ---------------------------------------------------------------------------
 step 'Environment file'

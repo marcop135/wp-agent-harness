@@ -7,6 +7,23 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Update `wp-cli/ability-command` to 1.0.4 ([#68](https://github.com/marcop135/wp-agent-harness/pull/68)).
+- Cache the site's images for one day instead of one year, so a replaced `og.png` or favicon shows up ([#68](https://github.com/marcop135/wp-agent-harness/pull/68)).
+- Link the website's docs to `main` instead of `develop` ([#68](https://github.com/marcop135/wp-agent-harness/pull/68)).
+
+### Fixed
+
+- Remove only the project's own MCP registration in `./bin/connect` and `./bin/reset`, never a user-scope server ([#68](https://github.com/marcop135/wp-agent-harness/pull/68)).
+- Stop `./bin/reset --help` and `./bin/connect --help` printing a line of code ([#68](https://github.com/marcop135/wp-agent-harness/pull/68)).
+- Fix the WordPress image version command in the dependency update guide ([#68](https://github.com/marcop135/wp-agent-harness/pull/68)).
+
+### Security
+
+- Block WordPress ability calls in Claude Code when `jq` is missing, instead of letting them run ([#68](https://github.com/marcop135/wp-agent-harness/pull/68), [#67](https://github.com/marcop135/wp-agent-harness/issues/67)).
+- Require `jq` in `./bin/setup` and fail the loopback port check without it ([#68](https://github.com/marcop135/wp-agent-harness/pull/68)).
+
 ## [0.12.0] - 2026-11-05
 
 ### Changed

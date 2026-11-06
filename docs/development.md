@@ -227,7 +227,7 @@ in the same debug log.
 | Apache | 2.4 | same image |
 | MariaDB | 11.8.9 | `mariadb:11.8.9` |
 | WP-CLI | 2.12.0 | GitHub release phar, SHA-512 verified |
-| `wp-cli/ability-command` | 1.0.2 | GitHub release tarball, SHA-256 verified (`WP_CLI_ABILITY_COMMAND_SHA256`) |
+| `wp-cli/ability-command` | 1.0.4 | GitHub release tarball, SHA-256 verified (`WP_CLI_ABILITY_COMMAND_SHA256`) |
 | MCP Adapter | 0.7.1 | GitHub release ZIP, SHA-256 verified (`MCP_ADAPTER_SHA256`) |
 | MS WordPress Abilities | 1.13.0 | GitHub release ZIP, SHA-256 verified (`MS_WP_ABILITIES_SHA256`) |
 | Twenty Twenty-Five | 1.5 | wordpress.org |
@@ -261,7 +261,7 @@ skills are the only upstream source tree committed to this repository.
 |----------|--------|----------------------|
 | `MCP_ADAPTER_VERSION` / `MCP_ADAPTER_SHA256` | GitHub release ZIP | `gh release list --repo WordPress/mcp-adapter`; recompute the ZIP's SHA-256 |
 | `MS_WP_ABILITIES_VERSION` / `MS_WP_ABILITIES_SHA256` | GitHub release ZIP | `gh release list --repo <owner/repo>` (repository in [NOTICE](../NOTICE)); recompute SHA-256 |
-| `WORDPRESS_IMAGE` | Docker Hub | `docker run --rm wordpress:7.1-php8.3-apache wp core version` |
+| `WORDPRESS_IMAGE` | Docker Hub | `docker run --rm --entrypoint printenv wordpress:7.1-php8.3-apache WORDPRESS_VERSION` |
 | `MARIADB_IMAGE` | Docker Hub | the MariaDB LTS line |
 | `WP_CLI_VERSION` | GitHub release phar | `gh release list --repo wp-cli/wp-cli` |
 | `WP_CLI_ABILITY_COMMAND_VERSION` / `WP_CLI_ABILITY_COMMAND_SHA256` | GitHub release tarball | `gh release list --repo wp-cli/ability-command`; recompute SHA-256 |

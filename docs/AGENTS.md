@@ -26,7 +26,7 @@ WordPress|7.1.3 (image wordpress:7.1.3-php8.3-apache) | PHP 8.3 | Apache 2.4
 MariaDB|11.8.9
 MCP Adapter|0.7.1 (GitHub release ZIP)
 MS WordPress Abilities|1.13.0 (GitHub release ZIP)
-WP-CLI|2.12.0 + ability-command 1.0.2
+WP-CLI|2.12.0 + ability-command 1.0.4
 MCP|meta-tools: discover / get-ability-info / execute-ability
 Ports|127.0.0.1 only (WP + DB)
 ```

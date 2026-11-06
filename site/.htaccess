@@ -1,5 +1,5 @@
-# Apache config for wpagent.marcopontili.com (Netsons). Mirrors the headers in
-# netlify.toml, which stays for Netlify previews. Keep the two in sync.
+# Apache config for wpagent.marcopontili.com (Netsons). netlify.toml only
+# redirects the old Netlify host here, so every header lives in this file.
 
 Options -Indexes
 DirectoryIndex index.html
@@ -77,15 +77,21 @@ ErrorDocument 500 /500.html
   # Default: HTML, markdown, text, scripts that are not fingerprinted.
   Header set Cache-Control "public, max-age=0, must-revalidate"
 
-  # Fingerprinted stylesheet, vendored Prism, fonts, images: one year.
+  # Fingerprinted stylesheet, vendored Prism, versioned fonts: one year.
   <FilesMatch "^styles\.[0-9a-f]{8}\.css$">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
   <FilesMatch "^prism-[a-z-]+\.min\.(js|css)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
-  <FilesMatch "\.(woff2|png|svg|ico)$">
+  <FilesMatch "\.woff2$">
     Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Images keep fixed names (og.png, favicons), so a replacement must reach
+  # browsers and the CDN: one day.
+  <FilesMatch "\.(png|svg|ico)$">
+    Header set Cache-Control "public, max-age=86400"
   </FilesMatch>
 
   # Manifest and /.well-known/: one day.
