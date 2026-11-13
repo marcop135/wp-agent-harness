@@ -332,6 +332,7 @@ assert_contains "the publisher's page is unchanged" \
 mcp_execute_ability "$ABILITY_NS/trash-post" "$(jq -cn --argjson id "${TEST_POST_ID:-0}" '{post_id:$id}')"
 assert_eq 'the reader is refused trash-post over MCP' 'true' "$(mcp_is_error)"
 mcp_terminate
+# shellcheck disable=SC2034  # read by mcp_creds in tests/lib.sh
 MCP_TEST_ROLE='admin'
 
 test_summary

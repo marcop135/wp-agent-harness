@@ -125,6 +125,7 @@ mcp_endpoint() { printf '%s%s' "$(site_url)" "$MCP_ROUTE"; }
 # MCP_ROLE_FILE, where bin/ability-gate reads it.
 
 readonly MCP_ROLES='admin publisher reader'
+# shellcheck disable=SC2034  # read by bin/connect and bin/status, which source this file
 readonly MCP_ROLE_FILE="$SECRETS_DIR/mcp-role"
 
 is_mcp_role() { [[ " $MCP_ROLES " == *" ${1:-} "* ]]; }
