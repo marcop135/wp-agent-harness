@@ -51,6 +51,8 @@ services:
       WP_ADMIN_USER: ${WP_ADMIN_USER:-admin}
       WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL:-admin@wp-agent-harness.test}
       WP_ADMIN_PASSWORD: ${WP_ADMIN_PASSWORD:?WP_ADMIN_PASSWORD is required — run ./bin/setup}
+      WP_PUBLISHER_USER: ${WP_PUBLISHER_USER:-agent-publisher}
+      WP_READER_USER: ${WP_READER_USER:-agent-reader}
       WP_THEME: ${WP_THEME:-twentytwentyfive}
       MCP_ADAPTER_VERSION: ${MCP_ADAPTER_VERSION:-0.7.1}
       MCP_ADAPTER_SHA256: ${MCP_ADAPTER_SHA256:-c8bc28f83d3c39beffa2add4f6becc0b1ae54097df433697d1dbe6520a80d769}

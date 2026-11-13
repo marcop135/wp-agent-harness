@@ -117,16 +117,54 @@ http_headers() {
 site_url()     { printf 'http://localhost:%s' "$(env_get WP_PORT 8080)"; }
 mcp_endpoint() { printf '%s%s' "$(site_url)" "$MCP_ROUTE"; }
 
-app_password() {
-    [[ -f "$APP_PASSWORD_FILE" ]] || return 1
-    tr -d '\r\n' < "$APP_PASSWORD_FILE"
+# --- agent roles -----------------------------------------------------------
+#
+# The WordPress login an MCP client connects as. admin is the harness
+# administrator; publisher and reader are the lower-privileged logins
+# wp-provision creates. bin/ability-gate reads the recorded role: the Claude
+# Code registration in MCP_ROLE_FILE, the last --print (Cursor) in
+# MCP_PRINT_ROLE_FILE, so one client's role never relabels the other's.
+
+readonly MCP_ROLES='admin publisher reader'
+# shellcheck disable=SC2034  # read by bin/connect and bin/status, which source this file
+readonly MCP_ROLE_FILE="$SECRETS_DIR/mcp-role"
+# shellcheck disable=SC2034  # read by bin/connect, which sources this file
+readonly MCP_PRINT_ROLE_FILE="$SECRETS_DIR/mcp-role-print"
+
+is_mcp_role() { [[ " $MCP_ROLES " == *" ${1:-} "* ]]; }
+
+role_login() {
+    case "$1" in
+        admin)     env_get WP_ADMIN_USER admin ;;
+        publisher) env_get WP_PUBLISHER_USER agent-publisher ;;
+        reader)    env_get WP_READER_USER agent-reader ;;
+        *)         return 1 ;;
+    esac
 }
 
-# Basic credentials for the MCP endpoint: admin login + Application Password.
+# The admin password keeps its original path, so existing installs keep working.
+app_password_file() {
+    case "$1" in
+        admin)            printf '%s' "$APP_PASSWORD_FILE" ;;
+        publisher|reader) printf '%s' "$SECRETS_DIR/application-password-$1" ;;
+        *)                return 1 ;;
+    esac
+}
+
+# app_password [role]
+app_password() {
+    local file
+    file="$(app_password_file "${1:-admin}")" || return 1
+    [[ -f "$file" ]] || return 1
+    tr -d '\r\n' < "$file"
+}
+
+# mcp_basic_auth [role]: Basic credentials for the MCP endpoint, the role's
+# login + its Application Password. Defaults to the administrator.
 mcp_basic_auth() {
-    local pass
-    pass="$(app_password)" || return 1
-    printf '%s:%s' "$(env_get WP_ADMIN_USER admin)" "$pass"
+    local role="${1:-admin}" pass
+    pass="$(app_password "$role")" || return 1
+    printf '%s:%s' "$(role_login "$role")" "$pass"
 }
 
 # --- secret file modes -----------------------------------------------------

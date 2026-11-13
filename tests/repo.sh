@@ -129,6 +129,8 @@ done
 suite 'Repository: write approval gate'
 # ===========================================================================
 
+# Pin the role file so a local ./bin/connect --role does not change the results.
+export ABILITY_GATE_ROLE_FILE=/nonexistent
 gate() { printf '%s' "$2" | bash bin/ability-gate "$1" 2>/dev/null; }
 execute() { printf '{"tool_name":"mcp__wordpress__mcp-adapter-execute-ability","tool_input":{"ability_name":"%s","parameters":{}}}' "$1"; }
 execute_cursor() { printf '{"tool_name":"mcp-adapter-execute-ability","tool_input":"{\\"ability_name\\":\\"%s\\"}"}' "$1"; }
@@ -179,6 +181,61 @@ assert_eq 'gate falls back to admin without a .env' \
     'WordPress write: create-post, as admin. Approve only if this matches what you asked for.' \
     "$(execute "$ABILITY_NS/create-post" | ABILITY_GATE_ENV_FILE=/nonexistent bash bin/ability-gate claude \
         | jq -r '.hookSpecificOutput.permissionDecisionReason')"
+gate_role_file="$(mktemp)"
+printf 'WP_ADMIN_USER=editor\nWP_PUBLISHER_USER=pub\nWP_READER_USER=rdr\n' > "$gate_env_file"
+printf 'publisher\n' > "$gate_role_file"
+assert_eq 'gate names the publisher login when connected as publisher' \
+    'WordPress write: create-post, as pub. Approve only if this matches what you asked for.' \
+    "$(execute "$ABILITY_NS/create-post" \
+        | ABILITY_GATE_ENV_FILE="$gate_env_file" ABILITY_GATE_ROLE_FILE="$gate_role_file" bash bin/ability-gate claude \
+        | jq -r '.hookSpecificOutput.permissionDecisionReason')"
+assert_eq 'gate still asks before a publisher write' 'ask' \
+    "$(execute "$ABILITY_NS/create-post" \
+        | ABILITY_GATE_ENV_FILE="$gate_env_file" ABILITY_GATE_ROLE_FILE="$gate_role_file" bash bin/ability-gate claude \
+        | jq -r '.hookSpecificOutput.permissionDecision')"
+printf 'reader\n' > "$gate_role_file"
+assert_eq 'gate denies a write when connected as reader (Claude Code)' 'deny' \
+    "$(execute "$ABILITY_NS/create-post" \
+        | ABILITY_GATE_ENV_FILE="$gate_env_file" ABILITY_GATE_ROLE_FILE="$gate_role_file" bash bin/ability-gate claude \
+        | jq -r '.hookSpecificOutput.permissionDecision')"
+assert_eq 'gate denies a write when connected as reader (Cursor)' 'deny' \
+    "$(execute_cursor "$ABILITY_NS/rest-write" \
+        | ABILITY_GATE_ENV_FILE="$gate_env_file" ABILITY_GATE_ROLE_FILE="$gate_role_file" bash bin/ability-gate cursor \
+        | jq -r '.permission')"
+assert_contains 'gate names the reader login in the denial' \
+    "$(execute "$ABILITY_NS/create-post" \
+        | ABILITY_GATE_ENV_FILE="$gate_env_file" ABILITY_GATE_ROLE_FILE="$gate_role_file" bash bin/ability-gate claude \
+        | jq -r '.hookSpecificOutput.permissionDecisionReason')" 'as rdr. Denied'
+assert_eq 'gate lets a read through when connected as reader' '' \
+    "$(execute "$ABILITY_NS/get-posts" \
+        | ABILITY_GATE_ENV_FILE="$gate_env_file" ABILITY_GATE_ROLE_FILE="$gate_role_file" bash bin/ability-gate claude)"
+printf 'nonsense\n' > "$gate_role_file"
+assert_eq 'gate treats an unknown recorded role as admin' 'ask' \
+    "$(execute "$ABILITY_NS/create-post" \
+        | ABILITY_GATE_ENV_FILE="$gate_env_file" ABILITY_GATE_ROLE_FILE="$gate_role_file" bash bin/ability-gate claude \
+        | jq -r '.hookSpecificOutput.permissionDecision')"
+rm -f "$gate_role_file"
+
+# Each client reads its own recorded role, so connecting Cursor as one role
+# never relabels or unlocks Claude Code's writes, and the reverse.
+gate_root="$(mktemp -d)"
+mkdir -p "$gate_root/bin" "$gate_root/.secrets"
+cp bin/ability-gate "$gate_root/bin/ability-gate"
+printf 'reader\n' > "$gate_root/.secrets/mcp-role"
+printf 'publisher\n' > "$gate_root/.secrets/mcp-role-print"
+assert_eq 'Claude Code reads the role ./bin/connect recorded' 'deny' \
+    "$(execute "$ABILITY_NS/create-post" \
+        | env -u ABILITY_GATE_ROLE_FILE ABILITY_GATE_ENV_FILE="$gate_env_file" bash "$gate_root/bin/ability-gate" claude \
+        | jq -r '.hookSpecificOutput.permissionDecision')"
+assert_eq 'Cursor reads the role ./bin/connect --print recorded' 'ask' \
+    "$(execute_cursor "$ABILITY_NS/create-post" \
+        | env -u ABILITY_GATE_ROLE_FILE ABILITY_GATE_ENV_FILE="$gate_env_file" bash "$gate_root/bin/ability-gate" cursor \
+        | jq -r '.permission')"
+assert_contains 'Cursor names the --print login' \
+    "$(execute_cursor "$ABILITY_NS/create-post" \
+        | env -u ABILITY_GATE_ROLE_FILE ABILITY_GATE_ENV_FILE="$gate_env_file" bash "$gate_root/bin/ability-gate" cursor \
+        | jq -r '.user_message')" 'as pub.'
+rm -rf "$gate_root"
 rm -f "$gate_env_file"
 
 # Without jq the gate must block (exit 2), never fail open. The empty PATH

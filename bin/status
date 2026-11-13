@@ -91,21 +91,25 @@ case "$anon" in
     *)       bad "unauthenticated request returned HTTP $anon, expected 401/403" ;;
 esac
 
-if creds="$(mcp_basic_auth 2>/dev/null)"; then
-    headers="$(http_headers "$(mcp_endpoint)" -X POST \
-        --user "$creds" \
-        -H 'Content-Type: application/json' \
-        -H 'Accept: application/json, text/event-stream' \
-        -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"bin-status","version":"1.0.0"}}}')"
-    if grep -qi '^HTTP/[0-9.]* 200' <<<"$headers"; then
-        session="$(grep -i '^mcp-session-id:' <<<"$headers" | awk '{print $2}' | tr -d '\r')"
-        ok "authenticated initialize succeeded (session ${session:0:8}…)"
+for role in $MCP_ROLES; do
+    login="$(role_login "$role")"
+    if creds="$(mcp_basic_auth "$role" 2>/dev/null)"; then
+        headers="$(http_headers "$(mcp_endpoint)" -X POST \
+            --user "$creds" \
+            -H 'Content-Type: application/json' \
+            -H 'Accept: application/json, text/event-stream' \
+            -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"bin-status","version":"1.0.0"}}}')"
+        if grep -qi '^HTTP/[0-9.]* 200' <<<"$headers"; then
+            session="$(grep -i '^mcp-session-id:' <<<"$headers" | awk '{print $2}' | tr -d '\r')"
+            ok "$role ($login): authenticated initialize succeeded (session ${session:0:8}…)"
+        else
+            bad "$role ($login): authenticated initialize failed: $(head -n1 <<<"$headers" | tr -d '\r')"
+        fi
     else
-        bad "authenticated initialize failed: $(head -n1 <<<"$headers" | tr -d '\r')"
+        file="$(app_password_file "$role")"
+        bad "$role ($login): no Application Password in ${file#"$REPO_ROOT/"}; run ./bin/setup"
     fi
-else
-    bad "no Application Password in ${APP_PASSWORD_FILE#"$REPO_ROOT/"} — run ./bin/setup"
-fi
+done
 
 # ---------------------------------------------------------------------------
 step 'Claude Code'
@@ -114,7 +118,9 @@ server_name="$(env_get MCP_SERVER_NAME wordpress)"
 if ! have claude; then
     warn 'claude is not on PATH; cannot check the MCP registration'
 elif ( cd "$REPO_ROOT" && claude mcp get "$server_name" >/dev/null 2>&1 ); then
-    ok "MCP server '$server_name' is registered for this project"
+    connected_role="$(head -n 1 "$MCP_ROLE_FILE" 2>/dev/null | tr -d '\r' || true)"
+    is_mcp_role "$connected_role" || connected_role='admin'
+    ok "MCP server '$server_name' is registered for this project, as $connected_role ($(role_login "$connected_role"))"
 else
     warn "MCP server '$server_name' is not registered — run ./bin/connect"
 fi

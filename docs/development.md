@@ -68,6 +68,8 @@ random secret. The ones you are most likely to change:
 | `WP_THEME` | `twentytwentyfive` | installed and activated by setup |
 | `WP_SITE_TITLE` | `WP Agent Harness` | site title |
 | `WP_ADMIN_USER` | `admin` | development administrator login |
+| `WP_PUBLISHER_USER` | `agent-publisher` | login for `./bin/connect --role publisher` |
+| `WP_READER_USER` | `agent-reader` | login for `./bin/connect --role reader` |
 | `WP_ADMIN_PASSWORD` | generated | **wp-admin** password, not the MCP credential |
 | `MCP_SERVER_NAME` | `wordpress` | name Claude Code registers the server under |
 | `COMPOSE_PROJECT_NAME` | `wp-agent-harness` | Docker Compose project and volume prefix |

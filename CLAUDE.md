@@ -64,6 +64,7 @@ them as durable, and do not store anything there that is not reproducible.
     ./bin/status              container, WordPress, ability and MCP health
     ./bin/connect             register MCP with Claude Code
     ./bin/connect --print     MCP URL + auth export (Codex / Cursor)
+    ./bin/connect --role publisher|reader   connect as a lower-privileged login
     ./bin/wp <wp-cli args>    WP-CLI inside the container
     ./bin/wp ability list     the abilities this site registers, without MCP
     ./bin/logs --debug        WordPress's own PHP debug log

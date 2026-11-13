@@ -125,9 +125,13 @@ MCP_LAST_STATUS=''
 MCP_LAST_HEADERS=''
 MCP_LAST_BODY=''
 
+# The agent role the MCP client authenticates as; tests switch it to check
+# the publisher and reader logins.
+MCP_TEST_ROLE='admin'
+
 mcp_creds() {
-    mcp_basic_auth 2>/dev/null \
-        || die "No Application Password in ${APP_PASSWORD_FILE#"$REPO_ROOT/"}. Run ./bin/setup."
+    mcp_basic_auth "$MCP_TEST_ROLE" 2>/dev/null \
+        || die "No Application Password for the $MCP_TEST_ROLE role. Run ./bin/setup."
 }
 
 # mcp_request <json-body> — POST it, then fill MCP_LAST_STATUS/HEADERS/BODY.

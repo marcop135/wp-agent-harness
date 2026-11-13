@@ -3,7 +3,10 @@
 ## Quick start
 
 1. `./bin/setup` (once; creates the Application Password).
-2. `./bin/connect` registers the `wordpress` MCP server for this project.
+2. `./bin/connect` registers the `wordpress` MCP server for this project, as
+   the administrator. `--role publisher` or `--role reader` connects as a
+   lower-privileged login instead ([agent roles](security.md#agent-roles));
+   re-run to switch.
 3. `claude` from the repository root. Trust the workspace when asked; that also
    loads the [approval gate](#the-approval-gate).
 4. [Verify](#verify-the-connection): `claude mcp get wordpress`, then `/mcp` in
@@ -19,11 +22,11 @@ Other clients: [Codex and Cursor](codex.md). How the pieces fit:
 | Server name | `wordpress` (`MCP_SERVER_NAME` in `.env`) |
 | Transport | `http` |
 | URL | `http://localhost:8080/wp-json/mcp/mcp-adapter-default-server` |
-| Authentication | `Authorization: Basic <base64 of admin:application-password>` |
+| Authentication | `Authorization: Basic <base64 of login:application-password>`, login per `--role` |
 | Scope | `local`: this project only, stored in `~/.claude.json` |
 
-`./bin/connect` runs this, filled in from `.env` and
-`.secrets/application-password`:
+`./bin/connect` runs this, filled in from `.env` and the role's file under
+`.secrets/`:
 
 ```bash
 claude mcp add --transport http --scope local \
@@ -104,7 +107,8 @@ End-to-end check with a real headless session: `./bin/test claude-code`.
 - `.claude/settings.json` registers `bin/ability-gate` as a `PreToolUse` hook on
   `mcp-adapter-execute-ability`.
 - Reads run without asking; every write ability opens a permission prompt
-  naming the ability.
+  naming the ability and the connected login. Connected as `reader`, writes
+  are denied without a prompt.
 - Claude Code loads project hooks only once the workspace is trusted; `/hooks`
   lists them.
 
@@ -164,13 +168,9 @@ run `skillpack-build.mjs` / `skillpack-install.mjs` with
 ./bin/connect --remove       # or: claude mcp remove wordpress -s local
 ```
 
-This only unregisters the server. The Application Password stays valid; revoke
-it under **Users → Profile → Application Passwords**, or:
-
-```bash
-docker compose exec -T wordpress wp-app-password delete
-rm .secrets/application-password
-```
+This only unregisters the server. The Application Passwords stay valid; revoke
+them under **Users → Profile → Application Passwords**, or as in
+[security.md](security.md#application-passwords).
 
 ## When it does not connect
 

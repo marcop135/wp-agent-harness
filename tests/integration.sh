@@ -260,4 +260,79 @@ after="$(curl -sS -X POST "$(mcp_endpoint)" \
     -d '{"jsonrpc":"2.0","id":500,"method":"tools/list","params":{}}' 2>/dev/null || true)"
 assert_contains 'a terminated session is no longer accepted' "$after" 'error'
 
+# ===========================================================================
+suite 'Layer 3: agent roles (publisher, reader)'
+# ===========================================================================
+
+# WordPress itself must refuse what each role is not meant to do; the gate is
+# a second layer. can-run asks the abilities' own permission callbacks.
+publisher_login="$(role_login publisher)"
+reader_login="$(role_login reader)"
+
+for ability in get-pages create-post patch-post-content apply-post-update rest-get; do
+    assert_ok "the publisher may run $ability" \
+        wp_cli ability can-run "$ABILITY_NS/$ability" --user="$publisher_login"
+done
+for ability in trash-post install-plugin activate-plugin update-plugin update-theme get-site-settings get-plugins; do
+    assert_fails "the publisher may not run $ability" \
+        wp_cli ability can-run "$ABILITY_NS/$ability" --user="$publisher_login"
+done
+for ability in get-posts get-pages get-post-meta get-users rest-get; do
+    assert_ok "the reader may run $ability" \
+        wp_cli ability can-run "$ABILITY_NS/$ability" --user="$reader_login"
+done
+for ability in trash-post create-term update-media-meta install-plugin get-site-settings; do
+    assert_fails "the reader may not run $ability" \
+        wp_cli ability can-run "$ABILITY_NS/$ability" --user="$reader_login"
+done
+assert_fails 'the reader cannot publish' \
+    wp_cli user can "$reader_login" publish_posts
+assert_fails "the reader cannot edit others' posts" \
+    wp_cli user can "$reader_login" edit_others_posts
+
+# Over MCP, as the publisher: create a page and publish it.
+MCP_TEST_ROLE='publisher'
+mcp_initialize
+assert_eq 'the publisher authenticates over MCP' '200' "$MCP_LAST_STATUS"
+mcp_notify_initialized
+
+mcp_execute_ability "$ABILITY_NS/create-post" "$(jq -cn --arg t "$TEST_TITLE (publisher)" '{
+    title: $t, post_type: "page", status: "publish",
+    markdown: "Created by tests/integration.sh as the publisher role and removed when the run finishes."
+}')"
+published="$(mcp_payload)"
+TEST_POST_ID="$(jq -r '.data.ID // empty' <<<"$published")"
+assert_eq 'the publisher can publish a page' 'publish' "$(jq -r '.data.status // empty' <<<"$published")"
+author_id="$(wp_cli post get "${TEST_POST_ID:-0}" --field=post_author 2>/dev/null | tr -d '\r' || true)"
+assert_eq 'the page is credited to the publisher login' "$publisher_login" \
+    "$(wp_cli user get "${author_id:-0}" --field=user_login 2>/dev/null | tr -d '\r' || true)"
+
+mcp_execute_ability "$ABILITY_NS/trash-post" "$(jq -cn --argjson id "${TEST_POST_ID:-0}" '{post_id:$id}')"
+assert_eq 'the publisher is refused trash-post over MCP' 'true' "$(mcp_is_error)"
+mcp_terminate
+
+# Over MCP, as the reader: reads work; changing someone else's page and
+# trashing it are refused by WordPress. The page is removed by cleanup.
+MCP_TEST_ROLE='reader'
+mcp_initialize
+assert_eq 'the reader authenticates over MCP' '200' "$MCP_LAST_STATUS"
+mcp_notify_initialized
+
+mcp_execute_ability "$ABILITY_NS/get-pages" "$(jq -cn --arg s "$TEST_TITLE" '{search:$s}')"
+assert_eq "the reader can read the publisher's page over MCP" "${TEST_POST_ID:-none}" \
+    "$(mcp_payload | jq -r '(.data // [])[0].ID // empty | tostring')"
+
+mcp_execute_ability "$ABILITY_NS/patch-post-content" "$(jq -cn --argjson id "${TEST_POST_ID:-0}" '{
+    post_id: $id, find: "publisher role", replace: "reader role"
+}')"
+assert_eq "the reader is refused patching the publisher's page" 'true' "$(mcp_is_error)"
+assert_contains "the publisher's page is unchanged" \
+    "$(wp_cli post get "${TEST_POST_ID:-0}" --field=content 2>/dev/null | tr -d '\r' || true)" 'publisher role'
+
+mcp_execute_ability "$ABILITY_NS/trash-post" "$(jq -cn --argjson id "${TEST_POST_ID:-0}" '{post_id:$id}')"
+assert_eq 'the reader is refused trash-post over MCP' 'true' "$(mcp_is_error)"
+mcp_terminate
+# shellcheck disable=SC2034  # read by mcp_creds in tests/lib.sh
+MCP_TEST_ROLE='admin'
+
 test_summary

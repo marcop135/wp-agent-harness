@@ -15,7 +15,10 @@ directory is **trusted**.
 
    `./bin/connect --print` does not need Claude Code. Its
    `export WORDPRESS_MCP_BASIC_AUTH='Basic …'` line is the full `Authorization`
-   header value that `.codex/config.toml` reads from the environment.
+   header value that `.codex/config.toml` reads from the environment. Add
+   `--role publisher` or `--role reader` to connect as a lower-privileged login
+   ([agent roles](security.md#agent-roles)); Codex has no gate, so the reader
+   can still create posts there.
 3. `codex` from the repository root; trust the project when prompted.
 4. Verify: `/mcp` in the session, or ask the agent to discover WordPress
    abilities through the `wordpress` server. Without MCP: `./bin/wp ability list`.

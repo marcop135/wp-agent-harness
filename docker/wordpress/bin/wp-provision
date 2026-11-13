@@ -14,6 +14,8 @@ MS_WP_ABILITIES_NS='miriamschwab'
 WP_SITE_TITLE="${WP_SITE_TITLE:-WP Agent Harness}"
 WP_ADMIN_USER="${WP_ADMIN_USER:-admin}"
 WP_ADMIN_EMAIL="${WP_ADMIN_EMAIL:-admin@wp-agent-harness.test}"
+WP_PUBLISHER_USER="${WP_PUBLISHER_USER:-agent-publisher}"
+WP_READER_USER="${WP_READER_USER:-agent-reader}"
 WP_THEME="${WP_THEME:-twentytwentyfive}"
 MCP_ADAPTER_VERSION="${MCP_ADAPTER_VERSION:-0.7.1}"
 MCP_ADAPTER_SHA256="${MCP_ADAPTER_SHA256:-c8bc28f83d3c39beffa2add4f6becc0b1ae54097df433697d1dbe6520a80d769}"
@@ -76,6 +78,73 @@ fi
 wp option update blogname "$WP_SITE_TITLE" >/dev/null
 wp option update siteurl "$SITE_URL" >/dev/null
 wp option update home "$SITE_URL" >/dev/null
+
+# ---------------------------------------------------------------------------
+step 'Agent roles'
+# ---------------------------------------------------------------------------
+# Lower-privileged logins for ./bin/connect --role. Capabilities are re-synced
+# on every run, so a change here reaches existing installs.
+#
+#   agent_publisher  editor capabilities minus every delete_* capability
+#   agent_reader     what MS WP Abilities' read abilities require. They share
+#                    edit_posts with create-post, so WordPress still lets this
+#                    role create its own posts (create-post does not check
+#                    publish_posts); it cannot edit others' content, trash, or
+#                    touch plugins, themes and settings. The approval gate
+#                    denies its writes in Claude Code and Cursor.
+for login in "$WP_PUBLISHER_USER" "$WP_READER_USER"; do
+    [ "$login" != "$WP_ADMIN_USER" ] \
+        || fail "$login is also WP_ADMIN_USER. Give each agent role its own login in .env."
+done
+[ "$WP_PUBLISHER_USER" != "$WP_READER_USER" ] \
+    || fail 'WP_PUBLISHER_USER and WP_READER_USER must differ.'
+
+wp eval '
+$roles = array(
+	"agent_publisher" => array(
+		"name" => "Agent Publisher",
+		"caps" => array_filter(
+			get_role( "editor" )->capabilities,
+			fn( $grant, $cap ) => $grant && ! str_starts_with( $cap, "delete_" ),
+			ARRAY_FILTER_USE_BOTH
+		),
+	),
+	"agent_reader"    => array(
+		"name" => "Agent Reader",
+		"caps" => array_fill_keys(
+			array( "read", "read_private_posts", "read_private_pages", "edit_posts", "edit_pages", "list_users" ),
+			true
+		),
+	),
+);
+foreach ( $roles as $slug => $def ) {
+	$role = get_role( $slug ) ?: add_role( $slug, $def["name"], array() );
+	foreach ( array_keys( $role->capabilities ) as $cap ) {
+		if ( empty( $def["caps"][ $cap ] ) ) {
+			$role->remove_cap( $cap );
+		}
+	}
+	foreach ( array_keys( $def["caps"] ) as $cap ) {
+		$role->add_cap( $cap );
+	}
+	WP_CLI::log( "    $slug: " . count( $def["caps"] ) . " capabilities" );
+}'
+
+ensure_agent_user() {
+    login="$1"
+    role="$2"
+    if wp user get "$login" --field=ID >/dev/null 2>&1; then
+        wp user set-role "$login" "$role" >/dev/null
+        info "$login exists; role $role"
+    else
+        # No login password is ever used: the agent authenticates with an
+        # Application Password, so WordPress generates a random one here.
+        wp user create "$login" "${login}@wp-agent-harness.test" --role="$role" --porcelain >/dev/null
+        info "Created $login ($role)"
+    fi
+}
+ensure_agent_user "$WP_PUBLISHER_USER" agent_publisher
+ensure_agent_user "$WP_READER_USER" agent_reader
 
 # ---------------------------------------------------------------------------
 step 'Permalinks'
