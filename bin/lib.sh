@@ -121,12 +121,15 @@ mcp_endpoint() { printf '%s%s' "$(site_url)" "$MCP_ROUTE"; }
 #
 # The WordPress login an MCP client connects as. admin is the harness
 # administrator; publisher and reader are the lower-privileged logins
-# wp-provision creates. ./bin/connect --role records the choice in
-# MCP_ROLE_FILE, where bin/ability-gate reads it.
+# wp-provision creates. bin/ability-gate reads the recorded role: the Claude
+# Code registration in MCP_ROLE_FILE, the last --print (Cursor) in
+# MCP_PRINT_ROLE_FILE, so one client's role never relabels the other's.
 
 readonly MCP_ROLES='admin publisher reader'
 # shellcheck disable=SC2034  # read by bin/connect and bin/status, which source this file
 readonly MCP_ROLE_FILE="$SECRETS_DIR/mcp-role"
+# shellcheck disable=SC2034  # read by bin/connect, which sources this file
+readonly MCP_PRINT_ROLE_FILE="$SECRETS_DIR/mcp-role-print"
 
 is_mcp_role() { [[ " $MCP_ROLES " == *" ${1:-} "* ]]; }
 

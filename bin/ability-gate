@@ -37,11 +37,14 @@ hook_field() {
         <<<"$payload" 2>/dev/null | tr -d '\r' || true
 }
 
-# The agent connects as the role ./bin/connect --role recorded in
-# .secrets/mcp-role: admin (WP_ADMIN_USER), publisher (WP_PUBLISHER_USER) or
-# reader (WP_READER_USER). No recorded role means admin.
+# The agent connects as the role ./bin/connect --role recorded: admin
+# (WP_ADMIN_USER), publisher (WP_PUBLISHER_USER) or reader (WP_READER_USER).
+# Claude Code reads .secrets/mcp-role (./bin/connect); Cursor reads
+# .secrets/mcp-role-print (./bin/connect --print). No recorded role means admin.
 readonly ENV_FILE="${ABILITY_GATE_ENV_FILE:-$(dirname -- "${BASH_SOURCE[0]}")/../.env}"
-readonly ROLE_FILE="${ABILITY_GATE_ROLE_FILE:-$(dirname -- "${BASH_SOURCE[0]}")/../.secrets/mcp-role}"
+role_file_name='mcp-role'
+[[ "${1:-}" != 'cursor' ]] || role_file_name='mcp-role-print'
+readonly ROLE_FILE="${ABILITY_GATE_ROLE_FILE:-$(dirname -- "${BASH_SOURCE[0]}")/../.secrets/$role_file_name}"
 
 role="$(head -n 1 "$ROLE_FILE" 2>/dev/null | tr -d '\r' || true)"
 case "$role" in

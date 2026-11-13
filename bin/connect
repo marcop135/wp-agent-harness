@@ -56,12 +56,13 @@ basic="$(printf '%s' "$creds" | base64 | tr -d '\r\n')"
 auth_header="Basic $basic"
 
 # Record the role so bin/ability-gate names the login a write runs as.
+# record_role <file>: MCP_ROLE_FILE for Claude Code, MCP_PRINT_ROLE_FILE for --print.
 record_role() {
-    ( umask 077 && mkdir -p "$SECRETS_DIR" && printf '%s\n' "$role" > "$MCP_ROLE_FILE" )
+    ( umask 077 && mkdir -p "$SECRETS_DIR" && printf '%s\n' "$role" > "$1" )
 }
 
 if [[ "$action" == 'print' ]]; then
-    record_role
+    record_role "$MCP_PRINT_ROLE_FILE"
     printf '%sWarning:%s stdout includes a live Basic auth header. Do not paste it into\n' "$C_YELLOW" "$C_RESET" >&2
     printf '    tickets or logs; clear it from shell history on shared machines.\n\n' >&2
     printf 'transport   http\n'
@@ -106,7 +107,7 @@ info "auth       Authorization: Basic <application password>"
 
 ( cd "$REPO_ROOT" && claude mcp get "$server_name" >/dev/null 2>&1 ) \
     || die "Claude Code did not persist the '$server_name' server."
-record_role
+record_role "$MCP_ROLE_FILE"
 
 ok "Registered for $REPO_ROOT (local scope, this project only) as $login"
 

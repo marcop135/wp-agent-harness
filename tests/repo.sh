@@ -214,7 +214,29 @@ assert_eq 'gate treats an unknown recorded role as admin' 'ask' \
     "$(execute "$ABILITY_NS/create-post" \
         | ABILITY_GATE_ENV_FILE="$gate_env_file" ABILITY_GATE_ROLE_FILE="$gate_role_file" bash bin/ability-gate claude \
         | jq -r '.hookSpecificOutput.permissionDecision')"
-rm -f "$gate_env_file" "$gate_role_file"
+rm -f "$gate_role_file"
+
+# Each client reads its own recorded role, so connecting Cursor as one role
+# never relabels or unlocks Claude Code's writes, and the reverse.
+gate_root="$(mktemp -d)"
+mkdir -p "$gate_root/bin" "$gate_root/.secrets"
+cp bin/ability-gate "$gate_root/bin/ability-gate"
+printf 'reader\n' > "$gate_root/.secrets/mcp-role"
+printf 'publisher\n' > "$gate_root/.secrets/mcp-role-print"
+assert_eq 'Claude Code reads the role ./bin/connect recorded' 'deny' \
+    "$(execute "$ABILITY_NS/create-post" \
+        | env -u ABILITY_GATE_ROLE_FILE ABILITY_GATE_ENV_FILE="$gate_env_file" bash "$gate_root/bin/ability-gate" claude \
+        | jq -r '.hookSpecificOutput.permissionDecision')"
+assert_eq 'Cursor reads the role ./bin/connect --print recorded' 'ask' \
+    "$(execute_cursor "$ABILITY_NS/create-post" \
+        | env -u ABILITY_GATE_ROLE_FILE ABILITY_GATE_ENV_FILE="$gate_env_file" bash "$gate_root/bin/ability-gate" cursor \
+        | jq -r '.permission')"
+assert_contains 'Cursor names the --print login' \
+    "$(execute_cursor "$ABILITY_NS/create-post" \
+        | env -u ABILITY_GATE_ROLE_FILE ABILITY_GATE_ENV_FILE="$gate_env_file" bash "$gate_root/bin/ability-gate" cursor \
+        | jq -r '.user_message')" 'as pub.'
+rm -rf "$gate_root"
+rm -f "$gate_env_file"
 
 # Without jq the gate must block (exit 2), never fail open. The empty PATH
 # hides jq; the shell runs from its absolute path.

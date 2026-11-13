@@ -83,8 +83,9 @@ it. It runs before every `mcp-adapter-execute-ability` call:
   fails if the two disagree.
 - Everything else asks: all write abilities, any ability from another plugin,
   and any call the gate cannot parse. The prompt names the login the
-  agent connects as, from the role `./bin/connect --role` recorded in
-  `.secrets/mcp-role` (admin when none is recorded).
+  agent connects as, from the role `./bin/connect --role` recorded:
+  `.secrets/mcp-role` for Claude Code, `.secrets/mcp-role-print` for Cursor
+  (`--print`); admin when none is recorded.
 - Connected as `reader`, the gate denies those calls instead of asking.
 - Project hooks run only in a trusted workspace. Check that the client loaded
   them (Claude Code: `/hooks`).
