@@ -9,11 +9,11 @@
 
 ### Added
 
-- Add `./bin/connect --role publisher|reader` to connect agents as lower-privileged WordPress logins ([security.md](docs/security.md#agent-roles)).
+- Add `./bin/connect --role publisher|reader` to connect agents as lower-privileged WordPress logins ([#71](https://github.com/marcop135/wp-agent-harness/pull/71), [#70](https://github.com/marcop135/wp-agent-harness/issues/70)).
 
 ### Security
 
-- Name the connected login in approval prompts and deny every write when connected as the reader role.
+- Name the connected login in approval prompts and deny every write when connected as the reader role ([#71](https://github.com/marcop135/wp-agent-harness/pull/71)).
 
 ## [0.12.1] - 2026-11-06
 
