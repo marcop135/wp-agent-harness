@@ -48,6 +48,7 @@ Common mistakes:
 | --- | --- |
 | Provision | `./bin/setup` |
 | MCP URL + auth export | `./bin/connect --print` |
+| Connect as a lower-privileged login | `./bin/connect --print --role publisher\|reader` |
 | Health | `./bin/status` |
 | WP-CLI / abilities | `./bin/wp …` |
 | PHP debug log | `./bin/logs --debug` |

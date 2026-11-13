@@ -37,6 +37,7 @@ Common mistakes:
 | Provision (idempotent) | `./bin/setup` |
 | Register MCP (Claude Code) | `./bin/connect` |
 | Print MCP URL + auth export | `./bin/connect --print` (Codex / Cursor / any client) |
+| Connect as a lower-privileged login | `./bin/connect --role publisher\|reader` (also with `--print`) |
 | Health | `./bin/status` |
 | WP-CLI / abilities without MCP | `./bin/wp …` / `./bin/wp ability list` |
 | PHP debug log | `./bin/logs --debug` |

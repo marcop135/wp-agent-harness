@@ -5,6 +5,8 @@
 #   ./bin/connect            add (or replace) the Claude Code registration
 #   ./bin/connect --remove   remove the Claude Code registration
 #   ./bin/connect --print    print endpoint, header, and env export (no Claude required)
+#   --role admin|publisher|reader
+#                            WordPress login to connect as (default admin)
 #
 # Claude Code: writes into ~/.claude.json (local scope), never into this repo.
 # Codex: project config is .codex/config.toml; export WORDPRESS_MCP_BASIC_AUTH
@@ -16,13 +18,20 @@ source "$(dirname -- "${BASH_SOURCE[0]}")/lib.sh"
 require_env
 
 action='add'
-case "${1:-}" in
-    '')                 ;;
-    --remove|--disconnect) action='remove' ;;
-    --print)            action='print' ;;
-    -h|--help)          sed -n '2,12p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
-    *)                  die "Unknown option: $1" ;;
-esac
+role='admin'
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --remove|--disconnect) action='remove' ;;
+        --print)            action='print' ;;
+        --role)             [[ $# -ge 2 ]] || die '--role needs a value: admin, publisher or reader.'
+                            role="$2"; shift ;;
+        --role=*)           role="${1#--role=}" ;;
+        -h|--help)          sed -n '2,14p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
+        *)                  die "Unknown option: $1" ;;
+    esac
+    shift
+done
+is_mcp_role "$role" || die "Unknown role '$role'. Use admin, publisher or reader."
 
 server_name="$(env_get MCP_SERVER_NAME wordpress)"
 endpoint="$(mcp_endpoint)"
@@ -32,22 +41,32 @@ if [[ "$action" == 'remove' ]]; then
     step "Removing MCP server '$server_name'"
     ( cd "$REPO_ROOT" && claude mcp remove --scope local "$server_name" ) \
         || die "Claude Code has no MCP server called '$server_name' for this project."
+    rm -f "$MCP_ROLE_FILE"
     ok 'Removed'
     exit 0
 fi
 
-creds="$(mcp_basic_auth 2>/dev/null)" \
-    || die "No Application Password found in ${APP_PASSWORD_FILE#"$REPO_ROOT/"}.
+login="$(role_login "$role")"
+password_file="$(app_password_file "$role")"
+creds="$(mcp_basic_auth "$role" 2>/dev/null)" \
+    || die "No Application Password for $role ($login) in ${password_file#"$REPO_ROOT/"}.
     Run ./bin/setup first."
 
 basic="$(printf '%s' "$creds" | base64 | tr -d '\r\n')"
 auth_header="Basic $basic"
 
+# Record the role so bin/ability-gate names the login a write runs as.
+record_role() {
+    ( umask 077 && mkdir -p "$SECRETS_DIR" && printf '%s\n' "$role" > "$MCP_ROLE_FILE" )
+}
+
 if [[ "$action" == 'print' ]]; then
+    record_role
     printf '%sWarning:%s stdout includes a live Basic auth header. Do not paste it into\n' "$C_YELLOW" "$C_RESET" >&2
     printf '    tickets or logs; clear it from shell history on shared machines.\n\n' >&2
     printf 'transport   http\n'
     printf 'name        %s\n' "$server_name"
+    printf 'role        %s (WordPress login %s)\n' "$role" "$login"
     printf 'url         %s\n' "$endpoint"
     printf 'header      Authorization: %s\n' "$auth_header"
     printf '\n'
@@ -70,6 +89,7 @@ container_running wordpress \
 step "Registering MCP server '$server_name' with Claude Code"
 info "transport  http"
 info "url        $endpoint"
+info "role       $role (WordPress login $login)"
 info "auth       Authorization: Basic <application password>"
 
 # Replace rather than append, so re-running after ./bin/reset picks up the new
@@ -86,8 +106,9 @@ info "auth       Authorization: Basic <application password>"
 
 ( cd "$REPO_ROOT" && claude mcp get "$server_name" >/dev/null 2>&1 ) \
     || die "Claude Code did not persist the '$server_name' server."
+record_role
 
-ok "Registered for $REPO_ROOT (local scope, this project only)"
+ok "Registered for $REPO_ROOT (local scope, this project only) as $login"
 
 printf '\n%sClaude Code is connected.%s\n\n' "$C_GREEN$C_BOLD" "$C_RESET"
 printf '  Start Claude Code from this directory:\n'

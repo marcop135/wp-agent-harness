@@ -4,8 +4,9 @@
 #
 # A pre-tool hook for Claude Code and Cursor. It reads the hook payload on
 # stdin, and when the tool is mcp-adapter-execute-ability it classifies the
-# ability: reads pass, everything else makes the client ask you first. Unknown
-# abilities and unreadable payloads count as writes.
+# ability: reads pass, everything else makes the client ask you first, or is
+# denied outright when connected with --role reader. Unknown abilities and
+# unreadable payloads count as writes.
 #
 #   .claude/settings.json   PreToolUse         -> ./bin/ability-gate claude
 #   .cursor/hooks.json      beforeMCPExecution -> ./bin/ability-gate cursor
@@ -36,18 +37,39 @@ hook_field() {
         <<<"$payload" 2>/dev/null | tr -d '\r' || true
 }
 
-# The agent connects as the harness administrator, WP_ADMIN_USER in .env.
+# The agent connects as the role ./bin/connect --role recorded in
+# .secrets/mcp-role: admin (WP_ADMIN_USER), publisher (WP_PUBLISHER_USER) or
+# reader (WP_READER_USER). No recorded role means admin.
 readonly ENV_FILE="${ABILITY_GATE_ENV_FILE:-$(dirname -- "${BASH_SOURCE[0]}")/../.env}"
+readonly ROLE_FILE="${ABILITY_GATE_ROLE_FILE:-$(dirname -- "${BASH_SOURCE[0]}")/../.secrets/mcp-role}"
+
+role="$(head -n 1 "$ROLE_FILE" 2>/dev/null | tr -d '\r' || true)"
+case "$role" in
+    publisher) login_key='WP_PUBLISHER_USER'; login_default='agent-publisher' ;;
+    reader)    login_key='WP_READER_USER';    login_default='agent-reader' ;;
+    *)         role='admin'; login_key='WP_ADMIN_USER'; login_default='admin' ;;
+esac
 
 # Name the action and the account it runs as. The namespace is the plugin's
 # vendor prefix, not a person, so it stays out of the prompt.
 reason() {
     local ability="${1:-unknown ability}" user
-    user="$(grep -E '^WP_ADMIN_USER=' "$ENV_FILE" 2>/dev/null | tail -n 1 | tr -d '\r' || true)"
+    user="$(grep -E "^${login_key}=" "$ENV_FILE" 2>/dev/null | tail -n 1 | tr -d '\r' || true)"
     user="${user#*=}"
-    printf 'WordPress write: %s, as %s. Approve only if this matches what you asked for.' \
-        "${ability#*/}" "${user:-admin}"
+    user="${user:-$login_default}"
+    if [[ "$role" == 'reader' ]]; then
+        printf 'WordPress write: %s, as %s. Denied: this client is connected with the read-only reader role.' \
+            "${ability#*/}" "$user"
+    else
+        printf 'WordPress write: %s, as %s. Approve only if this matches what you asked for.' \
+            "${ability#*/}" "$user"
+    fi
 }
+
+# The reader role's WordPress capabilities still allow drafts (the read
+# abilities need edit_posts), so its writes are denied here, not asked.
+decision='ask'
+[[ "$role" != 'reader' ]] || decision='deny'
 
 mode="${1:-}"
 
@@ -74,10 +96,10 @@ case "$mode" in
         ability=''
         [[ -z "$tool" ]] || ability="$(hook_field '.tool_input.ability_name')"
         [[ "$(classify "$ability")" == 'read' ]] && exit 0
-        jq -n --arg reason "$(reason "$ability")" '{
+        jq -n --arg reason "$(reason "$ability")" --arg decision "$decision" '{
             hookSpecificOutput: {
                 hookEventName: "PreToolUse",
-                permissionDecision: "ask",
+                permissionDecision: $decision,
                 permissionDecisionReason: $reason
             }
         }'
@@ -96,8 +118,8 @@ case "$mode" in
         if [[ "$(classify "$ability")" == 'read' ]]; then
             printf '{"permission":"allow"}\n'
         else
-            jq -n --arg reason "$(reason "$ability")" \
-                '{permission: "ask", user_message: $reason, agent_message: $reason}'
+            jq -n --arg reason "$(reason "$ability")" --arg decision "$decision" \
+                '{permission: $decision, user_message: $reason, agent_message: $reason}'
         fi
         ;;
 

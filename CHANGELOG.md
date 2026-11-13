@@ -7,6 +7,14 @@
 
 ## [Unreleased]
 
+### Added
+
+- Add `./bin/connect --role publisher|reader` to connect agents as lower-privileged WordPress logins ([security.md](docs/security.md#agent-roles)).
+
+### Security
+
+- Name the connected login in approval prompts and deny every write when connected as the reader role.
+
 ## [0.12.1] - 2026-11-06
 
 ### Changed
