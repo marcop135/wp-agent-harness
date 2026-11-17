@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.13.2] - 2026-11-17
+
 ### Security
 
 - Update WordPress to 7.1.4 ([#84](https://github.com/marcop135/wp-agent-harness/pull/84), [#83](https://github.com/marcop135/wp-agent-harness/issues/83)).
