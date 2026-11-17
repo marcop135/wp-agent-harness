@@ -7,6 +7,33 @@
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-11-17
+
+### Added
+
+- Add JSON-LD to the privacy page ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
+- Add Marco Pontili as the `Person` author in the home page JSON-LD ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
+- Add a Markdown twin of the privacy page at `/privacy.md` ([#78](https://github.com/marcop135/wp-agent-harness/pull/78), [#74](https://github.com/marcop135/wp-agent-harness/issues/74)).
+- Add `Link` discovery headers to the privacy page and a reverse `Link` on Markdown files ([#78](https://github.com/marcop135/wp-agent-harness/pull/78), [#74](https://github.com/marcop135/wp-agent-harness/issues/74)).
+- Add `No-Vary-Search` so tracking parameters share one cache entry ([#78](https://github.com/marcop135/wp-agent-harness/pull/78), [#74](https://github.com/marcop135/wp-agent-harness/issues/74)).
+- Check the site's links in CI on every site change and weekly for external links ([#79](https://github.com/marcop135/wp-agent-harness/pull/79), [#75](https://github.com/marcop135/wp-agent-harness/issues/75)).
+- Check site title and description lengths in `tests/repo.sh` ([#79](https://github.com/marcop135/wp-agent-harness/pull/79), [#75](https://github.com/marcop135/wp-agent-harness/issues/75)).
+- Check that the site's JSON-LD parses and every `@id` reference resolves in `tests/repo.sh` ([#79](https://github.com/marcop135/wp-agent-harness/pull/79), [#75](https://github.com/marcop135/wp-agent-harness/issues/75)).
+
+### Changed
+
+- Site copy: Rewrite the MCP Adapter feature line on the landing page as a direct statement ([#76](https://github.com/marcop135/wp-agent-harness/pull/76), [#72](https://github.com/marcop135/wp-agent-harness/issues/72)).
+- Other copy: Lead the privacy page description with the cookieless Matomo notice ([#76](https://github.com/marcop135/wp-agent-harness/pull/76), [#72](https://github.com/marcop135/wp-agent-harness/issues/72)).
+- Switch the social preview image from PNG to JPEG ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
+- Drop `changefreq` and `priority` from `sitemap.xml` ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
+- Keep only `twitter:card` and let Twitter fall back to the Open Graph tags ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
+- Other copy: List the Markdown privacy page in `llms.txt` ([#78](https://github.com/marcop135/wp-agent-harness/pull/78), [#74](https://github.com/marcop135/wp-agent-harness/issues/74)).
+
+### Fixed
+
+- Move `Content-Signal` into the `User-agent: *` group of `robots.txt` ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
+- Remove the canonical link from the noindex 404 and 500 pages ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
+
 ## [0.12.1] - 2026-11-06
 
 ### Changed

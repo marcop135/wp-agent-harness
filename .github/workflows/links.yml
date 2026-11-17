@@ -1,0 +1,52 @@
+name: links
+
+on:
+  push:
+    branches: [main]
+    paths: ['site/**', '.github/workflows/links.yml']
+  pull_request:
+    paths: ['site/**', '.github/workflows/links.yml']
+  schedule:
+    # Mondays 06:17 UTC: external links only, to catch link rot.
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lychee:
+    name: site links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Pushes and pull requests check internal and external links. Absolute
+      # links to the production host are mapped to site/, so a page added in
+      # this change resolves before it is deployed.
+      - name: internal and external links
+        if: github.event_name != 'schedule'
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          args: >-
+            --no-progress
+            --root-dir ${{ github.workspace }}/site
+            --remap 'https://wpagent\.marcopontili\.com/(.*) file://${{ github.workspace }}/site/$1'
+            site/*.html site/*.md site/llms.txt
+          jobSummary: true
+
+      # The weekly run checks only http(s) links, the production host included.
+      - name: external links
+        if: github.event_name == 'schedule'
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          args: >-
+            --no-progress
+            --root-dir ${{ github.workspace }}/site
+            --scheme https --scheme http
+            site/*.html site/*.md site/llms.txt
+          jobSummary: true

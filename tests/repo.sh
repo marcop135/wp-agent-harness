@@ -217,7 +217,7 @@ for f in README.md CLAUDE.md AGENTS.md llms.txt CHANGELOG.md LICENSE NOTICE Make
          .github/brand/readme-light.svg .github/brand/readme-light.png \
          .github/brand/readme-dark.svg .github/brand/readme-dark.png \
          .github/brand/social.svg .github/brand/social.png \
-         .github/brand/og.svg .github/brand/og.png \
+         .github/brand/og.svg .github/brand/og.jpg \
          site/index.html site/privacy.html site/404.html site/500.html \
          site/.well-known/security.txt site/.well-known/api-catalog \
          site/.htaccess site/js/matomo.js site/js/site.js \
@@ -294,6 +294,54 @@ for directive in script-src connect-src img-src; do
         grep -qE "$directive [^;]*$MATOMO_URL" <<<"$csp"
 done
 assert_fails "site/.htaccess CSP has no unsafe-inline" grep -qF 'unsafe-inline' <<<"$csp"
+
+# ===========================================================================
+suite 'Repository: website metadata'
+# ===========================================================================
+
+# Lengths in characters, not bytes (jq counts code points): titles 30-65,
+# descriptions 70-160, the bounds search results show without truncation.
+check_length() {
+    local label="$1" text="$2" min="$3" max="$4" len
+    len="$(jq -Rr 'length' <<<"$text")"
+    if [[ -n "$text" ]] && (( len >= min && len <= max )); then
+        _record_pass "$label is $min-$max characters ($len)"
+    else
+        _record_fail "$label is $min-$max characters" "${len:-0}: $text"
+    fi
+}
+
+for f in site/*.html; do
+    check_length "$f title" \
+        "$(sed -n 's|.*<title>\(.*\)</title>.*|\1|p' "$f" | head -1)" 30 65
+    check_length "$f description" \
+        "$(sed -n 's|.*<meta name="description" content="\([^"]*\)">.*|\1|p' "$f" | head -1)" 70 160
+done
+
+# Every JSON-LD block parses, and every bare {"@id": ...} reference points at
+# a node some page defines.
+ld_json() { sed -n '/<script type="application\/ld+json">/,/<\/script>/{/<script\|<\/script>/d;p}' "$1"; }
+ld_defined=''
+for f in site/*.html; do
+    grep -qF 'application/ld+json' "$f" || continue
+    if ld_json "$f" | jq -e . >/dev/null 2>&1; then
+        _record_pass "$f JSON-LD parses"
+        ld_defined+="$(ld_json "$f" | jq -r '.. | objects | select(has("@type") and has("@id")) | .["@id"]')"$'\n'
+    else
+        _record_fail "$f JSON-LD parses" "$(ld_json "$f" | jq . 2>&1 | head -3)"
+    fi
+done
+assert_ok 'site/index.html has JSON-LD' grep -qF 'application/ld+json' site/index.html
+for f in site/*.html; do
+    grep -qF 'application/ld+json' "$f" || continue
+    missing="$(ld_json "$f" | jq -r '.. | objects | select(keys == ["@id"]) | .["@id"]' 2>/dev/null \
+        | sort -u | grep -vxF -f <(grep -v '^$' <<<"$ld_defined") || true)"
+    if [[ -z "$missing" ]]; then
+        _record_pass "$f JSON-LD @id references resolve"
+    else
+        _record_fail "$f JSON-LD @id references resolve" "$missing"
+    fi
+done
 
 assert_ok 'deploy.yml uploads only ./site/' \
     bash -c "! grep -E 'local-dir:' .github/workflows/deploy.yml | grep -vqF './site/'"
