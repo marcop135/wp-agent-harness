@@ -8,7 +8,7 @@
 # Agent Harness for WordPress
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![WordPress 7.1.3](https://img.shields.io/badge/WordPress-7.1.3-21759b.svg)](https://wordpress.org/)
+[![WordPress 7.1.4](https://img.shields.io/badge/WordPress-7.1.4-21759b.svg)](https://wordpress.org/)
 [![MariaDB 11.8.9](https://img.shields.io/badge/MariaDB-11.8.9-C3363F.svg)](https://mariadb.org/)
 [![Docker Compose v2](https://img.shields.io/badge/Docker_Compose-v2-2496ED.svg)](https://docs.docker.com/compose/)
 [![MCP Adapter 0.7.1](https://img.shields.io/badge/MCP_Adapter-0.7.1-555.svg)](https://github.com/WordPress/mcp-adapter)
