@@ -14,9 +14,9 @@
 - Add a Markdown twin of the privacy page at `/privacy.md` ([#78](https://github.com/marcop135/wp-agent-harness/pull/78), [#74](https://github.com/marcop135/wp-agent-harness/issues/74)).
 - Add `Link` discovery headers to the privacy page and a reverse `Link` on Markdown files ([#78](https://github.com/marcop135/wp-agent-harness/pull/78), [#74](https://github.com/marcop135/wp-agent-harness/issues/74)).
 - Add `No-Vary-Search` so tracking parameters share one cache entry ([#78](https://github.com/marcop135/wp-agent-harness/pull/78), [#74](https://github.com/marcop135/wp-agent-harness/issues/74)).
-- Check the site's links in CI on every site change and weekly for external links ([#75](https://github.com/marcop135/wp-agent-harness/issues/75)).
-- Check site title and description lengths in `tests/repo.sh` ([#75](https://github.com/marcop135/wp-agent-harness/issues/75)).
-- Check that the site's JSON-LD parses and every `@id` reference resolves in `tests/repo.sh` ([#75](https://github.com/marcop135/wp-agent-harness/issues/75)).
+- Check the site's links in CI on every site change and weekly for external links ([#79](https://github.com/marcop135/wp-agent-harness/pull/79), [#75](https://github.com/marcop135/wp-agent-harness/issues/75)).
+- Check site title and description lengths in `tests/repo.sh` ([#79](https://github.com/marcop135/wp-agent-harness/pull/79), [#75](https://github.com/marcop135/wp-agent-harness/issues/75)).
+- Check that the site's JSON-LD parses and every `@id` reference resolves in `tests/repo.sh` ([#79](https://github.com/marcop135/wp-agent-harness/pull/79), [#75](https://github.com/marcop135/wp-agent-harness/issues/75)).
 
 ### Changed
 
