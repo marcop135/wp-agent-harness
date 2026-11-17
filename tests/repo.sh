@@ -217,7 +217,7 @@ for f in README.md CLAUDE.md AGENTS.md llms.txt CHANGELOG.md LICENSE NOTICE Make
          .github/brand/readme-light.svg .github/brand/readme-light.png \
          .github/brand/readme-dark.svg .github/brand/readme-dark.png \
          .github/brand/social.svg .github/brand/social.png \
-         .github/brand/og.svg .github/brand/og.png \
+         .github/brand/og.svg .github/brand/og.jpg \
          site/index.html site/privacy.html site/404.html site/500.html \
          site/.well-known/security.txt site/.well-known/api-catalog \
          site/.htaccess site/js/matomo.js site/js/site.js \

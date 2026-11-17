@@ -88,9 +88,9 @@ ErrorDocument 500 /500.html
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
 
-  # Images keep fixed names (og.png, favicons), so a replacement must reach
+  # Images keep fixed names (og.jpg, favicons), so a replacement must reach
   # browsers and the CDN: one day.
-  <FilesMatch "\.(png|svg|ico)$">
+  <FilesMatch "\.(png|jpg|svg|ico)$">
     Header set Cache-Control "public, max-age=86400"
   </FilesMatch>
 
