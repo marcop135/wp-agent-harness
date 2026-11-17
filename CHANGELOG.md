@@ -7,6 +7,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Render the social preview JPEG through the brand pipeline instead of a format conversion ([#81](https://github.com/marcop135/wp-agent-harness/pull/81)).
+
 ## [0.13.0] - 2026-11-17
 
 ### Added
