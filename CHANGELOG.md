@@ -9,21 +9,21 @@
 
 ### Added
 
-- Add JSON-LD to the privacy page ([#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
-- Add Marco Pontili as the `Person` author in the home page JSON-LD ([#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
+- Add JSON-LD to the privacy page ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
+- Add Marco Pontili as the `Person` author in the home page JSON-LD ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
 
 ### Changed
 
 - Site copy: Rewrite the MCP Adapter feature line on the landing page as a direct statement ([#76](https://github.com/marcop135/wp-agent-harness/pull/76), [#72](https://github.com/marcop135/wp-agent-harness/issues/72)).
 - Other copy: Lead the privacy page description with the cookieless Matomo notice ([#76](https://github.com/marcop135/wp-agent-harness/pull/76), [#72](https://github.com/marcop135/wp-agent-harness/issues/72)).
-- Switch the social preview image from PNG to JPEG ([#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
-- Drop `changefreq` and `priority` from `sitemap.xml` ([#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
-- Keep only `twitter:card` and let Twitter fall back to the Open Graph tags ([#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
+- Switch the social preview image from PNG to JPEG ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
+- Drop `changefreq` and `priority` from `sitemap.xml` ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
+- Keep only `twitter:card` and let Twitter fall back to the Open Graph tags ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
 
 ### Fixed
 
-- Move `Content-Signal` into the `User-agent: *` group of `robots.txt` ([#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
-- Remove the canonical link from the noindex 404 and 500 pages ([#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
+- Move `Content-Signal` into the `User-agent: *` group of `robots.txt` ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
+- Remove the canonical link from the noindex 404 and 500 pages ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
 
 ## [0.12.1] - 2026-11-06
 
