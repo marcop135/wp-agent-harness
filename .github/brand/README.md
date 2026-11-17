@@ -3,8 +3,8 @@
 `readme-light.svg` and `readme-dark.svg` are the README header sources
 (`readme-light.png` / `readme-dark.png`, 2560x1280), switched on GitHub via
 `#gh-light-mode-only` / `#gh-dark-mode-only`. `social.svg` → `social.png`
-(1280x640, GitHub Settings > Social preview). `og.svg` → `og.png` (1200x630),
-copied to `site/og.png` for the website. All four share one layout: wordmark
+(1280x640, GitHub Settings > Social preview). `og.svg` → `og.jpg` (1200x630, JPEG
+for social platforms), copied to `site/og.jpg` for the website. All four share one layout: wordmark
 and tagline above four icon tiles joined by arrows: Your Agent → MCP → Abilities → WP. All outputs are listed in
 `brand.config.json`.
 Render with

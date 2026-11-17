@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 User-agent: GPTBot
 Allow: /
@@ -26,5 +27,3 @@ User-agent: Applebot-Extended
 Allow: /
 
 Sitemap: https://wpagent.marcopontili.com/sitemap.xml
-
-Content-Signal: ai-train=yes, search=yes, ai-input=yes
