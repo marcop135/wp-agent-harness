@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-11-17
+
 ### Added
 
 - Add JSON-LD to the privacy page ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
