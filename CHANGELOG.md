@@ -9,8 +9,8 @@
 
 ### Changed
 
-- Site copy: Rewrite the MCP Adapter feature line on the landing page as a direct statement ([#72](https://github.com/marcop135/wp-agent-harness/issues/72)).
-- Other copy: Lead the privacy page description with the cookieless Matomo notice ([#72](https://github.com/marcop135/wp-agent-harness/issues/72)).
+- Site copy: Rewrite the MCP Adapter feature line on the landing page as a direct statement ([#76](https://github.com/marcop135/wp-agent-harness/pull/76), [#72](https://github.com/marcop135/wp-agent-harness/issues/72)).
+- Other copy: Lead the privacy page description with the cookieless Matomo notice ([#76](https://github.com/marcop135/wp-agent-harness/pull/76), [#72](https://github.com/marcop135/wp-agent-harness/issues/72)).
 
 ## [0.12.1] - 2026-11-06
 
