@@ -11,9 +11,9 @@
 
 - Add JSON-LD to the privacy page ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
 - Add Marco Pontili as the `Person` author in the home page JSON-LD ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
-- Add a Markdown twin of the privacy page at `/privacy.md` ([#74](https://github.com/marcop135/wp-agent-harness/issues/74)).
-- Add `Link` discovery headers to the privacy page and a reverse `Link` on Markdown files ([#74](https://github.com/marcop135/wp-agent-harness/issues/74)).
-- Add `No-Vary-Search` so tracking parameters share one cache entry ([#74](https://github.com/marcop135/wp-agent-harness/issues/74)).
+- Add a Markdown twin of the privacy page at `/privacy.md` ([#78](https://github.com/marcop135/wp-agent-harness/pull/78), [#74](https://github.com/marcop135/wp-agent-harness/issues/74)).
+- Add `Link` discovery headers to the privacy page and a reverse `Link` on Markdown files ([#78](https://github.com/marcop135/wp-agent-harness/pull/78), [#74](https://github.com/marcop135/wp-agent-harness/issues/74)).
+- Add `No-Vary-Search` so tracking parameters share one cache entry ([#78](https://github.com/marcop135/wp-agent-harness/pull/78), [#74](https://github.com/marcop135/wp-agent-harness/issues/74)).
 
 ### Changed
 
@@ -22,7 +22,7 @@
 - Switch the social preview image from PNG to JPEG ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
 - Drop `changefreq` and `priority` from `sitemap.xml` ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
 - Keep only `twitter:card` and let Twitter fall back to the Open Graph tags ([#77](https://github.com/marcop135/wp-agent-harness/pull/77), [#73](https://github.com/marcop135/wp-agent-harness/issues/73)).
-- Other copy: List the Markdown privacy page in `llms.txt` ([#74](https://github.com/marcop135/wp-agent-harness/issues/74)).
+- Other copy: List the Markdown privacy page in `llms.txt` ([#78](https://github.com/marcop135/wp-agent-harness/pull/78), [#74](https://github.com/marcop135/wp-agent-harness/issues/74)).
 
 ### Fixed
 
