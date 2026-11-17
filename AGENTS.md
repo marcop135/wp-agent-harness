@@ -13,7 +13,7 @@ Local, disposable WordPress harness for coding agents. Docker Compose runs WordP
 ## Stack pin
 
 ```text
-WordPress|7.1.3 (image wordpress:7.1.3-php8.3-apache) | PHP 8.3 | Apache 2.4
+WordPress|7.1.4 (image wordpress:7.1.4-php8.3-apache) | PHP 8.3 | Apache 2.4
 MariaDB|11.8.9
 MCP Adapter|0.7.1 (GitHub release ZIP)
 MS WordPress Abilities|1.13.0 (GitHub release ZIP)
