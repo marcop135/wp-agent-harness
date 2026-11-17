@@ -9,6 +9,7 @@ This site (https://wpagent.marcopontili.com) is the public project page; source 
 - [Home](https://wpagent.marcopontili.com/): Agent Harness for WordPress product page with quick start and FAQ
 - [Markdown home](https://wpagent.marcopontili.com/index.md): Same content as plain Markdown
 - [Privacy](https://wpagent.marcopontili.com/privacy.html): Privacy notice: cookieless self-hosted Matomo, no cookies
+- [Markdown privacy](https://wpagent.marcopontili.com/privacy.md): Same notice as plain Markdown
 - [GitHub repository](https://github.com/marcop135/wp-agent-harness): Source, Docker Compose, tests, docs
 
 ## Docs on GitHub

@@ -64,10 +64,24 @@ ErrorDocument 500 /500.html
   Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://mt.marcopontili.com; style-src 'self'; font-src 'self'; img-src 'self' https://mt.marcopontili.com; connect-src 'self' https://mt.marcopontili.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
   Header unset X-Powered-By
 
-  # Discovery links on the home page.
+  # Discovery links: each HTML page names its Markdown twin, and each twin
+  # points back at its HTML page.
   <If "%{REQUEST_URI} == '/' || %{REQUEST_URI} == '/index.html'">
     Header set Link "</index.md>; rel=\"alternate\"; type=\"text/markdown\", </llms.txt>; rel=\"alternate\"; type=\"text/plain\"; title=\"llms.txt\", </sitemap.xml>; rel=\"sitemap\"; type=\"application/xml\", </.well-known/security.txt>; rel=\"securitytxt\", </.well-known/api-catalog>; rel=\"api-catalog\""
   </If>
+  <ElseIf "%{REQUEST_URI} == '/privacy.html'">
+    Header set Link "</privacy.md>; rel=\"alternate\"; type=\"text/markdown\", </llms.txt>; rel=\"alternate\"; type=\"text/plain\"; title=\"llms.txt\", </sitemap.xml>; rel=\"sitemap\"; type=\"application/xml\", </.well-known/security.txt>; rel=\"securitytxt\", </.well-known/api-catalog>; rel=\"api-catalog\""
+  </ElseIf>
+  <ElseIf "%{REQUEST_URI} == '/index.md'">
+    Header set Link "</>; rel=\"alternate\"; type=\"text/html\""
+  </ElseIf>
+  <ElseIf "%{REQUEST_URI} == '/privacy.md'">
+    Header set Link "</privacy.html>; rel=\"alternate\"; type=\"text/html\""
+  </ElseIf>
+
+  # Tracking parameters do not change an HTML page, so caches that honour
+  # No-Vary-Search keep one entry for /?utm_source=x and /.
+  Header set No-Vary-Search "params=(\"utm_source\" \"utm_medium\" \"utm_campaign\" \"utm_term\" \"utm_content\")" "expr=%{CONTENT_TYPE} =~ m#^text/html#"
 </IfModule>
 
 # ---------------------------------------------------------------------------
