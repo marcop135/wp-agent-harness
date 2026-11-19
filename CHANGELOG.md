@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.13.3] - 2026-11-19
+
 ### Fixed
 
 - Update [MCP Adapter to 0.7.2](https://github.com/WordPress/mcp-adapter/releases/tag/v0.7.2) so clients that omit the protocol-version header can connect ([#88](https://github.com/marcop135/wp-agent-harness/pull/88), [#87](https://github.com/marcop135/wp-agent-harness/issues/87)).
