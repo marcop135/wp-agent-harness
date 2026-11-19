@@ -29,7 +29,7 @@ Local, disposable WordPress harness for coding agents. Docker Compose runs WordP
 ```text
 WordPress|7.1.4 (image wordpress:7.1.4-php8.3-apache) | PHP 8.3 | Apache 2.4
 MariaDB|11.8.9
-MCP Adapter|0.7.1 | MS WordPress Abilities|1.13.0
+MCP Adapter|0.7.2 | MS WordPress Abilities|1.13.0
 WP-CLI|2.12.0 + ability-command 1.0.4
 MCP|discover / get-ability-info / execute-ability
 Ports|127.0.0.1 only

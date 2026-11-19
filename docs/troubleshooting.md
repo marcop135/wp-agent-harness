@@ -125,9 +125,9 @@ a VPN that geo-blocks the host. Test and retry:
 
 ```bash
 docker compose exec wordpress curl -sI \
-  https://github.com/WordPress/mcp-adapter/releases/download/v0.7.1/mcp-adapter.zip
+  https://github.com/WordPress/mcp-adapter/releases/download/v0.7.2/mcp-adapter.zip
 ./bin/wp plugin install \
-  https://github.com/WordPress/mcp-adapter/releases/download/v0.7.1/mcp-adapter.zip --force
+  https://github.com/WordPress/mcp-adapter/releases/download/v0.7.2/mcp-adapter.zip --force
 ```
 
 A 404 means a wrong `MCP_ADAPTER_VERSION` or `MS_WP_ABILITIES_VERSION` in

@@ -18,7 +18,7 @@ approval gate asks.
 ## What you should see
 
 ```
-mcp-adapter/mcp-adapter.php          MCP Adapter             0.7.1   active
+mcp-adapter/mcp-adapter.php          MCP Adapter             0.7.2   active
 ms-wp-abilities/ms-wp-abilities.php  MS WordPress Abilities  1.13.0  active
 ```
 
