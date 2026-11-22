@@ -16,7 +16,7 @@ flowchart TB
   subgraph WPC["wordpress container: Apache 2.4 + mod_php 8.3"]
     MCP["MCP Adapter 0.7.2<br/>HttpTransport · three meta-tools<br/>sessions in user meta"]
     API["WordPress Abilities API<br/>core since 6.9"]
-    MS["MS WP Abilities 1.13.0<br/>26 abilities"]
+    MS["MS WP Abilities 1.14.0<br/>26 abilities"]
     Core["core/* abilities<br/>get-site-info · get-user-info · get-environment-info"]
     WP["WordPress 7.1.4 core + REST API<br/>Twenty Twenty-Five · content · media<br/>plugins · themes · site configuration"]
   end

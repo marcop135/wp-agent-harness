@@ -21,7 +21,7 @@ report includes the Harbor Coffee pages, posts and categories.
 
 - WordPress 7.1.4, PHP 8.3, MariaDB 11.8.9, environment type `local`
 - Active theme **Twenty Twenty-Five 1.5**
-- Exactly two plugins, both active: **MCP Adapter 0.7.2** and **MS WordPress Abilities 1.13.0**
+- Exactly two plugins, both active: **MCP Adapter 0.7.2** and **MS WordPress Abilities 1.14.0**
 - Post types `post`, `page`, `attachment`
 - Stock content: one post, a sample page, a privacy policy draft; plus the seed content if loaded
 - Several tool calls: the agent fetches an ability's schema before executing it the first time

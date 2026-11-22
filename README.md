@@ -12,7 +12,7 @@
 [![MariaDB 11.8.9](https://img.shields.io/badge/MariaDB-11.8.9-C3363F.svg)](https://mariadb.org/)
 [![Docker Compose v2](https://img.shields.io/badge/Docker_Compose-v2-2496ED.svg)](https://docs.docker.com/compose/)
 [![MCP Adapter 0.7.2](https://img.shields.io/badge/MCP_Adapter-0.7.2-555.svg)](https://github.com/WordPress/mcp-adapter)
-[![MS Abilities 1.13.0](https://img.shields.io/badge/MS_Abilities-1.13.0-555.svg)](NOTICE)
+[![MS Abilities 1.14.0](https://img.shields.io/badge/MS_Abilities-1.14.0-555.svg)](NOTICE)
 
 A local WordPress site in Docker for Claude Code, Codex, or Cursor.
 `./bin/setup` builds it, `./bin/reset` starts over.

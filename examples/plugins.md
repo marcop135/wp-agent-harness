@@ -19,7 +19,7 @@ approval gate asks.
 
 ```
 mcp-adapter/mcp-adapter.php          MCP Adapter             0.7.2   active
-ms-wp-abilities/ms-wp-abilities.php  MS WordPress Abilities  1.13.0  active
+ms-wp-abilities/ms-wp-abilities.php  MS WordPress Abilities  1.14.0  active
 ```
 
 - Only these two: provisioning removes the base image's Akismet and Hello Dolly
