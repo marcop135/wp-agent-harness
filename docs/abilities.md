@@ -1,7 +1,7 @@
 # Abilities
 
 What the agent can do on the local site. [MS WordPress Abilities](https://github.com/miriamschwab/ms-wp-abilities)
-1.13.0 registers 26 abilities under `miriamschwab/`, and WordPress core adds 3
+1.14.0 registers 26 abilities under `miriamschwab/`, and WordPress core adds 3
 under `core/`: 29 over MCP. Descriptions follow the plugin's own.
 
 **Gate** is what the [approval gate](security.md#the-approval-gate) does in
