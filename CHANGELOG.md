@@ -7,6 +7,8 @@
 
 ## [Unreleased]
 
+## [0.13.4] - 2026-11-22
+
 ### Changed
 
 - Update [MS WP Abilities to 1.14.0](https://github.com/miriamschwab/ms-wp-abilities/releases/tag/v1.14.0), which declares ability capabilities to WordPress 7.2+ ([#91](https://github.com/marcop135/wp-agent-harness/pull/91), [#90](https://github.com/marcop135/wp-agent-harness/issues/90)).
